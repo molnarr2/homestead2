@@ -1,0 +1,52 @@
+# Dependencies
+node_modules/
+
+# React Native
+apps/mobile/ios/Pods/
+apps/mobile/ios/build/
+apps/mobile/android/build/
+apps/mobile/android/app/build/
+apps/mobile/android/.gradle/
+*.hprof
+
+# Metro
+.metro-health-check*
+
+# Xcode
+*.xcworkspace
+!*.xcworkspace/contents.xcworkspacedata
+*.xcuserdata
+DerivedData/
+
+# Android
+*.apk
+*.aab
+*.keystore
+!debug.keystore
+local.properties
+
+# Vault / secrets
+vault/**
+!vault/.env.example
+
+# Env files
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Build output
+dist/
+lib/
+
+# Firebase
+.firebase/

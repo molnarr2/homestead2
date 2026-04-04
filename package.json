@@ -1,0 +1,8 @@
+{
+  "name": "react-native-template",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}
