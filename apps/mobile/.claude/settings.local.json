@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s \"https://www.google.com/search?q=Follow+Up+Boss+lead+routing+phone+number+setup+how+it+works\")",
+      "Bash(curl -s \"https://www.google.com/search?q=kvCORE+lead+routing+phone+number+integration+setup\")",
+      "WebFetch(domain:help.followupboss.com)",
+      "WebFetch(domain:support.expcloud.com)",
+      "WebFetch(domain:www.followupboss.com)",
+      "WebSearch",
+      "WebFetch(domain:www.kylehandy.com)",
+      "WebFetch(domain:inboundrem.com)",
+      "WebFetch(domain:www.sellstate.com)",
+      "WebFetch(domain:jpar.freshdesk.com)",
+      "WebFetch(domain:webroimantra.com)"
+    ]
+  }
+}
