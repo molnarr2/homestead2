@@ -10,14 +10,16 @@ apply plugin: "com.google.firebase.crashlytics"
  */
 react {
     /* Folders */
-    //   The root of your project, i.e. where "package.json" lives. Default is '../..'
-    // root = file("../../")
-    //   The folder where the react-native NPM package is. Default is ../../node_modules/react-native
-    // reactNativeDir = file("../../node_modules/react-native")
-    //   The folder where the react-native Codegen package is. Default is ../../node_modules/@react-native/codegen
-    // codegenDir = file("../../node_modules/@react-native/codegen")
-    //   The cli.js file which is the React Native CLI entrypoint. Default is ../../node_modules/react-native/cli.js
-    // cliFile = file("../../node_modules/react-native/cli.js")
+    // Monorepo (Yarn workspaces): node_modules are hoisted to the repo root.
+    root = file("../../")
+    reactNativeDir = file("../../../../node_modules/react-native")
+    codegenDir = file("../../../../node_modules/@react-native/codegen")
+    cliFile = file("../../../../node_modules/react-native/cli.js")
+
+    // RN 0.84+ ships hermesc as a separate `hermes-compiler` npm package
+    // instead of bundling it inside react-native/sdks/hermesc/.
+    // %OS-BIN% is a placeholder the plugin replaces with osx-bin/linux64-bin/win64-bin at build time.
+    hermesCommand = file("../../../../node_modules/hermes-compiler/hermesc/%OS-BIN%/hermesc").absolutePath
 
     /* Variants */
     //   The list of variants to that are debuggable. For those we're going to
