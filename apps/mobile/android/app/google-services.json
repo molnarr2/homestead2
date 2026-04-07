@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "YOUR_PROJECT_NUMBER",
-    "project_id": "YOUR_PROJECT_ID",
-    "storage_bucket": "YOUR_PROJECT_ID.firebasestorage.app"
+    "project_number": "561524091377",
+    "project_id": "antioch-dev-e224b",
+    "storage_bucket": "antioch-dev-e224b.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "YOUR_MOBILE_SDK_APP_ID",
+        "mobilesdk_app_id": "1:561524091377:android:9d300018507d9544187c50",
         "android_client_info": {
-          "package_name": "com.mobile"
+          "package_name": "com.hrjsoftware.antioch"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "YOUR_API_KEY"
+          "current_key": "AIzaSyAvEVB9cqVfH1SZlCKXie-IEfMq688mjac"
         }
       ],
       "services": {
