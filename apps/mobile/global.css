@@ -1,0 +1,35 @@
+@import 'tailwindcss';
+@import 'uniwind';
+
+@source "./App.tsx";
+@source "./src/**/*.{js,jsx,ts,tsx}";
+
+@theme {
+  --color-primary: #4A6741;
+  --color-primary-light: #6B8F61;
+  --color-primary-dark: #2D4228;
+  --color-secondary: #8B6F47;
+  --color-secondary-light: #A68B63;
+  --color-secondary-dark: #6B5232;
+  --color-accent: #D4A847;
+  --color-accent-light: #E8C56A;
+  --color-accent-dark: #B08A2E;
+  --color-warm-50: #FFF8F0;
+  --color-warm-100: #FFEFD6;
+  --color-warm-200: #FFE0B2;
+  --color-surface: #FFFFFF;
+  --color-surface-elevated: #FAFAFA;
+  --color-background: #F5F2ED;
+  --color-background-dark: #E8E3DC;
+  --color-border-light: #E8E3DC;
+  --color-border-medium: #D1CBC2;
+  --color-border-dark: #9E9E9E;
+  --color-status-success: #4CAF50;
+  --color-status-warning: #FF9800;
+  --color-status-error: #E53935;
+  --color-status-info: #2196F3;
+  --color-text-primary: #1A1A1A;
+  --color-text-secondary: #6B6B6B;
+  --color-text-disabled: #BDBDBD;
+  --color-text-inverse: #FFFFFF;
+}
