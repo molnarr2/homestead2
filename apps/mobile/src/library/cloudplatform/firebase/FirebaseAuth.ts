@@ -1,0 +1,188 @@
+import ICloudPlatformAuth from "../../../core/plugin/ICloudPlatformAuth";
+import auth, { firebase } from "@react-native-firebase/auth";
+import { ErrorResult, IResult, SuccessResult } from "../../../util/Result";
+import { BehaviorSubject, Subject, Subscribable } from "rxjs";
+import ILocalStorage from "../../../core/plugin/ILocalStorage";
+import Log from '../../log/Log.ts';
+
+const LOGGED_IN_KEY: string = "auth-logged-in";
+
+export default class FirebaseAuth implements ICloudPlatformAuth {
+    localStorage: ILocalStorage;
+
+    loggedInSubject: Subject<boolean>;
+    loggedIn: Subscribable<boolean>;
+    isLoggedIn: boolean = false;
+
+    constructor(localStorage: ILocalStorage) {
+        this.localStorage = localStorage;
+        this.isLoggedIn = localStorage.getBoolean(LOGGED_IN_KEY, false);
+        this.loggedInSubject = new BehaviorSubject<boolean>(this.isLoggedIn);
+        this.loggedIn = this.loggedInSubject;
+
+        auth().onAuthStateChanged(user => {
+            this.isLoggedIn = user !== null;
+            this.localStorage.setBoolean(LOGGED_IN_KEY, this.isLoggedIn);
+            this.loggedInSubject.next(this.isLoggedIn);
+        });
+    }
+
+    get currentUserId(): string {
+        const user = auth().currentUser;
+        if (user != null) {
+            return user.uid;
+        } else {
+            return "";
+        }
+    }
+
+    get isAnonymous(): boolean {
+        const user = auth().currentUser;
+        if (user != null) {
+            return user.isAnonymous;
+        } else {
+            return false;
+        }
+    }
+
+    async createUserWithEmailAndPassword(email: string, password: string): Promise<IResult> {
+        try {
+            await auth().createUserWithEmailAndPassword(email, password);
+            return SuccessResult;
+        } catch (error: any) {
+            let errorMessage = "Unknown error";
+            if (typeof error === "string") {
+                errorMessage = error.toUpperCase();
+            } else {
+                // Must be done this way...NativeFirebaseError
+                if (error.code === "auth/email-already-in-use") {
+                    errorMessage = "Email already in use";
+                } else if (error.code === "auth/invalid-email") {
+                    errorMessage = "Invalid email";
+                } else if (error.code === "auth/operation-not-allowed") {
+                    errorMessage = "Operation not allowed";
+                } else if (error.code === "auth/weak-password") {
+                    errorMessage = "Weak password make sure it is atleast 8 characters long";
+                } else {
+                    errorMessage = "Unable to create user. " + (error?.message || "");
+                }
+            }
+
+            return ErrorResult(errorMessage);
+        }
+    }
+
+    async createAccountAnonymously(): Promise<IResult> {
+        try {
+            await auth().signInAnonymously();
+            return SuccessResult;
+        } catch (error: any) {
+            let errorMessage = "Unknown error";
+            if (typeof error === "string") {
+                errorMessage = error.toUpperCase();
+            } else {
+                errorMessage = "Unable to create anonymous account. " + error;
+            }
+
+            return ErrorResult(errorMessage);
+        }
+    }
+
+    async signInWithEmailAndPassword(email: string, password: string): Promise<IResult> {
+        try {
+            await auth().signInWithEmailAndPassword(email, password);
+            return SuccessResult;
+        } catch (error: any) {
+            return this.processFirebaseError(error)
+        }
+    }
+
+    async waitUntilAuthenticated(): Promise<boolean> {
+        const ready = new Promise((resolve, reject) => {
+            const unsubscribe = auth().onAuthStateChanged(user => {
+                resolve(true);
+                unsubscribe();
+            });
+            if (this.currentUserId != "") {
+                resolve(true);
+                unsubscribe();
+            }
+        });
+
+        await ready;
+        return this.currentUserId !== "";
+    }
+
+    signOut(): void {
+        auth().signOut();
+    }
+
+    async sendPasswordResetEmail(email: string): Promise<void> {
+        await auth().sendPasswordResetEmail(email);
+    }
+
+    async deleteAuthAccount() {
+        await auth().currentUser?.delete();
+    }
+
+    async reauthenticate(email: string, password: string): Promise<IResult> {
+        try {
+            const authCredential = firebase.auth.EmailAuthProvider.credential(email, password);
+            await auth().currentUser?.reauthenticateWithCredential(authCredential);
+        } catch (error: any) {
+            return this.processFirebaseError(error)
+        }
+
+        return SuccessResult;
+    }
+
+    async linkUsernamePassword(email: string, password: string): Promise<IResult> {
+        try {
+            const authCredential = firebase.auth.EmailAuthProvider.credential(email, password);
+            await auth().currentUser?.linkWithCredential(authCredential);
+        } catch (error: any) {
+            return this.processFirebaseError(error)
+        }
+
+        return SuccessResult;
+    }
+
+    processFirebaseError(error: any): IResult {
+        Log.error("FirebaseAuth", "Firebase error: " + error)
+        let errorMessage = "Unknown error";
+        if (typeof error === "string") {
+            errorMessage = error.toUpperCase();
+        } else if (error.code) {
+            // Must be done this way...NativeFirebaseError
+            if (error.code === "auth/invalid-email") {
+                errorMessage = "Invalid email";
+            } else if (error.code === "auth/wrong-password") {
+                errorMessage = "Wrong password";
+            } else if (error.code === "auth/user-mismatch") {
+                errorMessage = "Credentials are for wrong user";
+            } else if (error.code === "auth/user-not-found") {
+                errorMessage = "wrong password / email";
+            } else if (error.code === "auth/invalid-email") {
+                errorMessage = "invalid email";
+
+            } else if (error.code === "auth/provider-already-linked") {
+                errorMessage = "user already has username linked";
+            } else if (error.code === "auth/invalid-credential") {
+                errorMessage = "invalid credential";
+            } else if (error.code === "auth/credential-already-in-use") {
+                errorMessage = "credential already in use";
+            } else if (error.code === "auth/email-already-in-use") {
+                errorMessage = "email already in use";
+            } else if (error.code === "auth/weak-password") {
+                errorMessage = "password is too weak, make sure to use letters, numbers, and at least 8 characters long";
+
+
+            } else {
+                errorMessage = "Wrong username or password";
+            }
+
+        }
+
+        return ErrorResult(errorMessage);
+    }
+}
