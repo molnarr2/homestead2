@@ -7,8 +7,11 @@ import IInAppPurchases, {
     SubscriptionWithError
 } from "../../../core/plugin/IInAppPurchases"
 import Purchases from "react-native-purchases"
-import { PUBLIC_APPLE_API_KEY, PUBLIC_GOOGLE_API_KEY } from "@env"
 import { InAppPrices, InAppSubscription } from "../../../core/service/purchases/IInAppPurchaseService"
+
+// TODO: set the RevenueCat API keys for each platform before using this class.
+const APPLE_API_KEY = ""
+const GOOGLE_API_KEY = ""
 
 export default class RevenueCatInAppPurchases implements IInAppPurchases {
 
@@ -44,9 +47,9 @@ export default class RevenueCatInAppPurchases implements IInAppPurchases {
         await Purchases.setLogLevel(Purchases.LOG_LEVEL.DEBUG)
 
         if (Platform.OS === 'ios') {
-            Purchases.configure({ apiKey: PUBLIC_APPLE_API_KEY })
+            Purchases.configure({ apiKey: APPLE_API_KEY })
         } else if (Platform.OS === 'android') {
-            Purchases.configure({ apiKey: PUBLIC_GOOGLE_API_KEY })
+            Purchases.configure({ apiKey: GOOGLE_API_KEY })
         }
     }
 
