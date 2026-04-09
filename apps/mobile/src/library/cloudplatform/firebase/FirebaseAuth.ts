@@ -1,28 +1,50 @@
-import ICloudPlatformAuth from "../../../core/plugin/ICloudPlatformAuth";
 import auth, { firebase } from "@react-native-firebase/auth";
-import { ErrorResult, IResult, SuccessResult } from "../../../util/Result";
 import { BehaviorSubject, Subject, Subscribable } from "rxjs";
-import ILocalStorage from "../../../core/plugin/ILocalStorage";
-import Log from '../../log/Log.ts';
+import { createMMKV } from "react-native-mmkv";
+import { ErrorResult, IResult, SuccessResult } from "../../../util/Result";
+import Log from "../../log/Log.ts";
 
 const LOGGED_IN_KEY: string = "auth-logged-in";
 
-export default class FirebaseAuth implements ICloudPlatformAuth {
-    localStorage: ILocalStorage;
+export interface IFirebaseAuth {
+    readonly currentUserId: string
+    readonly isAnonymous: boolean
+    readonly isLoggedIn: boolean
+    readonly loggedIn: Subscribable<boolean>
+
+    createUserWithEmailAndPassword(email: string, password: string): Promise<IResult>
+    createAccountAnonymously(): Promise<IResult>
+
+    signInWithEmailAndPassword(email: string, password: string): Promise<IResult>
+
+    waitUntilAuthenticated(): Promise<boolean>
+
+    signOut(): void
+
+    sendPasswordResetEmail(email: string): Promise<void>
+
+    deleteAuthAccount(): Promise<void>
+
+    reauthenticate(email: string, password: string): Promise<IResult>
+
+    linkUsernamePassword(email: string, password: string): Promise<IResult>
+}
+
+export default class FirebaseAuth implements IFirebaseAuth {
+    private storage = createMMKV();
 
     loggedInSubject: Subject<boolean>;
     loggedIn: Subscribable<boolean>;
     isLoggedIn: boolean = false;
 
-    constructor(localStorage: ILocalStorage) {
-        this.localStorage = localStorage;
-        this.isLoggedIn = localStorage.getBoolean(LOGGED_IN_KEY, false);
+    constructor() {
+        this.isLoggedIn = this.storage.getBoolean(LOGGED_IN_KEY) ?? false;
         this.loggedInSubject = new BehaviorSubject<boolean>(this.isLoggedIn);
         this.loggedIn = this.loggedInSubject;
 
         auth().onAuthStateChanged(user => {
             this.isLoggedIn = user !== null;
-            this.localStorage.setBoolean(LOGGED_IN_KEY, this.isLoggedIn);
+            this.storage.set(LOGGED_IN_KEY, this.isLoggedIn);
             this.loggedInSubject.next(this.isLoggedIn);
         });
     }
@@ -147,7 +169,7 @@ export default class FirebaseAuth implements ICloudPlatformAuth {
         return SuccessResult;
     }
 
-    processFirebaseError(error: any): IResult {
+    private processFirebaseError(error: any): IResult {
         Log.error("FirebaseAuth", "Firebase error: " + error)
         let errorMessage = "Unknown error";
         if (typeof error === "string") {
@@ -162,9 +184,6 @@ export default class FirebaseAuth implements ICloudPlatformAuth {
                 errorMessage = "Credentials are for wrong user";
             } else if (error.code === "auth/user-not-found") {
                 errorMessage = "wrong password / email";
-            } else if (error.code === "auth/invalid-email") {
-                errorMessage = "invalid email";
-
             } else if (error.code === "auth/provider-already-linked") {
                 errorMessage = "user already has username linked";
             } else if (error.code === "auth/invalid-credential") {
@@ -175,12 +194,9 @@ export default class FirebaseAuth implements ICloudPlatformAuth {
                 errorMessage = "email already in use";
             } else if (error.code === "auth/weak-password") {
                 errorMessage = "password is too weak, make sure to use letters, numbers, and at least 8 characters long";
-
-
             } else {
                 errorMessage = "Wrong username or password";
             }
-
         }
 
         return ErrorResult(errorMessage);
