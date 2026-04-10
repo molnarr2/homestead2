@@ -3,7 +3,7 @@ import { IResult } from '../util/Result'
 import AnimalType from '../schema/animalType/AnimalType'
 import Breed from '../schema/animalType/Breed'
 import CareTemplate from '../schema/animalType/CareTemplate'
-import { bsAnimalTypeService } from '../Bootstrap'
+import { bsAuthService, bsAnimalTypeService } from '../Bootstrap'
 import { useHomesteadStore } from './homesteadStore'
 import { GESTATION_TABLE } from '../schema/type/GestationTable'
 
@@ -54,7 +54,8 @@ export const useAnimalTypeStore = create<AnimalTypeState>((set, get) => ({
 
   seedStarterPlaybooks: async (species: string[]) => {
     const homesteadId = useHomesteadStore.getState().homesteadId
-    await bsAnimalTypeService.seedStarterPlaybooks(homesteadId, species)
+    const userId = bsAuthService.currentUserId
+    await bsAnimalTypeService.seedStarterPlaybooks(homesteadId, species, userId)
     const animalTypes = await bsAnimalTypeService.getAnimalTypes()
     set({ animalTypes })
   },

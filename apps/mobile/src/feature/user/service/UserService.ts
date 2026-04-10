@@ -65,6 +65,16 @@ export default class UserService implements IUserService {
     }
   }
 
+  async setActiveHomestead(userId: string, homesteadId: string): Promise<IResult> {
+    try {
+      await this.userCollection().doc(userId).update({ activeHomesteadId: homesteadId })
+      return SuccessResult
+    } catch (error: any) {
+      Log.error(TAG, `setActiveHomestead error: ${error.message}`)
+      return ErrorResult(error.message)
+    }
+  }
+
   async uploadAvatar(userId: string, uri: string): Promise<{ url: string, ref: string } | null> {
     try {
       const path = `user/${userId}/avatar/${Date.now()}.jpg`

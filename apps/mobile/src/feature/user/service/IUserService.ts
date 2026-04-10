@@ -7,4 +7,5 @@ export default interface IUserService {
   createUser(user: User): Promise<IResult>
   updateUser(user: User): Promise<IResult>
   uploadAvatar(userId: string, uri: string): Promise<{ url: string, ref: string } | null>
+  setActiveHomestead(userId: string, homesteadId: string): Promise<IResult>
 }

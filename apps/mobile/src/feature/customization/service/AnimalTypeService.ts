@@ -242,7 +242,7 @@ export default class AnimalTypeService implements IAnimalTypeService {
     }
   }
 
-  async seedStarterPlaybooks(homesteadId: string, selectedSpecies: string[]): Promise<IResult> {
+  async seedStarterPlaybooks(homesteadId: string, selectedSpecies: string[], userId: string): Promise<IResult> {
     try {
       const batch = firestore().batch()
       const homesteadRef = firestore().collection('homestead').doc(homesteadId)
@@ -262,10 +262,27 @@ export default class AnimalTypeService implements IAnimalTypeService {
         batch.set(typeRef, animalType as any)
       }
 
+      batch.update(firestore().collection('user').doc(userId), {
+        onboardingComplete: true,
+        selectedSpecies,
+      })
+
       await batch.commit()
       return SuccessResult
     } catch (error: any) {
       Log.error(TAG, `seedStarterPlaybooks error: ${error.message}`)
+      return ErrorResult(error.message)
+    }
+  }
+
+  async skipOnboarding(userId: string): Promise<IResult> {
+    try {
+      await firestore().collection('user').doc(userId).update({
+        onboardingComplete: true,
+      })
+      return SuccessResult
+    } catch (error: any) {
+      Log.error(TAG, `skipOnboarding error: ${error.message}`)
       return ErrorResult(error.message)
     }
   }

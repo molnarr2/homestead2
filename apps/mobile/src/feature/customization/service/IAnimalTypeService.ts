@@ -25,5 +25,6 @@ export default interface IAnimalTypeService {
   updateEventTemplate(animalTypeId: string, template: EventTemplate): Promise<IResult>
   deleteEventTemplate(animalTypeId: string, templateId: string): Promise<IResult>
 
-  seedStarterPlaybooks(homesteadId: string, selectedSpecies: string[]): Promise<IResult>
+  seedStarterPlaybooks(homesteadId: string, selectedSpecies: string[], userId: string): Promise<IResult>
+  skipOnboarding(userId: string): Promise<IResult>
 }

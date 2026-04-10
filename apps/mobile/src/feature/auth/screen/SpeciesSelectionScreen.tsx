@@ -1,0 +1,72 @@
+import React from 'react'
+import { View, Text, TouchableOpacity, FlatList } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import Icon from '@react-native-vector-icons/material-design-icons'
+import { useSpeciesSelectionController } from './SpeciesSelectionController'
+import PrimaryButton from '../../../components/button/PrimaryButton'
+
+const SpeciesSelectionScreen: React.FC = () => {
+  const controller = useSpeciesSelectionController()
+
+  const renderSpeciesCard = ({ item }: { item: { name: string; icon: string } }) => {
+    const isSelected = controller.selectedSpecies.includes(item.name)
+    return (
+      <TouchableOpacity
+        className={`flex-1 m-2 p-4 rounded-xl items-center border-2 ${
+          isSelected ? 'border-primary bg-accent-light' : 'border-border-light bg-surface'
+        }`}
+        onPress={() => controller.toggleSpecies(item.name)}
+      >
+        <Icon
+          name={item.icon as React.ComponentProps<typeof Icon>['name']}
+          size={32}
+          color={isSelected ? '#4A6741' : '#6B6B6B'}
+        />
+        <Text className={`text-sm font-medium mt-2 ${isSelected ? 'text-primary' : 'text-text-secondary'}`}>
+          {item.name}
+        </Text>
+        {isSelected ? (
+          <View className="absolute top-2 right-2">
+            <Icon name="check-circle" size={18} color="#4A6741" />
+          </View>
+        ) : null}
+      </TouchableOpacity>
+    )
+  }
+
+  return (
+    <SafeAreaView className="flex-1 bg-background">
+      <View className="flex-1 px-4 pt-6">
+        <Text className="text-2xl font-bold text-text-primary text-center">
+          What animals do you keep?
+        </Text>
+        <Text className="text-base text-text-secondary text-center mt-2 mb-6">
+          Select all that apply — you can add more later
+        </Text>
+
+        <FlatList
+          data={controller.availableSpecies}
+          renderItem={renderSpeciesCard}
+          keyExtractor={(item) => item.name}
+          numColumns={2}
+          className="flex-1"
+          showsVerticalScrollIndicator={false}
+        />
+
+        <View className="py-4">
+          <PrimaryButton
+            title="Get Started"
+            onPress={controller.complete}
+            loading={controller.loading}
+            disabled={controller.selectedSpecies.length === 0}
+          />
+          <TouchableOpacity className="mt-4 items-center py-2" onPress={controller.skip}>
+            <Text className="text-sm text-text-secondary">I'll set this up later</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </SafeAreaView>
+  )
+}
+
+export default SpeciesSelectionScreen
