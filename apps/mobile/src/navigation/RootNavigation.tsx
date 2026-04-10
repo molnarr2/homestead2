@@ -10,6 +10,11 @@ import RegisterScreen from '../feature/auth/screen/RegisterScreen'
 import SpeciesSelectionScreen from '../feature/auth/screen/SpeciesSelectionScreen'
 import DebugScreen from '../feature/debug/DebugScreen'
 import PlaceholderScreen from './PlaceholderScreen'
+import CustomizationHomeScreen from '../feature/customization/screen/CustomizationHomeScreen'
+import AnimalTypeDetailScreen from '../feature/customization/screen/AnimalTypeDetailScreen'
+import EditAnimalTypeScreen from '../feature/customization/screen/EditAnimalTypeScreen'
+import EditBreedScreen from '../feature/customization/screen/EditBreedScreen'
+import EditCareTemplateScreen from '../feature/customization/screen/EditCareTemplateScreen'
 import ProfileScreen from '../feature/profile/screen/ProfileScreen'
 import EditProfileScreen from '../feature/profile/screen/EditProfileScreen'
 import SettingsScreen from '../feature/profile/screen/SettingsScreen'
@@ -72,6 +77,10 @@ export type RootStackParamList = {
   Subscription: undefined
   Customization: undefined
   CustomizeAnimalType: { animalTypeId: string }
+  EditAnimalType: { animalTypeId?: string }
+  EditBreed: { animalTypeId: string; breedId?: string }
+  EditCareTemplate: { animalTypeId: string; templateId?: string }
+  EditEventTemplate: { animalTypeId: string; templateId?: string }
   CustomizeBreeds: { animalTypeId: string }
   CustomizeCareTemplates: { animalTypeId: string }
   SendFeedback: undefined
@@ -115,8 +124,12 @@ const RootNavigation: React.FC = () => {
             <Stack.Screen name="Profile" component={ProfileScreen} />
             <Stack.Screen name="EditProfile" component={EditProfileScreen} />
             <Stack.Screen name="Subscription" component={PlaceholderScreen} />
-            <Stack.Screen name="Customization" component={PlaceholderScreen} />
-            <Stack.Screen name="CustomizeAnimalType" component={PlaceholderScreen} />
+            <Stack.Screen name="Customization" component={CustomizationHomeScreen} />
+            <Stack.Screen name="CustomizeAnimalType" component={AnimalTypeDetailScreen} />
+            <Stack.Screen name="EditAnimalType" component={EditAnimalTypeScreen} />
+            <Stack.Screen name="EditBreed" component={EditBreedScreen} />
+            <Stack.Screen name="EditCareTemplate" component={EditCareTemplateScreen} />
+            <Stack.Screen name="EditEventTemplate" component={PlaceholderScreen} />
             <Stack.Screen name="CustomizeBreeds" component={PlaceholderScreen} />
             <Stack.Screen name="CustomizeCareTemplates" component={PlaceholderScreen} />
             <Stack.Screen name="SendFeedback" component={SendFeedbackScreen} />

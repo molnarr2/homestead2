@@ -5,7 +5,9 @@ import CareTemplate from '../../../schema/animalType/CareTemplate'
 import EventTemplate from '../../../schema/animalType/EventTemplate'
 
 export default interface IAnimalTypeService {
+  subscribeToAnimalTypes(callback: (types: AnimalType[]) => void): () => void
   getAnimalTypes(): Promise<AnimalType[]>
+  fetchAnimalType(animalTypeId: string): Promise<AnimalType | null>
   createAnimalType(animalType: AnimalType): Promise<IResult>
   updateAnimalType(animalType: AnimalType): Promise<IResult>
   deleteAnimalType(id: string): Promise<IResult>

@@ -1,6 +1,6 @@
 import firestore from '@react-native-firebase/firestore'
 import { IResult, SuccessResult, ErrorResult } from '../../../util/Result'
-import { adminObject_updateLastUpdated } from '../../../schema/object/AdminObject'
+import { adminObject_default, adminObject_updateLastUpdated } from '../../../schema/object/AdminObject'
 import AnimalType from '../../../schema/animalType/AnimalType'
 import Breed from '../../../schema/animalType/Breed'
 import CareTemplate from '../../../schema/animalType/CareTemplate'
@@ -8,6 +8,7 @@ import EventTemplate from '../../../schema/animalType/EventTemplate'
 import Log from '../../../library/log/Log'
 import { useHomesteadStore } from '../../../store/homesteadStore'
 import IAnimalTypeService from './IAnimalTypeService'
+import { STARTER_PLAYBOOKS } from '../data/StarterPlaybooks'
 
 const TAG = 'AnimalTypeService'
 
@@ -32,6 +33,35 @@ export default class AnimalTypeService implements IAnimalTypeService {
 
   private eventTemplateCollection(animalTypeId: string) {
     return this.animalTypeCollection().doc(animalTypeId).collection('eventTemplate')
+  }
+
+  subscribeToAnimalTypes(callback: (types: AnimalType[]) => void): () => void {
+    return this.animalTypeCollection()
+      .where('admin.deleted', '==', false)
+      .onSnapshot(
+        snapshot => {
+          const types = snapshot.docs.map(doc => ({
+            ...doc.data(),
+            id: doc.id,
+          } as AnimalType))
+          callback(types)
+        },
+        error => {
+          Log.error(TAG, `subscribeToAnimalTypes error: ${error.message}`)
+          callback([])
+        },
+      )
+  }
+
+  async fetchAnimalType(animalTypeId: string): Promise<AnimalType | null> {
+    try {
+      const doc = await this.animalTypeCollection().doc(animalTypeId).get()
+      if (!doc.exists) return null
+      return { ...doc.data(), id: doc.id } as AnimalType
+    } catch (error: any) {
+      Log.error(TAG, `fetchAnimalType error: ${error.message}`)
+      return null
+    }
   }
 
   async getAnimalTypes(): Promise<AnimalType[]> {
@@ -245,21 +275,44 @@ export default class AnimalTypeService implements IAnimalTypeService {
   async seedStarterPlaybooks(homesteadId: string, selectedSpecies: string[], userId: string): Promise<IResult> {
     try {
       const batch = firestore().batch()
-      const homesteadRef = firestore().collection('homestead').doc(homesteadId)
+      const seedRef = firestore().collection('homestead').doc(homesteadId)
 
       for (const species of selectedSpecies) {
-        const typeRef = homesteadRef.collection('animalType').doc()
-        const animalType: AnimalType = {
+        const playbook = STARTER_PLAYBOOKS[species]
+        const typeRef = seedRef.collection('animalType').doc()
+        batch.set(typeRef, {
           id: typeRef.id,
-          admin: {
-            deleted: false,
-            updated_at: firestore.FieldValue.serverTimestamp(),
-            created_at: firestore.FieldValue.serverTimestamp(),
-          },
+          admin: adminObject_default(),
           name: species,
-          colors: [],
+          colors: playbook?.colors ?? [],
+        } as any)
+
+        if (playbook) {
+          for (const breed of playbook.breeds) {
+            const breedRef = typeRef.collection('breed').doc()
+            batch.set(breedRef, {
+              id: breedRef.id,
+              admin: adminObject_default(),
+              name: breed.name,
+              gestationDays: breed.gestationDays ?? 0,
+              extraData: [],
+            } as any)
+          }
+
+          for (const template of playbook.careTemplates) {
+            const templateRef = typeRef.collection('careTemplate').doc()
+            batch.set(templateRef, {
+              id: templateRef.id,
+              admin: adminObject_default(),
+              name: template.name,
+              type: template.type,
+              cycle: template.cycle,
+              contactName: '',
+              contactPhone: '',
+              extraData: [],
+            } as any)
+          }
         }
-        batch.set(typeRef, animalType as any)
       }
 
       batch.update(firestore().collection('user').doc(userId), {

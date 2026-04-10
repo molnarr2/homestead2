@@ -12,6 +12,7 @@ interface AnimalTypeState {
   breeds: Record<string, Breed[]>
   careTemplates: Record<string, CareTemplate[]>
   loading: boolean
+  _unsubscribe: (() => void) | null
   subscribe: () => void
   teardown: () => void
   fetchBreeds: (animalTypeId: string) => Promise<void>
@@ -29,14 +30,23 @@ export const useAnimalTypeStore = create<AnimalTypeState>((set, get) => ({
   breeds: {},
   careTemplates: {},
   loading: true,
+  _unsubscribe: null,
 
-  subscribe: async () => {
+  subscribe: () => {
     set({ loading: true })
-    const animalTypes = await bsAnimalTypeService.getAnimalTypes()
-    set({ animalTypes, loading: false })
+    const unsubscribe = bsAnimalTypeService.subscribeToAnimalTypes((animalTypes) => {
+      set({ animalTypes, loading: false })
+    })
+    set({ _unsubscribe: unsubscribe })
   },
 
-  teardown: () => {},
+  teardown: () => {
+    const unsub = get()._unsubscribe
+    if (unsub) {
+      unsub()
+      set({ _unsubscribe: null })
+    }
+  },
 
   fetchBreeds: async (animalTypeId: string) => {
     const breeds = await bsAnimalTypeService.getBreedsForType(animalTypeId)
