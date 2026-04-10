@@ -72,32 +72,40 @@ export default class CareService implements ICareService {
 
   async completeCareEvent(event: CareEvent): Promise<IResult> {
     try {
-      event.completedDate = dateToTstamp(new Date())
-      adminObject_updateLastUpdated(event.admin)
-      await this.homesteadRef.collection('careEvent').doc(event.id).update(event as any)
+      const batch = firestore().batch()
+      const completedDate = dateToTstamp(new Date())
 
-      if (event.type === 'careRecurring' && event.cycle > 0 && !event.createdNextRecurringEvent) {
-        const nextDueDate = calculateNextDueDate(event.dueDate, event.cycle)
-        if (nextDueDate) {
-          const nextEvent: CareEvent = {
-            ...event,
-            id: '',
-            admin: adminObject_default(),
-            dueDate: dateToTstamp(nextDueDate),
-            completedDate: null,
-            createdNextRecurringEvent: false,
-          }
-          const nextRef = this.homesteadRef.collection('careEvent').doc()
-          nextEvent.id = nextRef.id
-          await nextRef.set(nextEvent as any)
+      const eventRef = this.homesteadRef.collection('careEvent').doc(event.id)
+      batch.update(eventRef, {
+        completedDate,
+        createdNextRecurringEvent: event.type === 'careRecurring',
+        'admin.updated_at': firestore.FieldValue.serverTimestamp(),
+      })
 
-          event.createdNextRecurringEvent = true
-          await this.homesteadRef.collection('careEvent').doc(event.id).update({
-            createdNextRecurringEvent: true,
-          })
+      if (event.type === 'careRecurring' && !event.createdNextRecurringEvent) {
+        const nextDueDate = calculateNextDueDate(completedDate, event.cycle)
+        const nextEventRef = this.homesteadRef.collection('careEvent').doc()
+        const nextEvent: CareEvent = {
+          id: nextEventRef.id,
+          animalId: event.animalId,
+          templateId: event.templateId,
+          name: event.name,
+          type: event.type,
+          cycle: event.cycle,
+          dueDate: dateToTstamp(nextDueDate),
+          completedDate: null,
+          contactName: event.contactName,
+          contactPhone: event.contactPhone,
+          notes: event.notes,
+          photoStorageRef: '',
+          photoUrl: '',
+          createdNextRecurringEvent: false,
+          admin: adminObject_default(),
         }
+        batch.set(nextEventRef, nextEvent as any)
       }
 
+      await batch.commit()
       return SuccessResult
     } catch (error: any) {
       Log.error(TAG, `completeCareEvent error: ${error.message}`)

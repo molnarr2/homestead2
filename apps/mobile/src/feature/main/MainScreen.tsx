@@ -4,7 +4,7 @@ import Icon from '@react-native-vector-icons/material-design-icons'
 import HomeScreen from '../home/HomeScreen'
 import AnimalListScreen from '../animal/screen/AnimalListScreen'
 import ProductionScreen from '../production/ProductionScreen'
-import CareScreen from '../care/CareScreen'
+import CareListScreen from '../care/screen/CareListScreen'
 
 export type MainTabParamList = {
   Home: undefined
@@ -38,7 +38,7 @@ export function MainScreen() {
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Animals" component={AnimalListScreen} />
       <Tab.Screen name="Production" component={ProductionScreen} />
-      <Tab.Screen name="Care" component={CareScreen} />
+      <Tab.Screen name="Care" component={CareListScreen} />
     </Tab.Navigator>
   )
 }
