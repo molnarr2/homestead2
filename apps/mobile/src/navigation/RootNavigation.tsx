@@ -10,6 +10,10 @@ import RegisterScreen from '../feature/auth/screen/RegisterScreen'
 import SpeciesSelectionScreen from '../feature/auth/screen/SpeciesSelectionScreen'
 import DebugScreen from '../feature/debug/DebugScreen'
 import PlaceholderScreen from './PlaceholderScreen'
+import ProfileScreen from '../feature/profile/screen/ProfileScreen'
+import EditProfileScreen from '../feature/profile/screen/EditProfileScreen'
+import SettingsScreen from '../feature/profile/screen/SettingsScreen'
+import SendFeedbackScreen from '../feature/profile/screen/SendFeedbackScreen'
 import AnimalDetailScreen from '../feature/animal/screen/AnimalDetailScreen'
 import CreateAnimalScreen from '../feature/animal/screen/CreateAnimalScreen'
 import EditAnimalScreen from '../feature/animal/screen/EditAnimalScreen'
@@ -108,15 +112,15 @@ const RootNavigation: React.FC = () => {
             <Stack.Screen name="CreateNote" component={CreateNoteScreen} />
             <Stack.Screen name="NoteDetail" component={NoteDetailScreen} />
             <Stack.Screen name="CreateWeightLog" component={PlaceholderScreen} />
-            <Stack.Screen name="Profile" component={PlaceholderScreen} />
-            <Stack.Screen name="EditProfile" component={PlaceholderScreen} />
+            <Stack.Screen name="Profile" component={ProfileScreen} />
+            <Stack.Screen name="EditProfile" component={EditProfileScreen} />
             <Stack.Screen name="Subscription" component={PlaceholderScreen} />
             <Stack.Screen name="Customization" component={PlaceholderScreen} />
             <Stack.Screen name="CustomizeAnimalType" component={PlaceholderScreen} />
             <Stack.Screen name="CustomizeBreeds" component={PlaceholderScreen} />
             <Stack.Screen name="CustomizeCareTemplates" component={PlaceholderScreen} />
-            <Stack.Screen name="SendFeedback" component={PlaceholderScreen} />
-            <Stack.Screen name="Settings" component={PlaceholderScreen} />
+            <Stack.Screen name="SendFeedback" component={SendFeedbackScreen} />
+            <Stack.Screen name="Settings" component={SettingsScreen} />
             <Stack.Screen name="Debug" component={DebugScreen} options={{ headerShown: true, title: 'Debug Theme' }} />
           </>
         )}
