@@ -20,6 +20,7 @@ import CreateHealthRecordScreen from '../feature/health/screen/CreateHealthRecor
 import BreedingRecordDetailScreen from '../feature/breeding/screen/BreedingRecordDetailScreen'
 import CreateBreedingRecordScreen from '../feature/breeding/screen/CreateBreedingRecordScreen'
 import RecordBirthOutcomeScreen from '../feature/breeding/screen/RecordBirthOutcomeScreen'
+import CreateProductionLogScreen from '../feature/production/screen/CreateProductionLogScreen'
 
 export type RootStackParamList = {
   // Auth
@@ -50,7 +51,7 @@ export type RootStackParamList = {
   RecordBirthOutcome: { recordId: string }
 
   // Production screens
-  CreateProductionLog: { animalId?: string; groupName?: string }
+  CreateProductionLog: { animalId?: string; groupName?: string; type?: import('../schema/production/ProductionLog').ProductionType }
 
   // Notes screens
   CreateNote: { animalId: string }
@@ -100,7 +101,7 @@ const RootNavigation: React.FC = () => {
             <Stack.Screen name="BreedingRecordDetail" component={BreedingRecordDetailScreen} />
             <Stack.Screen name="CreateBreedingRecord" component={CreateBreedingRecordScreen} />
             <Stack.Screen name="RecordBirthOutcome" component={RecordBirthOutcomeScreen} />
-            <Stack.Screen name="CreateProductionLog" component={PlaceholderScreen} />
+            <Stack.Screen name="CreateProductionLog" component={CreateProductionLogScreen} />
             <Stack.Screen name="CreateNote" component={PlaceholderScreen} />
             <Stack.Screen name="CreateWeightLog" component={PlaceholderScreen} />
             <Stack.Screen name="Profile" component={PlaceholderScreen} />

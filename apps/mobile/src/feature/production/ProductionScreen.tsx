@@ -1,13 +1,8 @@
 import React from 'react'
-import { View, Text } from 'react-native'
+import ProductionListScreen from './screen/ProductionListScreen'
 
 const ProductionScreen: React.FC = () => {
-  return (
-    <View className="flex-1 bg-background items-center justify-center">
-      <Text className="text-2xl font-bold text-text-primary">Production</Text>
-      <Text className="text-sm text-text-secondary mt-2">Coming soon</Text>
-    </View>
-  )
+  return <ProductionListScreen />
 }
 
 export default ProductionScreen
