@@ -19,6 +19,12 @@ export function getCareStatus(dueDate: Tstamp): CareStatusResult {
   return { status: 'FUTURE', color: 'gray' }
 }
 
+export function getDaysOverdue(dueDate: Tstamp): number {
+  const today = startOfDay(new Date())
+  const due = startOfDay(tstampToDate(dueDate) ?? new Date())
+  return Math.abs(differenceInDays(due, today))
+}
+
 export function calculateNextDueDate(completedDate: Tstamp, cycleDays: number): Date {
   const completed = tstampToDate(completedDate) ?? new Date()
   return addDaysFn(completed, cycleDays)
