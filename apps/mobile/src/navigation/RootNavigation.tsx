@@ -1,26 +1,110 @@
 import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import HomeScreen from '../feature/home/HomeScreen'
+import { useAuthStore } from '../store/authStore'
+import { DrawerNavigator } from './DrawerNavigator'
+import type { HealthRecordType } from '../schema/health/HealthRecord'
+import LoadingScreen from '../feature/loading/LoadingScreen'
+import LoginScreen from '../feature/auth/LoginScreen'
+import RegisterScreen from '../feature/auth/RegisterScreen'
+import SpeciesSelectionScreen from '../feature/auth/SpeciesSelectionScreen'
 import DebugScreen from '../feature/debug/DebugScreen'
+import PlaceholderScreen from './PlaceholderScreen'
 
 export type RootStackParamList = {
-  Home: undefined
+  // Auth
+  Loading: undefined
+  Login: undefined
+  Register: undefined
+  SpeciesSelection: undefined
+
+  // Main
+  DrawerMain: undefined
+
+  // Animal screens
+  AnimalDetail: { animalId: string }
+  CreateAnimal: { animalTypeId?: string }
+  EditAnimal: { animalId: string }
+
+  // Care screens
+  CareEventDetail: { eventId: string }
+  CreateCareEvent: { animalId: string; templateId?: string }
+
+  // Health screens
+  HealthRecordDetail: { recordId: string }
+  CreateHealthRecord: { animalId: string; recordType?: HealthRecordType }
+
+  // Breeding screens
+  BreedingRecordDetail: { recordId: string }
+  CreateBreedingRecord: { animalId: string }
+  RecordBirthOutcome: { recordId: string }
+
+  // Production screens
+  CreateProductionLog: { animalId?: string; groupName?: string }
+
+  // Notes screens
+  CreateNote: { animalId: string }
+
+  // Weight screens
+  CreateWeightLog: { animalId: string }
+
+  // Settings screens
+  Profile: undefined
+  EditProfile: undefined
+  Subscription: undefined
+  Customization: undefined
+  CustomizeAnimalType: { animalTypeId: string }
+  CustomizeBreeds: { animalTypeId: string }
+  CustomizeCareTemplates: { animalTypeId: string }
+  SendFeedback: undefined
+  Settings: undefined
   Debug: undefined
 }
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 
 const RootNavigation: React.FC = () => {
+  const isLoggedIn = useAuthStore(s => s.isLoggedIn)
+
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen
-          name="Debug"
-          component={DebugScreen}
-          options={{ headerShown: true, title: 'Debug Theme' }}
-        />
+        {isLoggedIn === null ? (
+          <Stack.Screen name="Loading" component={LoadingScreen} />
+        ) : isLoggedIn === false ? (
+          <>
+            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="Register" component={RegisterScreen} />
+            <Stack.Screen name="SpeciesSelection" component={SpeciesSelectionScreen} />
+          </>
+        ) : (
+          <>
+            <Stack.Screen name="DrawerMain" component={DrawerNavigator} />
+            <Stack.Screen name="AnimalDetail" component={PlaceholderScreen} />
+            <Stack.Screen name="CreateAnimal" component={PlaceholderScreen} />
+            <Stack.Screen name="EditAnimal" component={PlaceholderScreen} />
+            <Stack.Screen name="CareEventDetail" component={PlaceholderScreen} />
+            <Stack.Screen name="CreateCareEvent" component={PlaceholderScreen} />
+            <Stack.Screen name="HealthRecordDetail" component={PlaceholderScreen} />
+            <Stack.Screen name="CreateHealthRecord" component={PlaceholderScreen} />
+            <Stack.Screen name="BreedingRecordDetail" component={PlaceholderScreen} />
+            <Stack.Screen name="CreateBreedingRecord" component={PlaceholderScreen} />
+            <Stack.Screen name="RecordBirthOutcome" component={PlaceholderScreen} />
+            <Stack.Screen name="CreateProductionLog" component={PlaceholderScreen} />
+            <Stack.Screen name="CreateNote" component={PlaceholderScreen} />
+            <Stack.Screen name="CreateWeightLog" component={PlaceholderScreen} />
+            <Stack.Screen name="Profile" component={PlaceholderScreen} />
+            <Stack.Screen name="EditProfile" component={PlaceholderScreen} />
+            <Stack.Screen name="Subscription" component={PlaceholderScreen} />
+            <Stack.Screen name="Customization" component={PlaceholderScreen} />
+            <Stack.Screen name="CustomizeAnimalType" component={PlaceholderScreen} />
+            <Stack.Screen name="CustomizeBreeds" component={PlaceholderScreen} />
+            <Stack.Screen name="CustomizeCareTemplates" component={PlaceholderScreen} />
+            <Stack.Screen name="SendFeedback" component={PlaceholderScreen} />
+            <Stack.Screen name="Settings" component={PlaceholderScreen} />
+            <Stack.Screen name="Debug" component={DebugScreen} options={{ headerShown: true, title: 'Debug Theme' }} />
+          </>
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   )
