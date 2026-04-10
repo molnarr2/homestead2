@@ -1,37 +1,32 @@
 import { create } from 'zustand'
-import { IResult } from '../util/Result'
 import HealthRecord from '../schema/health/HealthRecord'
 import { bsHealthService } from '../Bootstrap'
 
-interface HealthState {
+interface HealthStoreState {
   healthRecords: HealthRecord[]
-  activeWithdrawals: HealthRecord[]
+  withdrawalRecords: HealthRecord[]
   loading: boolean
-  fetchByAnimal: (animalId: string) => Promise<void>
-  fetchActiveWithdrawals: () => Promise<void>
-  createHealthRecord: (record: HealthRecord) => Promise<IResult>
+
+  fetchHealthRecordsByAnimal: (animalId: string) => Promise<void>
+  fetchAllWithdrawalRecords: () => Promise<void>
   clear: () => void
 }
 
-export const useHealthStore = create<HealthState>((set) => ({
+export const useHealthStore = create<HealthStoreState>((set) => ({
   healthRecords: [],
-  activeWithdrawals: [],
+  withdrawalRecords: [],
   loading: false,
 
-  fetchByAnimal: async (animalId: string) => {
+  fetchHealthRecordsByAnimal: async (animalId) => {
     set({ loading: true })
-    const healthRecords = await bsHealthService.getHealthRecordsForAnimal(animalId)
-    set({ healthRecords, loading: false })
+    const records = await bsHealthService.fetchHealthRecordsByAnimal(animalId)
+    set({ healthRecords: records, loading: false })
   },
 
-  fetchActiveWithdrawals: async () => {
-    const activeWithdrawals = await bsHealthService.getActiveWithdrawalRecords()
-    set({ activeWithdrawals })
+  fetchAllWithdrawalRecords: async () => {
+    const records = await bsHealthService.fetchAllWithdrawalRecords()
+    set({ withdrawalRecords: records })
   },
 
-  createHealthRecord: (record: HealthRecord) => bsHealthService.createHealthRecord(record),
-
-  clear: () => {
-    set({ healthRecords: [], activeWithdrawals: [], loading: false })
-  },
+  clear: () => set({ healthRecords: [], withdrawalRecords: [], loading: false }),
 }))

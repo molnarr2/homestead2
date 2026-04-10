@@ -1,12 +1,14 @@
 import firestore from '@react-native-firebase/firestore'
+import storage from '@react-native-firebase/storage'
 import { IResult, SuccessResult, ErrorResult } from '../../../util/Result'
-import { adminObject_updateLastUpdated } from '../../../schema/object/AdminObject'
+import { adminObject_default } from '../../../schema/object/AdminObject'
 import HealthRecord from '../../../schema/health/HealthRecord'
-import { calculateWithdrawal } from '../../../util/WithdrawalUtility'
-import Log from '../../../library/log/Log'
-import { useHomesteadStore } from '../../../store/homesteadStore'
 import ICareService from '../../care/service/ICareService'
 import IHealthService from './IHealthService'
+import Log from '../../../library/log/Log'
+import { useHomesteadStore } from '../../../store/homesteadStore'
+import { careEvent_default } from '../../../schema/care/CareEvent'
+import { dateToTstamp } from '../../../schema/type/Tstamp'
 
 const TAG = 'HealthService'
 
@@ -22,12 +24,13 @@ export default class HealthService implements IHealthService {
     return firestore().collection('homestead').doc(homesteadId)
   }
 
-  async getHealthRecordsForAnimal(animalId: string): Promise<HealthRecord[]> {
+  async fetchHealthRecordsByAnimal(animalId: string): Promise<HealthRecord[]> {
     try {
       const snapshot = await this.homesteadRef
         .collection('healthRecord')
         .where('animalId', '==', animalId)
         .where('admin.deleted', '==', false)
+        .orderBy('date', 'desc')
         .get()
 
       return snapshot.docs.map(doc => ({
@@ -35,96 +38,89 @@ export default class HealthService implements IHealthService {
         id: doc.id,
       } as HealthRecord))
     } catch (error: any) {
-      Log.error(TAG, `getHealthRecordsForAnimal error: ${error.message}`)
+      Log.error(TAG, 'fetchHealthRecordsByAnimal error: ' + error.message)
       return []
     }
   }
 
-  async getActiveWithdrawalRecords(): Promise<HealthRecord[]> {
+  async fetchAllWithdrawalRecords(): Promise<HealthRecord[]> {
     try {
       const snapshot = await this.homesteadRef
         .collection('healthRecord')
         .where('admin.deleted', '==', false)
+        .where('withdrawalPeriodDays', '>', 0)
         .get()
 
-      const allRecords = snapshot.docs.map(doc => ({
+      const medicationRecords = snapshot.docs.map(doc => ({
         ...doc.data(),
         id: doc.id,
       } as HealthRecord))
 
-      return this.filterActiveWithdrawals(allRecords)
+      const dewormSnapshot = await this.homesteadRef
+        .collection('healthRecord')
+        .where('admin.deleted', '==', false)
+        .where('dewormingWithdrawalDays', '>', 0)
+        .get()
+
+      const dewormRecords = dewormSnapshot.docs.map(doc => ({
+        ...doc.data(),
+        id: doc.id,
+      } as HealthRecord))
+
+      const seen = new Set<string>()
+      const combined: HealthRecord[] = []
+      for (const r of [...medicationRecords, ...dewormRecords]) {
+        if (!seen.has(r.id)) {
+          seen.add(r.id)
+          combined.push(r)
+        }
+      }
+      return combined
     } catch (error: any) {
-      Log.error(TAG, `getActiveWithdrawalRecords error: ${error.message}`)
+      Log.error(TAG, 'fetchAllWithdrawalRecords error: ' + error.message)
       return []
     }
   }
 
-  subscribeActiveWithdrawals(callback: (records: HealthRecord[]) => void): () => void {
-    return this.homesteadRef
-      .collection('healthRecord')
-      .where('admin.deleted', '==', false)
-      .onSnapshot(
-        snapshot => {
-          const allRecords: HealthRecord[] = snapshot.docs.map(doc => ({
-            ...doc.data(),
-            id: doc.id,
-          } as HealthRecord))
-          const activeWithdrawals = this.filterActiveWithdrawals(allRecords)
-          callback(activeWithdrawals)
-        },
-        error => {
-          Log.error(TAG, `onSnapshot error: ${error.message}`)
-          callback([])
-        }
-      )
-  }
-
-  async createHealthRecord(record: HealthRecord): Promise<IResult> {
+  async createHealthRecord(record: HealthRecord, photoUri?: string): Promise<IResult> {
     try {
-      const ref = this.homesteadRef.collection('healthRecord').doc()
-      record.id = ref.id
-      await ref.set(record as any)
-      return SuccessResult
-    } catch (error: any) {
-      Log.error(TAG, `createHealthRecord error: ${error.message}`)
-      return ErrorResult(error.message)
-    }
-  }
+      const docRef = this.homesteadRef.collection('healthRecord').doc()
+      record.id = docRef.id
+      record.admin = adminObject_default()
 
-  async updateHealthRecord(record: HealthRecord): Promise<IResult> {
-    try {
-      adminObject_updateLastUpdated(record.admin)
-      await this.homesteadRef.collection('healthRecord').doc(record.id).update(record as any)
-      return SuccessResult
-    } catch (error: any) {
-      Log.error(TAG, `updateHealthRecord error: ${error.message}`)
-      return ErrorResult(error.message)
-    }
-  }
-
-  private filterActiveWithdrawals(records: HealthRecord[]): HealthRecord[] {
-    return records.filter(record => {
-      if (record.withdrawalPeriodDays > 0) {
-        const result = calculateWithdrawal(record.date, record.withdrawalPeriodDays, record.withdrawalType, record.name)
-        if (result.status === 'ACTIVE') return true
+      if (photoUri) {
+        const homesteadId = this.homesteadRef.id
+        const storagePath = `homestead/${homesteadId}/healthRecord/${record.id}/photo.jpg`
+        await storage().ref(storagePath).putFile(photoUri)
+        const downloadUrl = await storage().ref(storagePath).getDownloadURL()
+        record.photoStorageRef = storagePath
+        record.photoUrl = downloadUrl
       }
-      if (record.dewormingWithdrawalDays > 0) {
-        const result = calculateWithdrawal(record.date, record.dewormingWithdrawalDays, record.dewormingWithdrawalType, record.name)
-        if (result.status === 'ACTIVE') return true
-      }
-      return false
-    })
-  }
 
-  async deleteHealthRecord(id: string): Promise<IResult> {
-    try {
-      await this.homesteadRef.collection('healthRecord').doc(id).update({
-        'admin.deleted': true,
-        'admin.updated_at': firestore.FieldValue.serverTimestamp(),
-      })
+      await docRef.set(record as any)
+
+      if (record.recordType === 'vaccination' && record.vaccineNextDueDate) {
+        await this.careService.createCareEvent({
+          ...careEvent_default(),
+          animalId: record.animalId,
+          templateId: '',
+          name: `Vaccination: ${record.name}`,
+          type: 'careSingle',
+          cycle: 0,
+          dueDate: dateToTstamp(new Date(record.vaccineNextDueDate)),
+          completedDate: null,
+          contactName: record.providerName ?? '',
+          contactPhone: record.providerPhone ?? '',
+          notes: 'Auto-created from vaccination record',
+          photoStorageRef: '',
+          photoUrl: '',
+          createdNextRecurringEvent: false,
+        })
+      }
+
       return SuccessResult
     } catch (error: any) {
-      Log.error(TAG, `deleteHealthRecord error: ${error.message}`)
+      Log.error(TAG, 'createHealthRecord error: ' + error.message)
       return ErrorResult(error.message)
     }
   }

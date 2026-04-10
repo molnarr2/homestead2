@@ -21,7 +21,7 @@ export function useAnimalDetailController(navigation: Navigation, route: Route) 
   const animal = animals.find(a => a.id === animalId)
 
   const { careEvents } = useCareStore()
-  const { healthRecords, fetchByAnimal: fetchHealth } = useHealthStore()
+  const { healthRecords, fetchHealthRecordsByAnimal: fetchHealth } = useHealthStore()
   const { animalBreedings, fetchByAnimal: fetchBreeding } = useBreedingStore()
   const { notes, fetchByAnimal: fetchNotes } = useNoteStore()
   const { weightLogs, fetchByAnimal: fetchWeight } = useWeightStore()

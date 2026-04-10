@@ -37,8 +37,8 @@ export function useHomeController(navigation: any) {
   const user = useUserStore(s => s.user)
   const careEvents = useCareStore(s => s.careEvents)
   const activeBreedings = useBreedingStore(s => s.activeBreedings)
-  const activeWithdrawalRecords = useHealthStore(s => s.activeWithdrawals)
-  const fetchActiveWithdrawals = useHealthStore(s => s.fetchActiveWithdrawals)
+  const activeWithdrawalRecords = useHealthStore(s => s.withdrawalRecords)
+  const fetchActiveWithdrawals = useHealthStore(s => s.fetchAllWithdrawalRecords)
   const animals = useAnimalStore(s => s.animals)
   const [refreshing, setRefreshing] = useState(false)
 

@@ -15,6 +15,7 @@ import AnimalCareTab from '../component/AnimalCareTab'
 import AnimalNotesTab from '../component/AnimalNotesTab'
 import AnimalWeightTab from '../component/AnimalWeightTab'
 import Icon from '@react-native-vector-icons/material-design-icons'
+import WithdrawalBanner from '../../health/component/WithdrawalBanner'
 
 type Navigation = NativeStackNavigationProp<RootStackParamList, 'AnimalDetail'>
 type Route = RouteProp<RootStackParamList, 'AnimalDetail'>
@@ -94,14 +95,11 @@ const AnimalDetailScreen: React.FC = () => {
         onBack={controller.onBack}
       />
 
-      {controller.activeWithdrawals.length > 0 ? (
-        <View className="flex-row items-center px-4 py-2 bg-status-error/10">
-          <Icon name="alert-circle" size={16} color="#E53935" />
-          <Text className="text-xs font-semibold text-status-error ml-1">
-            {controller.activeWithdrawals.length} active withdrawal{controller.activeWithdrawals.length > 1 ? 's' : ''}
-          </Text>
-        </View>
-      ) : null}
+      <WithdrawalBanner
+        withdrawals={controller.activeWithdrawals}
+        records={controller.healthRecords}
+        animalName={controller.animal.name}
+      />
 
       <AnimalDetailTabs
         activeTab={controller.activeTab}
