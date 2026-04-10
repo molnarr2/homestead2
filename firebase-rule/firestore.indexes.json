@@ -1,0 +1,109 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "animal",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "animalType", "order": "ASCENDING" },
+        { "fieldPath": "admin.deleted", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "animal",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "state", "order": "ASCENDING" },
+        { "fieldPath": "admin.deleted", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "careEvent",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "admin.deleted", "order": "ASCENDING" },
+        { "fieldPath": "completedDate", "order": "ASCENDING" },
+        { "fieldPath": "dueDate", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "careEvent",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "animalId", "order": "ASCENDING" },
+        { "fieldPath": "admin.deleted", "order": "ASCENDING" },
+        { "fieldPath": "dueDate", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "healthRecord",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "animalId", "order": "ASCENDING" },
+        { "fieldPath": "admin.deleted", "order": "ASCENDING" },
+        { "fieldPath": "date", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "healthRecord",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "admin.deleted", "order": "ASCENDING" },
+        { "fieldPath": "withdrawalPeriodDays", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "breedingRecord",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "admin.deleted", "order": "ASCENDING" },
+        { "fieldPath": "status", "order": "ASCENDING" },
+        { "fieldPath": "expectedDueDate", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "breedingRecord",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "animalId", "order": "ASCENDING" },
+        { "fieldPath": "admin.deleted", "order": "ASCENDING" },
+        { "fieldPath": "breedingDate", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "note",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "animalId", "order": "ASCENDING" },
+        { "fieldPath": "admin.deleted", "order": "ASCENDING" },
+        { "fieldPath": "admin.created_at", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "weightLog",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "animalId", "order": "ASCENDING" },
+        { "fieldPath": "admin.deleted", "order": "ASCENDING" },
+        { "fieldPath": "date", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "productionLog",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "admin.deleted", "order": "ASCENDING" },
+        { "fieldPath": "date", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "productionLog",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "productionType", "order": "ASCENDING" },
+        { "fieldPath": "admin.deleted", "order": "ASCENDING" },
+        { "fieldPath": "date", "order": "DESCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

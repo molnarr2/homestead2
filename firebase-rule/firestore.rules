@@ -1,0 +1,133 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAuth() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+
+    // Check if the user is a member of the homestead (has any role)
+    function isHomesteadMember(homesteadId) {
+      return isAuth() && exists(/databases/$(database)/documents/homestead/$(homesteadId)/member/$(request.auth.uid));
+    }
+
+    // User profile — owner only
+    match /user/{userId} {
+      allow read: if isAuth() && isOwner(userId);
+      allow create: if isAuth() && isOwner(userId);
+      allow update: if isAuth() && isOwner(userId);
+      allow delete: if false;
+
+      match /device/{deviceId} {
+        allow read, write: if isAuth() && isOwner(userId);
+      }
+    }
+
+    // Homestead — members only
+    match /homestead/{homesteadId} {
+      allow read: if isHomesteadMember(homesteadId);
+      allow create: if isAuth();
+      allow update: if isHomesteadMember(homesteadId);
+      allow delete: if false;
+
+      // Members — members can read, only homestead members can manage
+      match /member/{memberId} {
+        allow read: if isHomesteadMember(homesteadId);
+        allow create: if isHomesteadMember(homesteadId);
+        allow update: if isHomesteadMember(homesteadId);
+        allow delete: if false;
+      }
+
+      // All farm data — homestead members only
+      match /animal/{animalId} {
+        allow read: if isHomesteadMember(homesteadId);
+        allow create: if isHomesteadMember(homesteadId);
+        allow update: if isHomesteadMember(homesteadId);
+        allow delete: if false;
+      }
+
+      match /careEvent/{eventId} {
+        allow read: if isHomesteadMember(homesteadId);
+        allow create: if isHomesteadMember(homesteadId);
+        allow update: if isHomesteadMember(homesteadId);
+        allow delete: if false;
+      }
+
+      match /healthRecord/{recordId} {
+        allow read: if isHomesteadMember(homesteadId);
+        allow create: if isHomesteadMember(homesteadId);
+        allow update: if isHomesteadMember(homesteadId);
+        allow delete: if false;
+      }
+
+      match /breedingRecord/{recordId} {
+        allow read: if isHomesteadMember(homesteadId);
+        allow create: if isHomesteadMember(homesteadId);
+        allow update: if isHomesteadMember(homesteadId);
+        allow delete: if false;
+      }
+
+      match /note/{noteId} {
+        allow read: if isHomesteadMember(homesteadId);
+        allow create: if isHomesteadMember(homesteadId);
+        allow update: if isHomesteadMember(homesteadId);
+        allow delete: if false;
+      }
+
+      match /weightLog/{logId} {
+        allow read: if isHomesteadMember(homesteadId);
+        allow create: if isHomesteadMember(homesteadId);
+        allow update: if isHomesteadMember(homesteadId);
+        allow delete: if false;
+      }
+
+      match /productionLog/{logId} {
+        allow read: if isHomesteadMember(homesteadId);
+        allow create: if isHomesteadMember(homesteadId);
+        allow update: if isHomesteadMember(homesteadId);
+        allow delete: if false;
+      }
+
+      // Animal Types — homestead members only (with subcollections)
+      match /animalType/{typeId} {
+        allow read: if isHomesteadMember(homesteadId);
+        allow create: if isHomesteadMember(homesteadId);
+        allow update: if isHomesteadMember(homesteadId);
+        allow delete: if false;
+
+        match /breed/{breedId} {
+          allow read: if isHomesteadMember(homesteadId);
+          allow create: if isHomesteadMember(homesteadId);
+          allow update: if isHomesteadMember(homesteadId);
+          allow delete: if false;
+        }
+
+        match /careTemplate/{templateId} {
+          allow read: if isHomesteadMember(homesteadId);
+          allow create: if isHomesteadMember(homesteadId);
+          allow update: if isHomesteadMember(homesteadId);
+          allow delete: if false;
+        }
+
+        match /eventTemplate/{templateId} {
+          allow read: if isHomesteadMember(homesteadId);
+          allow create: if isHomesteadMember(homesteadId);
+          allow update: if isHomesteadMember(homesteadId);
+          allow delete: if false;
+        }
+      }
+    }
+
+    // Feedback — write-only, read by admin
+    match /feedback/{feedbackId} {
+      allow create: if isAuth();
+      allow read: if false;
+      allow update: if false;
+      allow delete: if false;
+    }
+  }
+}
