@@ -1,0 +1,12 @@
+{
+  "firestore": {
+    "rules": "firebase-rule/firestore.rules",
+    "indexes": "firebase-rule/firestore.indexes.json"
+  },
+  "storage": {
+    "rules": "firebase-rule/storage.rules"
+  },
+  "functions": {
+    "source": "functions"
+  }
+}
