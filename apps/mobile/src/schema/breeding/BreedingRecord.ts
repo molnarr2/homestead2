@@ -4,6 +4,15 @@ export type BreedingMethod = 'natural' | 'ai' | 'other'
 export type BreedingStatus = 'active' | 'completed' | 'failed'
 export type DamCondition = 'Good' | 'Fair' | 'Poor'
 
+export interface BirthOutcome {
+  birthDate: string
+  bornAlive: number
+  stillborn: number
+  complications: string
+  damCondition: DamCondition
+  sireId: string
+}
+
 export default interface BreedingRecord {
   id: string
   admin: AdminObject

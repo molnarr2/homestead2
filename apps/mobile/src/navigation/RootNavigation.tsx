@@ -17,6 +17,9 @@ import CareEventDetailScreen from '../feature/care/screen/CareEventDetailScreen'
 import CreateCareEventScreen from '../feature/care/screen/CreateCareEventScreen'
 import HealthRecordDetailScreen from '../feature/health/screen/HealthRecordDetailScreen'
 import CreateHealthRecordScreen from '../feature/health/screen/CreateHealthRecordScreen'
+import BreedingRecordDetailScreen from '../feature/breeding/screen/BreedingRecordDetailScreen'
+import CreateBreedingRecordScreen from '../feature/breeding/screen/CreateBreedingRecordScreen'
+import RecordBirthOutcomeScreen from '../feature/breeding/screen/RecordBirthOutcomeScreen'
 
 export type RootStackParamList = {
   // Auth
@@ -94,9 +97,9 @@ const RootNavigation: React.FC = () => {
             <Stack.Screen name="CreateCareEvent" component={CreateCareEventScreen} />
             <Stack.Screen name="HealthRecordDetail" component={HealthRecordDetailScreen} />
             <Stack.Screen name="CreateHealthRecord" component={CreateHealthRecordScreen} />
-            <Stack.Screen name="BreedingRecordDetail" component={PlaceholderScreen} />
-            <Stack.Screen name="CreateBreedingRecord" component={PlaceholderScreen} />
-            <Stack.Screen name="RecordBirthOutcome" component={PlaceholderScreen} />
+            <Stack.Screen name="BreedingRecordDetail" component={BreedingRecordDetailScreen} />
+            <Stack.Screen name="CreateBreedingRecord" component={CreateBreedingRecordScreen} />
+            <Stack.Screen name="RecordBirthOutcome" component={RecordBirthOutcomeScreen} />
             <Stack.Screen name="CreateProductionLog" component={PlaceholderScreen} />
             <Stack.Screen name="CreateNote" component={PlaceholderScreen} />
             <Stack.Screen name="CreateWeightLog" component={PlaceholderScreen} />

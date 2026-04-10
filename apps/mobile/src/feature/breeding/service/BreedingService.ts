@@ -1,7 +1,7 @@
 import firestore from '@react-native-firebase/firestore'
 import { IResult, SuccessResult, ErrorResult } from '../../../util/Result'
-import { adminObject_updateLastUpdated } from '../../../schema/object/AdminObject'
-import BreedingRecord from '../../../schema/breeding/BreedingRecord'
+import { adminObject_default } from '../../../schema/object/AdminObject'
+import BreedingRecord, { BirthOutcome } from '../../../schema/breeding/BreedingRecord'
 import Animal from '../../../schema/animal/Animal'
 import Log from '../../../library/log/Log'
 import { useHomesteadStore } from '../../../store/homesteadStore'
@@ -16,11 +16,10 @@ export default class BreedingService implements IBreedingService {
     return firestore().collection('homestead').doc(homesteadId)
   }
 
-  subscribeActiveBreedings(callback: (records: BreedingRecord[]) => void): () => void {
+  subscribe(callback: (records: BreedingRecord[]) => void): () => void {
     return this.homesteadRef
       .collection('breedingRecord')
       .where('admin.deleted', '==', false)
-      .where('status', '==', 'active')
       .onSnapshot(
         snapshot => {
           const records: BreedingRecord[] = snapshot.docs.map(doc => ({
@@ -66,34 +65,68 @@ export default class BreedingService implements IBreedingService {
     }
   }
 
-  async updateBreedingRecord(record: BreedingRecord): Promise<IResult> {
-    try {
-      adminObject_updateLastUpdated(record.admin)
-      await this.homesteadRef.collection('breedingRecord').doc(record.id).update(record as any)
-      return SuccessResult
-    } catch (error: any) {
-      Log.error(TAG, `updateBreedingRecord error: ${error.message}`)
-      return ErrorResult(error.message)
-    }
-  }
-
-  async recordBirthOutcome(record: BreedingRecord, offspring: Animal[]): Promise<IResult> {
+  async completeBirth(recordId: string, outcome: BirthOutcome, dam: Animal): Promise<IResult> {
     try {
       const batch = firestore().batch()
+      const offspringIds: string[] = []
 
-      const recordRef = this.homesteadRef.collection('breedingRecord').doc(record.id)
-      batch.update(recordRef, record as any)
-
-      for (const animal of offspring) {
-        const animalRef = this.homesteadRef.collection('animal').doc()
-        animal.id = animalRef.id
-        batch.set(animalRef, animal as any)
+      for (let i = 0; i < outcome.bornAlive; i++) {
+        const offspringRef = this.homesteadRef.collection('animal').doc()
+        offspringIds.push(offspringRef.id)
+        batch.set(offspringRef, {
+          id: offspringRef.id,
+          name: `Baby ${i + 1}`,
+          animalType: dam.animalType,
+          animalTypeId: dam.animalTypeId,
+          animalTypeLevel: dam.animalTypeLevel,
+          breed: dam.breed,
+          animalBreedId: dam.animalBreedId,
+          birthday: outcome.birthDate,
+          gender: 'unknown',
+          color: '',
+          register: '',
+          state: 'own',
+          notes: '',
+          photoStorageRef: '',
+          photoUrl: '',
+          purchasePrice: 0,
+          weight: 0,
+          weightUnit: 'lbs',
+          sireId: outcome.sireId ?? '',
+          damId: dam.id,
+          admin: adminObject_default(),
+        })
       }
+
+      const recordRef = this.homesteadRef.collection('breedingRecord').doc(recordId)
+      batch.update(recordRef, {
+        status: 'completed',
+        birthDate: outcome.birthDate,
+        bornAlive: outcome.bornAlive,
+        stillborn: outcome.stillborn,
+        complications: outcome.complications,
+        damCondition: outcome.damCondition,
+        offspringIds,
+        'admin.updated_at': firestore.FieldValue.serverTimestamp(),
+      })
 
       await batch.commit()
       return SuccessResult
     } catch (error: any) {
-      Log.error(TAG, `recordBirthOutcome error: ${error.message}`)
+      Log.error(TAG, `completeBirth error: ${error.message}`)
+      return ErrorResult(error.message)
+    }
+  }
+
+  async failBreeding(recordId: string): Promise<IResult> {
+    try {
+      await this.homesteadRef.collection('breedingRecord').doc(recordId).update({
+        status: 'failed',
+        'admin.updated_at': firestore.FieldValue.serverTimestamp(),
+      })
+      return SuccessResult
+    } catch (error: any) {
+      Log.error(TAG, `failBreeding error: ${error.message}`)
       return ErrorResult(error.message)
     }
   }

@@ -36,7 +36,7 @@ export interface DashboardBreedingItem {
 export function useHomeController(navigation: any) {
   const user = useUserStore(s => s.user)
   const careEvents = useCareStore(s => s.careEvents)
-  const activeBreedings = useBreedingStore(s => s.activeBreedings)
+  const breedingRecords = useBreedingStore(s => s.breedingRecords)
   const activeWithdrawalRecords = useHealthStore(s => s.withdrawalRecords)
   const fetchActiveWithdrawals = useHealthStore(s => s.fetchAllWithdrawalRecords)
   const animals = useAnimalStore(s => s.animals)
@@ -114,7 +114,8 @@ export function useHomeController(navigation: any) {
   }, [activeWithdrawalRecords, animalMap])
 
   const breedingCountdowns: DashboardBreedingItem[] = useMemo(() => {
-    return activeBreedings
+    return breedingRecords
+      .filter(record => record.status === 'active')
       .map(record => {
         const animal = animalMap.get(record.animalId)
         const gestation = calculateGestation(record.breedingDate, animal?.animalType ?? '')
@@ -126,7 +127,7 @@ export function useHomeController(navigation: any) {
         }
       })
       .sort((a, b) => a.gestation.daysRemaining - b.gestation.daysRemaining)
-  }, [activeBreedings, animalMap])
+  }, [breedingRecords, animalMap])
 
   const onRefresh = async () => {
     setRefreshing(true)

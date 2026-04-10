@@ -1,12 +1,12 @@
 import { IResult } from '../../../util/Result'
-import BreedingRecord from '../../../schema/breeding/BreedingRecord'
+import BreedingRecord, { BirthOutcome } from '../../../schema/breeding/BreedingRecord'
 import Animal from '../../../schema/animal/Animal'
 
 export default interface IBreedingService {
-  subscribeActiveBreedings(callback: (records: BreedingRecord[]) => void): () => void
+  subscribe(callback: (records: BreedingRecord[]) => void): () => void
   getBreedingRecordsForAnimal(animalId: string): Promise<BreedingRecord[]>
   createBreedingRecord(record: BreedingRecord): Promise<IResult>
-  updateBreedingRecord(record: BreedingRecord): Promise<IResult>
-  recordBirthOutcome(record: BreedingRecord, offspring: Animal[]): Promise<IResult>
+  completeBirth(recordId: string, outcome: BirthOutcome, dam: Animal): Promise<IResult>
+  failBreeding(recordId: string): Promise<IResult>
   deleteBreedingRecord(id: string): Promise<IResult>
 }
