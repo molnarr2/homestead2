@@ -1,0 +1,119 @@
+import firestore from '@react-native-firebase/firestore'
+import { IResult, SuccessResult, ErrorResult } from '../../../util/Result'
+import { adminObject_default } from '../../../schema/object/AdminObject'
+import { homesteadMember_default } from '../../../schema/homestead/HomesteadMember'
+import Homestead from '../../../schema/homestead/Homestead'
+import HomesteadMember from '../../../schema/homestead/HomesteadMember'
+import Log from '../../../library/log/Log'
+import IHomesteadService from './IHomesteadService'
+
+const TAG = 'HomesteadService'
+
+export default class HomesteadService implements IHomesteadService {
+
+  private homesteadCollection() {
+    return firestore().collection('homestead')
+  }
+
+  async getHomestead(homesteadId: string): Promise<Homestead | null> {
+    try {
+      const doc = await this.homesteadCollection().doc(homesteadId).get()
+      if (!doc.exists) return null
+      return { ...doc.data(), id: doc.id } as Homestead
+    } catch (error: any) {
+      Log.error(TAG, `getHomestead error: ${error.message}`)
+      return null
+    }
+  }
+
+  async createHomestead(name: string, ownerUserId: string, ownerDisplayName: string, ownerEmail: string): Promise<string> {
+    try {
+      const homesteadRef = this.homesteadCollection().doc()
+      const homestead: Homestead = {
+        id: homesteadRef.id,
+        admin: adminObject_default(),
+        name,
+      }
+      await homesteadRef.set(homestead)
+
+      const memberRef = homesteadRef.collection('member').doc()
+      const member: HomesteadMember = {
+        ...homesteadMember_default(),
+        id: memberRef.id,
+        userId: ownerUserId,
+        role: 'owner',
+        displayName: ownerDisplayName,
+        email: ownerEmail,
+      }
+      await memberRef.set(member as any)
+
+      return homesteadRef.id
+    } catch (error: any) {
+      Log.error(TAG, `createHomestead error: ${error.message}`)
+      return ''
+    }
+  }
+
+  async getHomesteadsForUser(userId: string): Promise<Homestead[]> {
+    try {
+      const memberSnapshots = await firestore()
+        .collectionGroup('member')
+        .where('userId', '==', userId)
+        .where('admin.deleted', '==', false)
+        .get()
+
+      const homesteadIds = memberSnapshots.docs.map(doc => {
+        const parentPath = doc.ref.parent.parent
+        return parentPath?.id ?? ''
+      }).filter(id => id !== '')
+
+      if (homesteadIds.length === 0) return []
+
+      const homesteads: Homestead[] = []
+      for (const id of homesteadIds) {
+        const homestead = await this.getHomestead(id)
+        if (homestead && !homestead.admin.deleted) {
+          homesteads.push(homestead)
+        }
+      }
+
+      return homesteads
+    } catch (error: any) {
+      Log.error(TAG, `getHomesteadsForUser error: ${error.message}`)
+      return []
+    }
+  }
+
+  async getMembers(homesteadId: string): Promise<HomesteadMember[]> {
+    try {
+      const snapshot = await this.homesteadCollection()
+        .doc(homesteadId)
+        .collection('member')
+        .where('admin.deleted', '==', false)
+        .get()
+
+      return snapshot.docs.map(doc => ({
+        ...doc.data(),
+        id: doc.id,
+      } as HomesteadMember))
+    } catch (error: any) {
+      Log.error(TAG, `getMembers error: ${error.message}`)
+      return []
+    }
+  }
+
+  async addMember(homesteadId: string, member: HomesteadMember): Promise<IResult> {
+    try {
+      const ref = this.homesteadCollection()
+        .doc(homesteadId)
+        .collection('member')
+        .doc()
+      member.id = ref.id
+      await ref.set(member as any)
+      return SuccessResult
+    } catch (error: any) {
+      Log.error(TAG, `addMember error: ${error.message}`)
+      return ErrorResult(error.message)
+    }
+  }
+}
