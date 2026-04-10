@@ -2,7 +2,7 @@ import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Icon from '@react-native-vector-icons/material-design-icons'
 import HomeScreen from '../home/HomeScreen'
-import AnimalListScreen from '../animal/AnimalListScreen'
+import AnimalListScreen from '../animal/screen/AnimalListScreen'
 import ProductionScreen from '../production/ProductionScreen'
 import CareScreen from '../care/CareScreen'
 

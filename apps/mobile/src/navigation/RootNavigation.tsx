@@ -10,6 +10,9 @@ import RegisterScreen from '../feature/auth/screen/RegisterScreen'
 import SpeciesSelectionScreen from '../feature/auth/screen/SpeciesSelectionScreen'
 import DebugScreen from '../feature/debug/DebugScreen'
 import PlaceholderScreen from './PlaceholderScreen'
+import AnimalDetailScreen from '../feature/animal/screen/AnimalDetailScreen'
+import CreateAnimalScreen from '../feature/animal/screen/CreateAnimalScreen'
+import EditAnimalScreen from '../feature/animal/screen/EditAnimalScreen'
 
 export type RootStackParamList = {
   // Auth
@@ -80,9 +83,9 @@ const RootNavigation: React.FC = () => {
         ) : (
           <>
             <Stack.Screen name="DrawerMain" component={DrawerNavigator} />
-            <Stack.Screen name="AnimalDetail" component={PlaceholderScreen} />
-            <Stack.Screen name="CreateAnimal" component={PlaceholderScreen} />
-            <Stack.Screen name="EditAnimal" component={PlaceholderScreen} />
+            <Stack.Screen name="AnimalDetail" component={AnimalDetailScreen} />
+            <Stack.Screen name="CreateAnimal" component={CreateAnimalScreen} />
+            <Stack.Screen name="EditAnimal" component={EditAnimalScreen} />
             <Stack.Screen name="CareEventDetail" component={PlaceholderScreen} />
             <Stack.Screen name="CreateCareEvent" component={PlaceholderScreen} />
             <Stack.Screen name="HealthRecordDetail" component={PlaceholderScreen} />

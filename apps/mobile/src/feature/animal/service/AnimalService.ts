@@ -82,6 +82,19 @@ export default class AnimalService implements IAnimalService {
     }
   }
 
+  async updateAnimalState(animalId: string, state: string): Promise<IResult> {
+    try {
+      await this.homesteadRef.collection('animal').doc(animalId).update({
+        state,
+        'admin.updated_at': firestore.FieldValue.serverTimestamp(),
+      })
+      return SuccessResult
+    } catch (error: any) {
+      Log.error(TAG, `updateAnimalState error: ${error.message}`)
+      return ErrorResult(error.message)
+    }
+  }
+
   async uploadAnimalPhoto(animalId: string, uri: string): Promise<{ url: string, ref: string } | null> {
     try {
       const homesteadId = useHomesteadStore.getState().homesteadId
