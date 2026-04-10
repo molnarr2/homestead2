@@ -7,7 +7,7 @@ interface NoteState {
   notes: Note[]
   loading: boolean
   fetchByAnimal: (animalId: string) => Promise<void>
-  createNote: (note: Note) => Promise<IResult>
+  createNote: (note: Note, photoUri?: string) => Promise<IResult>
   deleteNote: (noteId: string) => Promise<IResult>
   clear: () => void
 }
@@ -18,11 +18,11 @@ export const useNoteStore = create<NoteState>((set) => ({
 
   fetchByAnimal: async (animalId: string) => {
     set({ loading: true })
-    const notes = await bsNoteService.getNotesForAnimal(animalId)
+    const notes = await bsNoteService.fetchNotesByAnimal(animalId)
     set({ notes, loading: false })
   },
 
-  createNote: (note: Note) => bsNoteService.createNote(note),
+  createNote: (note: Note, photoUri?: string) => bsNoteService.createNote(note, photoUri),
   deleteNote: (noteId: string) => bsNoteService.deleteNote(noteId),
 
   clear: () => {

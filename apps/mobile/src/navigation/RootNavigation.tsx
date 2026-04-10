@@ -21,6 +21,8 @@ import BreedingRecordDetailScreen from '../feature/breeding/screen/BreedingRecor
 import CreateBreedingRecordScreen from '../feature/breeding/screen/CreateBreedingRecordScreen'
 import RecordBirthOutcomeScreen from '../feature/breeding/screen/RecordBirthOutcomeScreen'
 import CreateProductionLogScreen from '../feature/production/screen/CreateProductionLogScreen'
+import CreateNoteScreen from '../feature/notes/screen/CreateNoteScreen'
+import NoteDetailScreen from '../feature/notes/screen/NoteDetailScreen'
 
 export type RootStackParamList = {
   // Auth
@@ -55,6 +57,7 @@ export type RootStackParamList = {
 
   // Notes screens
   CreateNote: { animalId: string }
+  NoteDetail: { noteId: string; animalId: string }
 
   // Weight screens
   CreateWeightLog: { animalId: string }
@@ -102,7 +105,8 @@ const RootNavigation: React.FC = () => {
             <Stack.Screen name="CreateBreedingRecord" component={CreateBreedingRecordScreen} />
             <Stack.Screen name="RecordBirthOutcome" component={RecordBirthOutcomeScreen} />
             <Stack.Screen name="CreateProductionLog" component={CreateProductionLogScreen} />
-            <Stack.Screen name="CreateNote" component={PlaceholderScreen} />
+            <Stack.Screen name="CreateNote" component={CreateNoteScreen} />
+            <Stack.Screen name="NoteDetail" component={NoteDetailScreen} />
             <Stack.Screen name="CreateWeightLog" component={PlaceholderScreen} />
             <Stack.Screen name="Profile" component={PlaceholderScreen} />
             <Stack.Screen name="EditProfile" component={PlaceholderScreen} />

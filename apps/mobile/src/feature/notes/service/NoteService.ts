@@ -1,7 +1,7 @@
 import firestore from '@react-native-firebase/firestore'
 import storage from '@react-native-firebase/storage'
 import { IResult, SuccessResult, ErrorResult } from '../../../util/Result'
-import { adminObject_updateLastUpdated } from '../../../schema/object/AdminObject'
+import { adminObject_default } from '../../../schema/object/AdminObject'
 import Note from '../../../schema/notes/Note'
 import Log from '../../../library/log/Log'
 import { useHomesteadStore } from '../../../store/homesteadStore'
@@ -16,29 +16,41 @@ export default class NoteService implements INoteService {
     return firestore().collection('homestead').doc(homesteadId)
   }
 
-  async getNotesForAnimal(animalId: string): Promise<Note[]> {
+  async fetchNotesByAnimal(animalId: string): Promise<Note[]> {
     try {
       const snapshot = await this.homesteadRef
         .collection('note')
         .where('animalId', '==', animalId)
         .where('admin.deleted', '==', false)
+        .orderBy('admin.created_at', 'desc')
         .get()
 
-      return snapshot.docs.map(doc => ({
-        ...doc.data(),
-        id: doc.id,
-      } as Note))
+      return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Note))
     } catch (error: any) {
-      Log.error(TAG, `getNotesForAnimal error: ${error.message}`)
+      Log.error(TAG, `fetchNotesByAnimal error: ${error.message}`)
       return []
     }
   }
 
-  async createNote(note: Note): Promise<IResult> {
+  async createNote(note: Note, photoUri?: string): Promise<IResult> {
     try {
-      const ref = this.homesteadRef.collection('note').doc()
-      note.id = ref.id
-      await ref.set(note as any)
+      const docRef = this.homesteadRef.collection('note').doc()
+      const noteData: Note = {
+        ...note,
+        id: docRef.id,
+        admin: adminObject_default(),
+      }
+
+      if (photoUri) {
+        const homesteadId = useHomesteadStore.getState().homesteadId
+        const storagePath = `homestead/${homesteadId}/note/${docRef.id}/photo.jpg`
+        await storage().ref(storagePath).putFile(photoUri)
+        const downloadUrl = await storage().ref(storagePath).getDownloadURL()
+        noteData.photoStorageRef = storagePath
+        noteData.photoUrl = downloadUrl
+      }
+
+      await docRef.set(noteData as any)
       return SuccessResult
     } catch (error: any) {
       Log.error(TAG, `createNote error: ${error.message}`)
@@ -46,20 +58,9 @@ export default class NoteService implements INoteService {
     }
   }
 
-  async updateNote(note: Note): Promise<IResult> {
+  async deleteNote(noteId: string): Promise<IResult> {
     try {
-      adminObject_updateLastUpdated(note.admin)
-      await this.homesteadRef.collection('note').doc(note.id).update(note as any)
-      return SuccessResult
-    } catch (error: any) {
-      Log.error(TAG, `updateNote error: ${error.message}`)
-      return ErrorResult(error.message)
-    }
-  }
-
-  async deleteNote(id: string): Promise<IResult> {
-    try {
-      await this.homesteadRef.collection('note').doc(id).update({
+      await this.homesteadRef.collection('note').doc(noteId).update({
         'admin.deleted': true,
         'admin.updated_at': firestore.FieldValue.serverTimestamp(),
       })
@@ -67,20 +68,6 @@ export default class NoteService implements INoteService {
     } catch (error: any) {
       Log.error(TAG, `deleteNote error: ${error.message}`)
       return ErrorResult(error.message)
-    }
-  }
-
-  async uploadNotePhoto(noteId: string, uri: string): Promise<{ url: string, ref: string } | null> {
-    try {
-      const homesteadId = useHomesteadStore.getState().homesteadId
-      const path = `homestead/${homesteadId}/note/${noteId}/${Date.now()}.jpg`
-      const ref = storage().ref(path)
-      await ref.putFile(uri)
-      const url = await ref.getDownloadURL()
-      return { url, ref: path }
-    } catch (error: any) {
-      Log.error(TAG, `uploadNotePhoto error: ${error.message}`)
-      return null
     }
   }
 }
