@@ -1,22 +1,12 @@
-import { useState, useEffect } from 'react'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
-import { bsAnimalTypeService } from '../../../Bootstrap'
-import AnimalType from '../../../schema/animalType/AnimalType'
+import { useAnimalTypeStore } from '../../../store/animalTypeStore'
 
 type Navigation = NativeStackNavigationProp<RootStackParamList>
 
 export function useCustomizationHomeController(navigation: Navigation) {
-  const [animalTypes, setAnimalTypes] = useState<AnimalType[]>([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    const unsubscribe = bsAnimalTypeService.subscribeToAnimalTypes((types) => {
-      setAnimalTypes(types)
-      setLoading(false)
-    })
-    return () => unsubscribe()
-  }, [])
+  const animalTypes = useAnimalTypeStore(s => s.animalTypes)
+  const loading = useAnimalTypeStore(s => s.loading)
 
   const onAnimalTypePress = (typeId: string) =>
     navigation.navigate('CustomizeAnimalType', { animalTypeId: typeId })

@@ -33,6 +33,7 @@ export const useAnimalTypeStore = create<AnimalTypeState>((set, get) => ({
   _unsubscribe: null,
 
   subscribe: () => {
+    get().teardown()
     set({ loading: true })
     const unsubscribe = bsAnimalTypeService.subscribeToAnimalTypes((animalTypes) => {
       set({ animalTypes, loading: false })
@@ -82,6 +83,7 @@ export const useAnimalTypeStore = create<AnimalTypeState>((set, get) => ({
   },
 
   clear: () => {
-    set({ animalTypes: [], breeds: {}, careTemplates: {}, loading: true })
+    get().teardown()
+    set({ animalTypes: [], breeds: {}, careTemplates: {}, loading: true, _unsubscribe: null })
   },
 }))
