@@ -9,6 +9,7 @@ import Log from '../../../library/log/Log'
 import { useHomesteadStore } from '../../../store/homesteadStore'
 import { careEvent_default } from '../../../schema/care/CareEvent'
 import { dateToTstamp } from '../../../schema/type/Tstamp'
+import { Col } from '@template/common'
 
 const TAG = 'HealthService'
 
@@ -21,13 +22,13 @@ export default class HealthService implements IHealthService {
 
   private get homesteadRef() {
     const homesteadId = useHomesteadStore.getState().homesteadId
-    return firestore().collection('homestead').doc(homesteadId)
+    return firestore().collection(Col.homestead).doc(homesteadId)
   }
 
   async fetchHealthRecordsByAnimal(animalId: string): Promise<HealthRecord[]> {
     try {
       const snapshot = await this.homesteadRef
-        .collection('healthRecord')
+        .collection(Col.healthRecord)
         .where('animalId', '==', animalId)
         .where('admin.deleted', '==', false)
         .orderBy('date', 'desc')
@@ -46,7 +47,7 @@ export default class HealthService implements IHealthService {
   async fetchAllWithdrawalRecords(): Promise<HealthRecord[]> {
     try {
       const snapshot = await this.homesteadRef
-        .collection('healthRecord')
+        .collection(Col.healthRecord)
         .where('admin.deleted', '==', false)
         .where('withdrawalPeriodDays', '>', 0)
         .get()
@@ -57,7 +58,7 @@ export default class HealthService implements IHealthService {
       } as HealthRecord))
 
       const dewormSnapshot = await this.homesteadRef
-        .collection('healthRecord')
+        .collection(Col.healthRecord)
         .where('admin.deleted', '==', false)
         .where('dewormingWithdrawalDays', '>', 0)
         .get()
@@ -84,7 +85,7 @@ export default class HealthService implements IHealthService {
 
   async createHealthRecord(record: HealthRecord, photoUri?: string): Promise<IResult> {
     try {
-      const docRef = this.homesteadRef.collection('healthRecord').doc()
+      const docRef = this.homesteadRef.collection(Col.healthRecord).doc()
       record.id = docRef.id
       record.admin = adminObject_default()
 

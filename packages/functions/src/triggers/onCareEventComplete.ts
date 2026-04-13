@@ -1,6 +1,7 @@
 import { onDocumentUpdated } from 'firebase-functions/v2/firestore'
 import { getFirestore, Timestamp } from 'firebase-admin/firestore'
 import { logger } from 'firebase-functions/v2'
+import { Col } from '@template/common'
 
 function addDays(timestamp: Timestamp, days: number): Timestamp {
   const date = timestamp.toDate()
@@ -9,7 +10,7 @@ function addDays(timestamp: Timestamp, days: number): Timestamp {
 }
 
 export const onCareEventComplete = onDocumentUpdated(
-  'homestead/{homesteadId}/careEvent/{eventId}',
+  `${Col.homestead}/{homesteadId}/${Col.careEvent}/{eventId}`,
   async (event) => {
     const before = event.data?.before.data()
     const after = event.data?.after.data()
@@ -26,10 +27,10 @@ export const onCareEventComplete = onDocumentUpdated(
 
       const newDueDate = addDays(after.completedDate as Timestamp, after.cycle)
 
-      const homesteadRef = db.collection('homestead').doc(homesteadId)
+      const homesteadRef = db.collection(Col.homestead).doc(homesteadId)
 
       try {
-        await homesteadRef.collection('careEvent').add({
+        await homesteadRef.collection(Col.careEvent).add({
           ...after,
           id: '',
           dueDate: newDueDate,

@@ -6,13 +6,14 @@ import Homestead from '../../../schema/homestead/Homestead'
 import HomesteadMember from '../../../schema/homestead/HomesteadMember'
 import Log from '../../../library/log/Log'
 import IHomesteadService from './IHomesteadService'
+import { Col } from '@template/common'
 
 const TAG = 'HomesteadService'
 
 export default class HomesteadService implements IHomesteadService {
 
   private homesteadCollection() {
-    return firestore().collection('homestead')
+    return firestore().collection(Col.homestead)
   }
 
   async getHomestead(homesteadId: string): Promise<Homestead | null> {
@@ -36,7 +37,7 @@ export default class HomesteadService implements IHomesteadService {
       }
       await homesteadRef.set(homestead)
 
-      const memberRef = homesteadRef.collection('member').doc()
+      const memberRef = homesteadRef.collection(Col.member).doc()
       const member: HomesteadMember = {
         ...homesteadMember_default(),
         id: memberRef.id,
@@ -57,7 +58,7 @@ export default class HomesteadService implements IHomesteadService {
   async getHomesteadsForUser(userId: string): Promise<Homestead[]> {
     try {
       const memberSnapshots = await firestore()
-        .collectionGroup('member')
+        .collectionGroup(Col.member)
         .where('userId', '==', userId)
         .where('admin.deleted', '==', false)
         .get()
@@ -88,7 +89,7 @@ export default class HomesteadService implements IHomesteadService {
     try {
       const snapshot = await this.homesteadCollection()
         .doc(homesteadId)
-        .collection('member')
+        .collection(Col.member)
         .where('admin.deleted', '==', false)
         .get()
 
@@ -106,7 +107,7 @@ export default class HomesteadService implements IHomesteadService {
     try {
       const ref = this.homesteadCollection()
         .doc(homesteadId)
-        .collection('member')
+        .collection(Col.member)
         .doc()
       member.id = ref.id
       await ref.set(member as any)

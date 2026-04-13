@@ -6,6 +6,7 @@ import Note from '../../../schema/notes/Note'
 import Log from '../../../library/log/Log'
 import { useHomesteadStore } from '../../../store/homesteadStore'
 import INoteService from './INoteService'
+import { Col } from '@template/common'
 
 const TAG = 'NoteService'
 
@@ -13,13 +14,13 @@ export default class NoteService implements INoteService {
 
   private get homesteadRef() {
     const homesteadId = useHomesteadStore.getState().homesteadId
-    return firestore().collection('homestead').doc(homesteadId)
+    return firestore().collection(Col.homestead).doc(homesteadId)
   }
 
   async fetchNotesByAnimal(animalId: string): Promise<Note[]> {
     try {
       const snapshot = await this.homesteadRef
-        .collection('note')
+        .collection(Col.note)
         .where('animalId', '==', animalId)
         .where('admin.deleted', '==', false)
         .orderBy('admin.created_at', 'desc')
@@ -34,7 +35,7 @@ export default class NoteService implements INoteService {
 
   async createNote(note: Note, photoUri?: string): Promise<IResult> {
     try {
-      const docRef = this.homesteadRef.collection('note').doc()
+      const docRef = this.homesteadRef.collection(Col.note).doc()
       const noteData: Note = {
         ...note,
         id: docRef.id,
@@ -60,7 +61,7 @@ export default class NoteService implements INoteService {
 
   async deleteNote(noteId: string): Promise<IResult> {
     try {
-      await this.homesteadRef.collection('note').doc(noteId).update({
+      await this.homesteadRef.collection(Col.note).doc(noteId).update({
         'admin.deleted': true,
         'admin.updated_at': firestore.FieldValue.serverTimestamp(),
       })

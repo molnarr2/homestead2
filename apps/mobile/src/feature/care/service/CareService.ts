@@ -7,6 +7,7 @@ import { calculateNextDueDate } from '../../../util/CareUtility'
 import Log from '../../../library/log/Log'
 import { useHomesteadStore } from '../../../store/homesteadStore'
 import ICareService from './ICareService'
+import { Col } from '@template/common'
 
 const TAG = 'CareService'
 
@@ -14,12 +15,12 @@ export default class CareService implements ICareService {
 
   private get homesteadRef() {
     const homesteadId = useHomesteadStore.getState().homesteadId
-    return firestore().collection('homestead').doc(homesteadId)
+    return firestore().collection(Col.homestead).doc(homesteadId)
   }
 
   subscribeCareEvents(callback: (events: CareEvent[]) => void): () => void {
     return this.homesteadRef
-      .collection('careEvent')
+      .collection(Col.careEvent)
       .where('admin.deleted', '==', false)
       .onSnapshot(
         snapshot => {
@@ -38,7 +39,7 @@ export default class CareService implements ICareService {
 
   async getCareEvent(id: string): Promise<CareEvent | null> {
     try {
-      const doc = await this.homesteadRef.collection('careEvent').doc(id).get()
+      const doc = await this.homesteadRef.collection(Col.careEvent).doc(id).get()
       if (!doc.exists) return null
       return { ...doc.data(), id: doc.id } as CareEvent
     } catch (error: any) {
@@ -49,7 +50,7 @@ export default class CareService implements ICareService {
 
   async createCareEvent(event: CareEvent): Promise<IResult> {
     try {
-      const ref = this.homesteadRef.collection('careEvent').doc()
+      const ref = this.homesteadRef.collection(Col.careEvent).doc()
       event.id = ref.id
       await ref.set(event as any)
       return SuccessResult
@@ -62,7 +63,7 @@ export default class CareService implements ICareService {
   async updateCareEvent(event: CareEvent): Promise<IResult> {
     try {
       adminObject_updateLastUpdated(event.admin)
-      await this.homesteadRef.collection('careEvent').doc(event.id).update(event as any)
+      await this.homesteadRef.collection(Col.careEvent).doc(event.id).update(event as any)
       return SuccessResult
     } catch (error: any) {
       Log.error(TAG, `updateCareEvent error: ${error.message}`)
@@ -75,7 +76,7 @@ export default class CareService implements ICareService {
       const batch = firestore().batch()
       const completedDate = dateToTstamp(new Date())
 
-      const eventRef = this.homesteadRef.collection('careEvent').doc(event.id)
+      const eventRef = this.homesteadRef.collection(Col.careEvent).doc(event.id)
       batch.update(eventRef, {
         completedDate,
         createdNextRecurringEvent: event.type === 'careRecurring',
@@ -84,7 +85,7 @@ export default class CareService implements ICareService {
 
       if (event.type === 'careRecurring' && !event.createdNextRecurringEvent) {
         const nextDueDate = calculateNextDueDate(completedDate, event.cycle)
-        const nextEventRef = this.homesteadRef.collection('careEvent').doc()
+        const nextEventRef = this.homesteadRef.collection(Col.careEvent).doc()
         const nextEvent: CareEvent = {
           id: nextEventRef.id,
           animalId: event.animalId,
@@ -115,7 +116,7 @@ export default class CareService implements ICareService {
 
   async deleteCareEvent(id: string): Promise<IResult> {
     try {
-      await this.homesteadRef.collection('careEvent').doc(id).update({
+      await this.homesteadRef.collection(Col.careEvent).doc(id).update({
         'admin.deleted': true,
         'admin.updated_at': firestore.FieldValue.serverTimestamp(),
       })

@@ -9,6 +9,7 @@ import Log from '../../../library/log/Log'
 import { useHomesteadStore } from '../../../store/homesteadStore'
 import IAnimalTypeService from './IAnimalTypeService'
 import { STARTER_PLAYBOOKS } from '../data/StarterPlaybooks'
+import { Col } from '@template/common'
 
 const TAG = 'AnimalTypeService'
 
@@ -16,23 +17,23 @@ export default class AnimalTypeService implements IAnimalTypeService {
 
   private get homesteadRef() {
     const homesteadId = useHomesteadStore.getState().homesteadId
-    return firestore().collection('homestead').doc(homesteadId)
+    return firestore().collection(Col.homestead).doc(homesteadId)
   }
 
   private animalTypeCollection() {
-    return this.homesteadRef.collection('animalType')
+    return this.homesteadRef.collection(Col.animalType)
   }
 
   private breedCollection(animalTypeId: string) {
-    return this.animalTypeCollection().doc(animalTypeId).collection('breed')
+    return this.animalTypeCollection().doc(animalTypeId).collection(Col.breed)
   }
 
   private careTemplateCollection(animalTypeId: string) {
-    return this.animalTypeCollection().doc(animalTypeId).collection('careTemplate')
+    return this.animalTypeCollection().doc(animalTypeId).collection(Col.careTemplate)
   }
 
   private eventTemplateCollection(animalTypeId: string) {
-    return this.animalTypeCollection().doc(animalTypeId).collection('eventTemplate')
+    return this.animalTypeCollection().doc(animalTypeId).collection(Col.eventTemplate)
   }
 
   subscribeToAnimalTypes(callback: (types: AnimalType[]) => void): () => void {
@@ -275,11 +276,11 @@ export default class AnimalTypeService implements IAnimalTypeService {
   async seedStarterPlaybooks(homesteadId: string, selectedSpecies: string[], userId: string): Promise<IResult> {
     try {
       const batch = firestore().batch()
-      const seedRef = firestore().collection('homestead').doc(homesteadId)
+      const seedRef = firestore().collection(Col.homestead).doc(homesteadId)
 
       for (const species of selectedSpecies) {
         const playbook = STARTER_PLAYBOOKS[species]
-        const typeRef = seedRef.collection('animalType').doc()
+        const typeRef = seedRef.collection(Col.animalType).doc()
         batch.set(typeRef, {
           id: typeRef.id,
           admin: adminObject_default(),
@@ -289,7 +290,7 @@ export default class AnimalTypeService implements IAnimalTypeService {
 
         if (playbook) {
           for (const breed of playbook.breeds) {
-            const breedRef = typeRef.collection('breed').doc()
+            const breedRef = typeRef.collection(Col.breed).doc()
             batch.set(breedRef, {
               id: breedRef.id,
               admin: adminObject_default(),
@@ -300,7 +301,7 @@ export default class AnimalTypeService implements IAnimalTypeService {
           }
 
           for (const template of playbook.careTemplates) {
-            const templateRef = typeRef.collection('careTemplate').doc()
+            const templateRef = typeRef.collection(Col.careTemplate).doc()
             batch.set(templateRef, {
               id: templateRef.id,
               admin: adminObject_default(),
@@ -315,7 +316,7 @@ export default class AnimalTypeService implements IAnimalTypeService {
         }
       }
 
-      batch.update(firestore().collection('user').doc(userId), {
+      batch.update(firestore().collection(Col.user).doc(userId), {
         onboardingComplete: true,
         selectedSpecies,
       })
@@ -330,7 +331,7 @@ export default class AnimalTypeService implements IAnimalTypeService {
 
   async skipOnboarding(userId: string): Promise<IResult> {
     try {
-      await firestore().collection('user').doc(userId).update({
+      await firestore().collection(Col.user).doc(userId).update({
         onboardingComplete: true,
       })
       return SuccessResult

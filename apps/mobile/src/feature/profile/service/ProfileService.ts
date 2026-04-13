@@ -5,6 +5,7 @@ import { adminObject_default } from '../../../schema/object/AdminObject'
 import Feedback from '../../../schema/feedback/Feedback'
 import Log from '../../../library/log/Log'
 import IProfileService from './IProfileService'
+import { Col } from '@template/common'
 
 const TAG = 'ProfileService'
 
@@ -16,7 +17,7 @@ export default class ProfileService implements IProfileService {
       await storage().ref(storagePath).putFile(photoUri)
       const downloadUrl = await storage().ref(storagePath).getDownloadURL()
 
-      await firestore().collection('user').doc(userId).update({
+      await firestore().collection(Col.user).doc(userId).update({
         photoStorageRef: storagePath,
         avatarUrl: downloadUrl,
         'admin.updated_at': firestore.FieldValue.serverTimestamp(),
@@ -30,7 +31,7 @@ export default class ProfileService implements IProfileService {
 
   async submitFeedback(feedback: Feedback): Promise<IResult> {
     try {
-      const ref = firestore().collection('feedback').doc()
+      const ref = firestore().collection(Col.feedback).doc()
       await ref.set({
         ...feedback,
         id: ref.id,

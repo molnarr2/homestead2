@@ -5,13 +5,14 @@ import { adminObject_updateLastUpdated } from '../../../schema/object/AdminObjec
 import User from '../../../schema/user/User'
 import Log from '../../../library/log/Log'
 import IUserService from './IUserService'
+import { Col } from '@template/common'
 
 const TAG = 'UserService'
 
 export default class UserService implements IUserService {
 
   private userCollection() {
-    return firestore().collection('user')
+    return firestore().collection(Col.user)
   }
 
   subscribeUser(userId: string, callback: (user: User | null) => void): () => void {

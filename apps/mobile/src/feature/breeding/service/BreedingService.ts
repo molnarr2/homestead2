@@ -6,6 +6,7 @@ import Animal from '../../../schema/animal/Animal'
 import Log from '../../../library/log/Log'
 import { useHomesteadStore } from '../../../store/homesteadStore'
 import IBreedingService from './IBreedingService'
+import { Col } from '@template/common'
 
 const TAG = 'BreedingService'
 
@@ -13,12 +14,12 @@ export default class BreedingService implements IBreedingService {
 
   private get homesteadRef() {
     const homesteadId = useHomesteadStore.getState().homesteadId
-    return firestore().collection('homestead').doc(homesteadId)
+    return firestore().collection(Col.homestead).doc(homesteadId)
   }
 
   subscribe(callback: (records: BreedingRecord[]) => void): () => void {
     return this.homesteadRef
-      .collection('breedingRecord')
+      .collection(Col.breedingRecord)
       .where('admin.deleted', '==', false)
       .onSnapshot(
         snapshot => {
@@ -38,7 +39,7 @@ export default class BreedingService implements IBreedingService {
   async getBreedingRecordsForAnimal(animalId: string): Promise<BreedingRecord[]> {
     try {
       const snapshot = await this.homesteadRef
-        .collection('breedingRecord')
+        .collection(Col.breedingRecord)
         .where('animalId', '==', animalId)
         .where('admin.deleted', '==', false)
         .get()
@@ -55,7 +56,7 @@ export default class BreedingService implements IBreedingService {
 
   async createBreedingRecord(record: BreedingRecord): Promise<IResult> {
     try {
-      const ref = this.homesteadRef.collection('breedingRecord').doc()
+      const ref = this.homesteadRef.collection(Col.breedingRecord).doc()
       record.id = ref.id
       await ref.set(record as any)
       return SuccessResult
@@ -71,7 +72,7 @@ export default class BreedingService implements IBreedingService {
       const offspringIds: string[] = []
 
       for (let i = 0; i < outcome.bornAlive; i++) {
-        const offspringRef = this.homesteadRef.collection('animal').doc()
+        const offspringRef = this.homesteadRef.collection(Col.animal).doc()
         offspringIds.push(offspringRef.id)
         batch.set(offspringRef, {
           id: offspringRef.id,
@@ -98,7 +99,7 @@ export default class BreedingService implements IBreedingService {
         })
       }
 
-      const recordRef = this.homesteadRef.collection('breedingRecord').doc(recordId)
+      const recordRef = this.homesteadRef.collection(Col.breedingRecord).doc(recordId)
       batch.update(recordRef, {
         status: 'completed',
         birthDate: outcome.birthDate,
@@ -120,7 +121,7 @@ export default class BreedingService implements IBreedingService {
 
   async failBreeding(recordId: string): Promise<IResult> {
     try {
-      await this.homesteadRef.collection('breedingRecord').doc(recordId).update({
+      await this.homesteadRef.collection(Col.breedingRecord).doc(recordId).update({
         status: 'failed',
         'admin.updated_at': firestore.FieldValue.serverTimestamp(),
       })
@@ -133,7 +134,7 @@ export default class BreedingService implements IBreedingService {
 
   async deleteBreedingRecord(id: string): Promise<IResult> {
     try {
-      await this.homesteadRef.collection('breedingRecord').doc(id).update({
+      await this.homesteadRef.collection(Col.breedingRecord).doc(id).update({
         'admin.deleted': true,
         'admin.updated_at': firestore.FieldValue.serverTimestamp(),
       })

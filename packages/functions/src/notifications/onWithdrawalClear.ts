@@ -2,6 +2,7 @@ import { onSchedule } from 'firebase-functions/v2/scheduler'
 import { getFirestore } from 'firebase-admin/firestore'
 import { getMessaging } from 'firebase-admin/messaging'
 import { logger } from 'firebase-functions/v2'
+import { Col } from '@template/common'
 
 export const onWithdrawalClear = onSchedule('every day 07:00', async () => {
   const db = getFirestore()
@@ -9,7 +10,7 @@ export const onWithdrawalClear = onSchedule('every day 07:00', async () => {
   today.setHours(0, 0, 0, 0)
 
   const snapshot = await db
-    .collectionGroup('healthRecord')
+    .collectionGroup(Col.healthRecord)
     .where('admin.deleted', '==', false)
     .where('withdrawalPeriodDays', '>', 0)
     .get()
@@ -30,9 +31,9 @@ export const onWithdrawalClear = onSchedule('every day 07:00', async () => {
     let animalName = 'Unknown'
     if (data.animalId) {
       const animalSnap = await db
-        .collection('homestead')
+        .collection(Col.homestead)
         .doc(homesteadId)
-        .collection('animal')
+        .collection(Col.animal)
         .doc(data.animalId)
         .get()
       if (animalSnap.exists) {
@@ -41,18 +42,18 @@ export const onWithdrawalClear = onSchedule('every day 07:00', async () => {
     }
 
     const membersSnap = await db
-      .collection('homestead')
+      .collection(Col.homestead)
       .doc(homesteadId)
-      .collection('member')
+      .collection(Col.member)
       .get()
     const memberUserIds = membersSnap.docs.map((d) => d.id)
 
     const tokens: string[] = []
     for (const userId of memberUserIds) {
       const devicesSnap = await db
-        .collection('user')
+        .collection(Col.user)
         .doc(userId)
-        .collection('device')
+        .collection(Col.device)
         .get()
       devicesSnap.docs.forEach((d) => {
         const token = d.data().tokenId

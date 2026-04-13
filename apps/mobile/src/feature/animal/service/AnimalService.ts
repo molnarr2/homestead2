@@ -6,6 +6,7 @@ import Animal from '../../../schema/animal/Animal'
 import Log from '../../../library/log/Log'
 import { useHomesteadStore } from '../../../store/homesteadStore'
 import IAnimalService from './IAnimalService'
+import { Col } from '@template/common'
 
 const TAG = 'AnimalService'
 
@@ -13,12 +14,12 @@ export default class AnimalService implements IAnimalService {
 
   private get homesteadRef() {
     const homesteadId = useHomesteadStore.getState().homesteadId
-    return firestore().collection('homestead').doc(homesteadId)
+    return firestore().collection(Col.homestead).doc(homesteadId)
   }
 
   subscribeAnimals(callback: (animals: Animal[]) => void): () => void {
     return this.homesteadRef
-      .collection('animal')
+      .collection(Col.animal)
       .where('admin.deleted', '==', false)
       .onSnapshot(
         snapshot => {
@@ -37,7 +38,7 @@ export default class AnimalService implements IAnimalService {
 
   async getAnimal(id: string): Promise<Animal | null> {
     try {
-      const doc = await this.homesteadRef.collection('animal').doc(id).get()
+      const doc = await this.homesteadRef.collection(Col.animal).doc(id).get()
       if (!doc.exists) return null
       return { ...doc.data(), id: doc.id } as Animal
     } catch (error: any) {
@@ -48,7 +49,7 @@ export default class AnimalService implements IAnimalService {
 
   async createAnimal(animal: Animal): Promise<IResult> {
     try {
-      const ref = this.homesteadRef.collection('animal').doc()
+      const ref = this.homesteadRef.collection(Col.animal).doc()
       animal.id = ref.id
       await ref.set(animal as any)
       return SuccessResult
@@ -61,7 +62,7 @@ export default class AnimalService implements IAnimalService {
   async updateAnimal(animal: Animal): Promise<IResult> {
     try {
       adminObject_updateLastUpdated(animal.admin)
-      await this.homesteadRef.collection('animal').doc(animal.id).update(animal as any)
+      await this.homesteadRef.collection(Col.animal).doc(animal.id).update(animal as any)
       return SuccessResult
     } catch (error: any) {
       Log.error(TAG, `updateAnimal error: ${error.message}`)
@@ -71,7 +72,7 @@ export default class AnimalService implements IAnimalService {
 
   async deleteAnimal(id: string): Promise<IResult> {
     try {
-      await this.homesteadRef.collection('animal').doc(id).update({
+      await this.homesteadRef.collection(Col.animal).doc(id).update({
         'admin.deleted': true,
         'admin.updated_at': firestore.FieldValue.serverTimestamp(),
       })
@@ -84,7 +85,7 @@ export default class AnimalService implements IAnimalService {
 
   async updateAnimalState(animalId: string, state: string): Promise<IResult> {
     try {
-      await this.homesteadRef.collection('animal').doc(animalId).update({
+      await this.homesteadRef.collection(Col.animal).doc(animalId).update({
         state,
         'admin.updated_at': firestore.FieldValue.serverTimestamp(),
       })

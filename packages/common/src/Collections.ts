@@ -1,0 +1,18 @@
+export const Col = {
+  user: 'user_v2',
+  device: 'device_v2',
+  homestead: 'homestead_v2',
+  member: 'member_v2',
+  animal: 'animal_v2',
+  careEvent: 'careEvent_v2',
+  healthRecord: 'healthRecord_v2',
+  breedingRecord: 'breedingRecord_v2',
+  note: 'note_v2',
+  weightLog: 'weightLog_v2',
+  productionLog: 'productionLog_v2',
+  animalType: 'animalType_v2',
+  breed: 'breed_v2',
+  careTemplate: 'careTemplate_v2',
+  eventTemplate: 'eventTemplate_v2',
+  feedback: 'feedback_v2',
+} as const

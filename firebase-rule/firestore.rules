@@ -12,30 +12,30 @@ service cloud.firestore {
 
     // Check if the user is a member of the homestead (has any role)
     function isHomesteadMember(homesteadId) {
-      return isAuth() && exists(/databases/$(database)/documents/homestead/$(homesteadId)/member/$(request.auth.uid));
+      return isAuth() && exists(/databases/$(database)/documents/homestead_v2/$(homesteadId)/member_v2/$(request.auth.uid));
     }
 
     // User profile — owner only
-    match /user/{userId} {
+    match /user_v2/{userId} {
       allow read: if isAuth() && isOwner(userId);
       allow create: if isAuth() && isOwner(userId);
       allow update: if isAuth() && isOwner(userId);
       allow delete: if false;
 
-      match /device/{deviceId} {
+      match /device_v2/{deviceId} {
         allow read, write: if isAuth() && isOwner(userId);
       }
     }
 
     // Homestead — members only
-    match /homestead/{homesteadId} {
+    match /homestead_v2/{homesteadId} {
       allow read: if isHomesteadMember(homesteadId);
       allow create: if isAuth();
       allow update: if isHomesteadMember(homesteadId);
       allow delete: if false;
 
       // Members — members can read, only homestead members can manage
-      match /member/{memberId} {
+      match /member_v2/{memberId} {
         allow read: if isHomesteadMember(homesteadId);
         allow create: if isHomesteadMember(homesteadId);
         allow update: if isHomesteadMember(homesteadId);
@@ -43,49 +43,49 @@ service cloud.firestore {
       }
 
       // All farm data — homestead members only
-      match /animal/{animalId} {
+      match /animal_v2/{animalId} {
         allow read: if isHomesteadMember(homesteadId);
         allow create: if isHomesteadMember(homesteadId);
         allow update: if isHomesteadMember(homesteadId);
         allow delete: if false;
       }
 
-      match /careEvent/{eventId} {
+      match /careEvent_v2/{eventId} {
         allow read: if isHomesteadMember(homesteadId);
         allow create: if isHomesteadMember(homesteadId);
         allow update: if isHomesteadMember(homesteadId);
         allow delete: if false;
       }
 
-      match /healthRecord/{recordId} {
+      match /healthRecord_v2/{recordId} {
         allow read: if isHomesteadMember(homesteadId);
         allow create: if isHomesteadMember(homesteadId);
         allow update: if isHomesteadMember(homesteadId);
         allow delete: if false;
       }
 
-      match /breedingRecord/{recordId} {
+      match /breedingRecord_v2/{recordId} {
         allow read: if isHomesteadMember(homesteadId);
         allow create: if isHomesteadMember(homesteadId);
         allow update: if isHomesteadMember(homesteadId);
         allow delete: if false;
       }
 
-      match /note/{noteId} {
+      match /note_v2/{noteId} {
         allow read: if isHomesteadMember(homesteadId);
         allow create: if isHomesteadMember(homesteadId);
         allow update: if isHomesteadMember(homesteadId);
         allow delete: if false;
       }
 
-      match /weightLog/{logId} {
+      match /weightLog_v2/{logId} {
         allow read: if isHomesteadMember(homesteadId);
         allow create: if isHomesteadMember(homesteadId);
         allow update: if isHomesteadMember(homesteadId);
         allow delete: if false;
       }
 
-      match /productionLog/{logId} {
+      match /productionLog_v2/{logId} {
         allow read: if isHomesteadMember(homesteadId);
         allow create: if isHomesteadMember(homesteadId);
         allow update: if isHomesteadMember(homesteadId);
@@ -93,27 +93,27 @@ service cloud.firestore {
       }
 
       // Animal Types — homestead members only (with subcollections)
-      match /animalType/{typeId} {
+      match /animalType_v2/{typeId} {
         allow read: if isHomesteadMember(homesteadId);
         allow create: if isHomesteadMember(homesteadId);
         allow update: if isHomesteadMember(homesteadId);
         allow delete: if false;
 
-        match /breed/{breedId} {
+        match /breed_v2/{breedId} {
           allow read: if isHomesteadMember(homesteadId);
           allow create: if isHomesteadMember(homesteadId);
           allow update: if isHomesteadMember(homesteadId);
           allow delete: if false;
         }
 
-        match /careTemplate/{templateId} {
+        match /careTemplate_v2/{templateId} {
           allow read: if isHomesteadMember(homesteadId);
           allow create: if isHomesteadMember(homesteadId);
           allow update: if isHomesteadMember(homesteadId);
           allow delete: if false;
         }
 
-        match /eventTemplate/{templateId} {
+        match /eventTemplate_v2/{templateId} {
           allow read: if isHomesteadMember(homesteadId);
           allow create: if isHomesteadMember(homesteadId);
           allow update: if isHomesteadMember(homesteadId);
@@ -123,7 +123,7 @@ service cloud.firestore {
     }
 
     // Feedback — write-only, read by admin
-    match /feedback/{feedbackId} {
+    match /feedback_v2/{feedbackId} {
       allow create: if isAuth();
       allow read: if false;
       allow update: if false;

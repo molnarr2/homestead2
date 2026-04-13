@@ -5,6 +5,7 @@ import WeightLog from '../../../schema/weight/WeightLog'
 import Log from '../../../library/log/Log'
 import { useHomesteadStore } from '../../../store/homesteadStore'
 import IWeightService from './IWeightService'
+import { Col } from '@template/common'
 
 const TAG = 'WeightService'
 
@@ -12,13 +13,13 @@ export default class WeightService implements IWeightService {
 
   private get homesteadRef() {
     const homesteadId = useHomesteadStore.getState().homesteadId
-    return firestore().collection('homestead').doc(homesteadId)
+    return firestore().collection(Col.homestead).doc(homesteadId)
   }
 
   async getWeightLogsForAnimal(animalId: string): Promise<WeightLog[]> {
     try {
       const snapshot = await this.homesteadRef
-        .collection('weightLog')
+        .collection(Col.weightLog)
         .where('animalId', '==', animalId)
         .where('admin.deleted', '==', false)
         .get()
@@ -35,7 +36,7 @@ export default class WeightService implements IWeightService {
 
   async createWeightLog(log: WeightLog): Promise<IResult> {
     try {
-      const ref = this.homesteadRef.collection('weightLog').doc()
+      const ref = this.homesteadRef.collection(Col.weightLog).doc()
       log.id = ref.id
       await ref.set(log as any)
       return SuccessResult
@@ -48,7 +49,7 @@ export default class WeightService implements IWeightService {
   async updateWeightLog(log: WeightLog): Promise<IResult> {
     try {
       adminObject_updateLastUpdated(log.admin)
-      await this.homesteadRef.collection('weightLog').doc(log.id).update(log as any)
+      await this.homesteadRef.collection(Col.weightLog).doc(log.id).update(log as any)
       return SuccessResult
     } catch (error: any) {
       Log.error(TAG, `updateWeightLog error: ${error.message}`)
@@ -58,7 +59,7 @@ export default class WeightService implements IWeightService {
 
   async deleteWeightLog(id: string): Promise<IResult> {
     try {
-      await this.homesteadRef.collection('weightLog').doc(id).update({
+      await this.homesteadRef.collection(Col.weightLog).doc(id).update({
         'admin.deleted': true,
         'admin.updated_at': firestore.FieldValue.serverTimestamp(),
       })
