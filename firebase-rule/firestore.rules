@@ -1,6 +1,9 @@
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
+
+    // ──── V2 Helper Functions ────
 
     function isAuth() {
       return request.auth != null;
@@ -10,12 +13,78 @@ service cloud.firestore {
       return request.auth.uid == userId;
     }
 
-    // Check if the user is a member of the homestead (has any role)
     function isHomesteadMember(homesteadId) {
       return isAuth() && exists(/databases/$(database)/documents/homestead_v2/$(homesteadId)/member_v2/$(request.auth.uid));
     }
 
-    // User profile — owner only
+    // ──── Production Rules (DO NOT MODIFY) ────
+
+    match /{path=**}/workevent/{wid} {
+      allow read, write: if resource.data.userId == request.auth.uid;
+    }
+
+    match /feedback/{feedbackid} {
+      allow create: if request.auth.uid != null;
+    }
+
+    match /user/{userid} {
+        allow read, write: if request.auth.uid == userid
+    }
+
+    match /user/{userid}/device/{device} {
+        allow read, write: if request.auth.uid == userid
+    }
+
+    match /user/{userid}/animal/{animal} {
+        allow read, write: if request.auth.uid == userid
+    }
+
+    match /user/{userid}/animal/{animal}/subrecurring/{sid} {
+        allow read, write: if request.auth.uid == userid
+    }
+
+    match /user/{userid}/animal/{animal}/workevent/{wid} {
+        allow read, write: if request.auth.uid == userid
+    }
+
+    match /user/{userid}/animal/{animal}/userevent/{wid} {
+        allow read, write: if request.auth.uid == userid
+    }
+
+    match /user/{userid}/urecurring_template/{urid} {
+        allow read, write: if request.auth.uid == userid
+    }
+
+    match /user/{userid}/uanimal_type/{uaid} {
+        allow read, write: if request.auth.uid == userid
+    }
+
+    match /user/{userid}/uanimal_type/{uaid}/ubreed_type/{ubid} {
+        allow read, write: if request.auth.uid == userid
+    }
+
+    match /user/{userid}/uanimal_type/{uaid}/urecurring_template/{ubid} {
+        allow read, write: if request.auth.uid == userid
+    }
+
+    match /recurring_template/{id} {
+        allow read: if true;
+    }
+
+    match /animal_type/{id} {
+        allow read: if true;
+    }
+
+    match /animal_type/{aid}/breed_type/{bid} {
+        allow read: if true;
+    }
+
+    match /animal_type/{aid}/recurring_template/{rid} {
+        allow read: if true;
+    }
+
+    // ──── V2 Rules ────
+
     match /user_v2/{userId} {
       allow read: if isAuth() && isOwner(userId);
       allow create: if isAuth() && isOwner(userId);
@@ -27,14 +96,12 @@ service cloud.firestore {
       }
     }
 
-    // Homestead — members only
     match /homestead_v2/{homesteadId} {
       allow read: if isHomesteadMember(homesteadId);
       allow create: if isAuth();
       allow update: if isHomesteadMember(homesteadId);
       allow delete: if false;
 
-      // Members — members can read, only homestead members can manage
       match /member_v2/{memberId} {
         allow read: if isHomesteadMember(homesteadId);
         allow create: if isHomesteadMember(homesteadId);
@@ -42,7 +109,6 @@ service cloud.firestore {
         allow delete: if false;
       }
 
-      // All farm data — homestead members only
       match /animal_v2/{animalId} {
         allow read: if isHomesteadMember(homesteadId);
         allow create: if isHomesteadMember(homesteadId);
@@ -92,7 +158,6 @@ service cloud.firestore {
         allow delete: if false;
       }
 
-      // Animal Types — homestead members only (with subcollections)
       match /animalType_v2/{typeId} {
         allow read: if isHomesteadMember(homesteadId);
         allow create: if isHomesteadMember(homesteadId);
@@ -122,12 +187,17 @@ service cloud.firestore {
       }
     }
 
-    // Feedback — write-only, read by admin
     match /feedback_v2/{feedbackId} {
       allow create: if isAuth();
       allow read: if false;
       allow update: if false;
       allow delete: if false;
+    }
+
+    // ──── Catch-all Deny (from production) ────
+
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }
