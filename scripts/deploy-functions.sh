@@ -5,5 +5,5 @@ cd "$(dirname "$0")/../functions"
 npm run build
 echo "Deploying Cloud Functions..."
 cd "$(dirname "$0")/.."
-firebase deploy --only functions --project <PROJECT_ID>
+firebase deploy --only functions --project homestead-prod
 echo "Functions deployed."

@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "561524091377",
-    "project_id": "antioch-dev-e224b",
-    "storage_bucket": "antioch-dev-e224b.firebasestorage.app"
+    "project_number": "736833423375",
+    "project_id": "homestead-prod",
+    "storage_bucket": "homestead-prod.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:561524091377:android:9d300018507d9544187c50",
+        "mobilesdk_app_id": "1:736833423375:android:7dc5a39c091238c3c93b7a",
         "android_client_info": {
-          "package_name": "com.hrjsoftware.antioch"
+          "package_name": "com.hrjsoftware.homestead"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAvEVB9cqVfH1SZlCKXie-IEfMq688mjac"
+          "current_key": "AIzaSyCpz4SSKH4UAfvU5Fmn25bdLu6I9pTdvH4"
         }
       ],
       "services": {

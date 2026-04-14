@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyClg4fof_bnIEfb7kfkfy31MsZSmlb3S9k</string>
+	<string>AIzaSyDJtg5QkkWYB2d3PkZrV4tYaG8bQ0e4EXQ</string>
 	<key>GCM_SENDER_ID</key>
-	<string>561524091377</string>
+	<string>736833423375</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.hrjsoftware.antioch</string>
+	<string>com.hrjsoftware.homestead</string>
 	<key>PROJECT_ID</key>
-	<string>antioch-dev-e224b</string>
+	<string>homestead-prod</string>
 	<key>STORAGE_BUCKET</key>
-	<string>antioch-dev-e224b.firebasestorage.app</string>
+	<string>homestead-prod.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:561524091377:ios:dae8db0d1003d25b187c50</string>
+	<string>1:736833423375:ios:198c036681eb40a2c93b7a</string>
 </dict>
 </plist>
