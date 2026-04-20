@@ -6,8 +6,9 @@ import IInAppPurchases, {
     errorPurchase,
     SubscriptionWithError
 } from "../../../core/plugin/IInAppPurchases"
-import Purchases from "react-native-purchases"
 import { InAppPrices, InAppSubscription } from "../../../core/service/purchases/IInAppPurchaseService"
+
+const getPurchases = () => require("react-native-purchases").default as typeof import("react-native-purchases").default
 
 // TODO: set the RevenueCat API keys for each platform before using this class.
 const APPLE_API_KEY = ""
@@ -44,6 +45,7 @@ export default class RevenueCatInAppPurchases implements IInAppPurchases {
     }
 
     async initialize(): Promise<void> {
+        const Purchases = getPurchases()
         await Purchases.setLogLevel(Purchases.LOG_LEVEL.DEBUG)
 
         if (Platform.OS === 'ios') {
@@ -54,15 +56,15 @@ export default class RevenueCatInAppPurchases implements IInAppPurchases {
     }
 
     async login(userId: string): Promise<void> {
-        await Purchases.logIn(userId)
+        await getPurchases().logIn(userId)
     }
 
     async logout(): Promise<void> {
-        await Purchases.logOut()
+        await getPurchases().logOut()
     }
 
     async getProducts(): Promise<void> {
-        await Purchases.getProducts([this.productTier1, this.productTier2, this.productTier3])
+        await getPurchases().getProducts([this.productTier1, this.productTier2, this.productTier3])
     }
 
     async purchaseProduct(productId: string): Promise<IPurchaseResult> {
@@ -76,7 +78,7 @@ export default class RevenueCatInAppPurchases implements IInAppPurchases {
     }
 
     async prices(): Promise<InAppPrices> {
-        const products = await Purchases.getProducts([this.productTier1, this.productTier2, this.productTier3])
+        const products = await getPurchases().getProducts([this.productTier1, this.productTier2, this.productTier3])
 
         const price1 = products.find((item) => item.identifier === this.identifierTier1)?.priceString
         const price2 = products.find((item) => item.identifier === this.identifierTier2)?.priceString
@@ -101,7 +103,7 @@ export default class RevenueCatInAppPurchases implements IInAppPurchases {
 
     async restorePurchases(): Promise<IPurchaseResult> {
         try {
-            await Purchases.restorePurchases()
+            await getPurchases().restorePurchases()
             return SuccessPurchase
         } catch (e) {
             return errorPurchase("" + e)
@@ -110,6 +112,7 @@ export default class RevenueCatInAppPurchases implements IInAppPurchases {
 
     async performPurchase(productId: string, entitlementId: string): Promise<IPurchaseResult> {
         try {
+            const Purchases = getPurchases()
             const product = await Purchases.getProducts([productId])
             const { customerInfo } = await Purchases.purchaseStoreProduct(product[0])
             if (typeof customerInfo.entitlements.active[entitlementId] !== "undefined") {
@@ -130,7 +133,7 @@ export default class RevenueCatInAppPurchases implements IInAppPurchases {
 
     async getSubscription(): Promise<SubscriptionWithError> {
         try {
-            const customerInfo = await Purchases.getCustomerInfo()
+            const customerInfo = await getPurchases().getCustomerInfo()
             const hasTier1 = typeof customerInfo.entitlements.active[this.entitlementTier1] !== "undefined"
             const hasTier2 = typeof customerInfo.entitlements.active[this.entitlementTier2] !== "undefined"
             const hasTier3 = typeof customerInfo.entitlements.active[this.entitlementTier3] !== "undefined"

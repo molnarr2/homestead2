@@ -3,6 +3,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
 import { bsAuthService, bsUserService, bsHomesteadService } from '../../../Bootstrap'
 import { user_default } from '../../../schema/user/User'
+import { useHomesteadStore } from '../../../store/homesteadStore'
 
 type RegisterNavigation = NativeStackNavigationProp<RootStackParamList, 'Register'>
 
@@ -43,6 +44,7 @@ export function useRegisterController(navigation: RegisterNavigation) {
 
     const homesteadId = await bsHomesteadService.createHomestead('My Homestead', userId, `${firstName} ${lastName}`, email)
     await bsUserService.setActiveHomestead(userId, homesteadId)
+    useHomesteadStore.getState().setHomestead(homesteadId)
 
     navigation.navigate('SpeciesSelection')
     setLoading(false)

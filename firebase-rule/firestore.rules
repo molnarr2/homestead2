@@ -104,7 +104,7 @@ service cloud.firestore {
 
       match /member_v2/{memberId} {
         allow read: if isHomesteadMember(homesteadId);
-        allow create: if isHomesteadMember(homesteadId);
+        allow create: if isAuth() && (isHomesteadMember(homesteadId) || request.auth.uid == memberId);
         allow update: if isHomesteadMember(homesteadId);
         allow delete: if false;
       }

@@ -2,6 +2,7 @@ import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { useAuthStore } from '../store/authStore'
+import { useHomesteadStore } from '../store/homesteadStore'
 import { DrawerNavigator } from './DrawerNavigator'
 import type { HealthRecordType } from '../schema/health/HealthRecord'
 import LoadingScreen from '../feature/loading/LoadingScreen'
@@ -92,21 +93,23 @@ const Stack = createNativeStackNavigator<RootStackParamList>()
 
 const RootNavigation: React.FC = () => {
   const isLoggedIn = useAuthStore(s => s.isLoggedIn)
+  const homesteadId = useHomesteadStore(s => s.homesteadId)
+  const showLoading = isLoggedIn === null || (isLoggedIn === true && homesteadId === '')
 
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {isLoggedIn === null ? (
+        {showLoading ? (
           <Stack.Screen name="Loading" component={LoadingScreen} />
         ) : isLoggedIn === false ? (
           <>
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Register" component={RegisterScreen} />
-            <Stack.Screen name="SpeciesSelection" component={SpeciesSelectionScreen} />
           </>
         ) : (
           <>
             <Stack.Screen name="DrawerMain" component={DrawerNavigator} />
+            <Stack.Screen name="SpeciesSelection" component={SpeciesSelectionScreen} />
             <Stack.Screen name="AnimalDetail" component={AnimalDetailScreen} />
             <Stack.Screen name="CreateAnimal" component={CreateAnimalScreen} />
             <Stack.Screen name="EditAnimal" component={EditAnimalScreen} />

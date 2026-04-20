@@ -37,10 +37,10 @@ export default class HomesteadService implements IHomesteadService {
       }
       await homesteadRef.set(homestead)
 
-      const memberRef = homesteadRef.collection(Col.member).doc()
+      const memberRef = homesteadRef.collection(Col.member).doc(ownerUserId)
       const member: HomesteadMember = {
         ...homesteadMember_default(),
-        id: memberRef.id,
+        id: ownerUserId,
         userId: ownerUserId,
         role: 'owner',
         displayName: ownerDisplayName,
