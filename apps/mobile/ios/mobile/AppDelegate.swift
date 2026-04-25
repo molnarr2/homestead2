@@ -17,6 +17,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   ) -> Bool {
     FirebaseApp.configure()
 
+#if DEBUG
+    RCTBundleURLProvider.sharedSettings().jsLocation = "localhost:8083"
+#endif
+
     let delegate = ReactNativeDelegate()
     let factory = RCTReactNativeFactory(delegate: delegate)
     delegate.dependencyProvider = RCTAppDependencyProvider()

@@ -12,4 +12,4 @@ if [ -z "$ANDROID_HOME" ]; then
   exit 1
 fi
 
-npx react-native run-android
+npx react-native run-android --port 8083

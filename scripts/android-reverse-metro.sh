@@ -1,3 +1,3 @@
 #!/bin/bash
 set -e
-adb reverse tcp:8081 tcp:8081
+adb reverse tcp:8083 tcp:8083
