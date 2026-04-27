@@ -10,6 +10,8 @@ export default interface User {
   anonymous: boolean
   selectedSpecies: string[]
   onboardingComplete: boolean
+  subscriptionRevenuecat: 'free' | 'pro' | 'farm'
+  subscriptionOverride: 'free' | 'pro' | 'farm'
   subscription: 'free' | 'pro' | 'farm'
   avatarUrl: string
   photoStorageRef: string
@@ -27,6 +29,8 @@ export function user_default(): User {
     anonymous: false,
     selectedSpecies: [],
     onboardingComplete: false,
+    subscriptionRevenuecat: 'free',
+    subscriptionOverride: 'free',
     subscription: 'free',
     avatarUrl: '',
     photoStorageRef: '',
