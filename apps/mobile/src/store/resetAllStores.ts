@@ -9,6 +9,14 @@ import { useNoteStore } from './noteStore'
 import { useWeightStore } from './weightStore'
 import { useAnimalTypeStore } from './animalTypeStore'
 
+export function subscribeAllStores() {
+  useUserStore.getState().subscribe()
+  useAnimalStore.getState().subscribe()
+  useCareStore.getState().subscribe()
+  useBreedingStore.getState().subscribe()
+  useAnimalTypeStore.getState().subscribe()
+}
+
 export function resetAllStores() {
   useAnimalStore.getState().clear()
   useCareStore.getState().clear()

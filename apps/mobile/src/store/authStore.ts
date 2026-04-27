@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { bsAuthService, bsUserService, bsHomesteadService } from '../Bootstrap'
 import { useHomesteadStore } from './homesteadStore'
+import { subscribeAllStores, resetAllStores } from './resetAllStores'
 
 interface AuthState {
   isLoggedIn: boolean | null
@@ -25,10 +26,11 @@ export const useAuthStore = create<AuthState>((set) => {
         }
         if (hsId) {
           useHomesteadStore.getState().setHomestead(hsId)
+          subscribeAllStores()
         }
       } else {
+        resetAllStores()
         set({ isLoggedIn: false, userId: '' })
-        useHomesteadStore.getState().clear()
       }
     },
   })
