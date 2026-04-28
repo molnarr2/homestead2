@@ -6,6 +6,8 @@ import ScreenContainer from '../../../components/layout/ScreenContainer'
 import ConfirmDialog from '../../../components/dialog/ConfirmDialog'
 import Icon from '@react-native-vector-icons/material-design-icons'
 import { useProfileController } from './ProfileController'
+import { useHomesteadStore } from '../../../store/homesteadStore'
+import { effectiveSubscription } from '../../subscription/service/ISubscriptionService'
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Profile'>
 
@@ -27,8 +29,10 @@ const MenuItemRow: React.FC<MenuItemRowProps> = ({ label, onPress }) => (
 
 const ProfileScreen: React.FC<Props> = ({ navigation }) => {
   const c = useProfileController(navigation)
+  const homestead = useHomesteadStore(s => s.homestead)
+  const tier = effectiveSubscription(homestead)
   const fullName = `${c.user?.firstName ?? ''} ${c.user?.lastName ?? ''}`.trim()
-  const subscriptionLabel = (c.user?.subscription ?? 'free').charAt(0).toUpperCase() + (c.user?.subscription ?? 'free').slice(1)
+  const subscriptionLabel = tier.charAt(0).toUpperCase() + tier.slice(1)
 
   return (
     <ScreenContainer>

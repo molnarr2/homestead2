@@ -3,10 +3,11 @@ import { IResult, SuccessResult, ErrorResult } from '../../../util/Result'
 import { adminObject_default } from '../../../schema/object/AdminObject'
 import { homesteadMember_default } from '../../../schema/homestead/HomesteadMember'
 import Homestead from '../../../schema/homestead/Homestead'
-import HomesteadMember from '../../../schema/homestead/HomesteadMember'
+import HomesteadMember, { HomesteadRole } from '../../../schema/homestead/HomesteadMember'
 import Log from '../../../library/log/Log'
 import IHomesteadService from './IHomesteadService'
 import { Col } from '@template/common'
+import type { SubscriptionTier } from '../../subscription/service/ISubscriptionService'
 
 const TAG = 'HomesteadService'
 
@@ -34,6 +35,8 @@ export default class HomesteadService implements IHomesteadService {
         id: homesteadRef.id,
         admin: adminObject_default(),
         name,
+        subscriptionRevenuecat: 'free',
+        subscriptionOverride: 'free',
       }
       await homesteadRef.set(homestead)
 
@@ -114,6 +117,51 @@ export default class HomesteadService implements IHomesteadService {
       return SuccessResult
     } catch (error: any) {
       Log.error(TAG, `addMember error: ${error.message}`)
+      return ErrorResult(error.message)
+    }
+  }
+
+  subscribeHomestead(homesteadId: string, callback: (homestead: Homestead | null) => void): () => void {
+    return this.homesteadCollection()
+      .doc(homesteadId)
+      .onSnapshot(
+        snapshot => {
+          if (!snapshot.exists) {
+            callback(null)
+            return
+          }
+          callback({ ...snapshot.data(), id: snapshot.id } as Homestead)
+        },
+        error => {
+          Log.error(TAG, `subscribeHomestead error: ${error.message}`)
+          callback(null)
+        }
+      )
+  }
+
+  async getMemberRole(homesteadId: string, userId: string): Promise<HomesteadRole | null> {
+    try {
+      const doc = await this.homesteadCollection()
+        .doc(homesteadId)
+        .collection(Col.member)
+        .doc(userId)
+        .get()
+      if (!doc.exists) return null
+      return (doc.data() as HomesteadMember).role
+    } catch (error: any) {
+      Log.error(TAG, `getMemberRole error: ${error.message}`)
+      return null
+    }
+  }
+
+  async updateHomesteadSubscription(homesteadId: string, subscriptionRevenuecat: SubscriptionTier): Promise<IResult> {
+    try {
+      await this.homesteadCollection()
+        .doc(homesteadId)
+        .update({ subscriptionRevenuecat })
+      return SuccessResult
+    } catch (error: any) {
+      Log.error(TAG, `updateHomesteadSubscription error: ${error.message}`)
       return ErrorResult(error.message)
     }
   }

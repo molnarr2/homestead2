@@ -5,8 +5,9 @@ import type { RouteProp } from '@react-navigation/native'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
 import { useAnimalStore } from '../../../store/animalStore'
 import { useAnimalTypeStore } from '../../../store/animalTypeStore'
-import { useUserStore } from '../../../store/userStore'
-import { bsAnimalService, bsSubscriptionService } from '../../../Bootstrap'
+import { useHomesteadStore } from '../../../store/homesteadStore'
+import { effectiveSubscription } from '../../subscription/service/ISubscriptionService'
+import { bsAnimalService } from '../../../Bootstrap'
 import { animal_default, AnimalGender } from '../../../schema/animal/Animal'
 import { adminObject_default } from '../../../schema/object/AdminObject'
 import Breed from '../../../schema/animalType/Breed'
@@ -19,7 +20,7 @@ const FREE_TIER_ANIMAL_LIMIT = 10
 export function useCreateAnimalController(navigation: Navigation, route: Route) {
   const { animals } = useAnimalStore()
   const { animalTypes, breeds, fetchBreeds } = useAnimalTypeStore()
-  const user = useUserStore(s => s.user)
+  const homestead = useHomesteadStore(s => s.homestead)
 
   const [name, setName] = useState('')
   const [animalTypeId, setAnimalTypeId] = useState(route.params?.animalTypeId ?? '')
@@ -55,7 +56,7 @@ export function useCreateAnimalController(navigation: Navigation, route: Route) 
       return
     }
 
-    const tier = user?.subscription ?? 'free'
+    const tier = effectiveSubscription(homestead)
     if (tier === 'free' && animals.length >= FREE_TIER_ANIMAL_LIMIT) {
       Alert.alert(
         'Animal Limit Reached',

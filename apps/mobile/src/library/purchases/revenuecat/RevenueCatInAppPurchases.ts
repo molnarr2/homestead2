@@ -1,4 +1,4 @@
-import { Platform } from "react-native"
+import { Platform, NativeModules } from "react-native"
 import IInAppPurchases, {
     CanceledPurchase,
     IPurchaseResult,
@@ -8,7 +8,14 @@ import IInAppPurchases, {
 } from "../../../core/plugin/IInAppPurchases"
 import { InAppPrices, InAppSubscription } from "../../../core/service/purchases/IInAppPurchaseService"
 
-const getPurchases = () => require("react-native-purchases").default as typeof import("react-native-purchases").default
+const getPurchases = (): typeof import("react-native-purchases").default | null => {
+    if (!NativeModules.RNPurchases) return null
+    try {
+        return require("react-native-purchases").default
+    } catch {
+        return null
+    }
+}
 
 // TODO: set the RevenueCat API keys for each platform before using this class.
 const APPLE_API_KEY = ""
@@ -46,6 +53,7 @@ export default class RevenueCatInAppPurchases implements IInAppPurchases {
 
     async initialize(): Promise<void> {
         const Purchases = getPurchases()
+        if (!Purchases) return
         await Purchases.setLogLevel(Purchases.LOG_LEVEL.DEBUG)
 
         if (Platform.OS === 'ios') {
@@ -56,15 +64,21 @@ export default class RevenueCatInAppPurchases implements IInAppPurchases {
     }
 
     async login(userId: string): Promise<void> {
-        await getPurchases().logIn(userId)
+        const Purchases = getPurchases()
+        if (!Purchases) return
+        await Purchases.logIn(userId)
     }
 
     async logout(): Promise<void> {
-        await getPurchases().logOut()
+        const Purchases = getPurchases()
+        if (!Purchases) return
+        await Purchases.logOut()
     }
 
     async getProducts(): Promise<void> {
-        await getPurchases().getProducts([this.productTier1, this.productTier2, this.productTier3])
+        const Purchases = getPurchases()
+        if (!Purchases) return
+        await Purchases.getProducts([this.productTier1, this.productTier2, this.productTier3])
     }
 
     async purchaseProduct(productId: string): Promise<IPurchaseResult> {
@@ -78,7 +92,9 @@ export default class RevenueCatInAppPurchases implements IInAppPurchases {
     }
 
     async prices(): Promise<InAppPrices> {
-        const products = await getPurchases().getProducts([this.productTier1, this.productTier2, this.productTier3])
+        const Purchases = getPurchases()
+        if (!Purchases) return { success: false, priceTier1: "", priceTier2: "", priceTier3: "" }
+        const products = await Purchases.getProducts([this.productTier1, this.productTier2, this.productTier3])
 
         const price1 = products.find((item) => item.identifier === this.identifierTier1)?.priceString
         const price2 = products.find((item) => item.identifier === this.identifierTier2)?.priceString
@@ -103,7 +119,9 @@ export default class RevenueCatInAppPurchases implements IInAppPurchases {
 
     async restorePurchases(): Promise<IPurchaseResult> {
         try {
-            await getPurchases().restorePurchases()
+            const Purchases = getPurchases()
+            if (!Purchases) return errorPurchase("RevenueCat not available")
+            await Purchases.restorePurchases()
             return SuccessPurchase
         } catch (e) {
             return errorPurchase("" + e)
@@ -113,6 +131,7 @@ export default class RevenueCatInAppPurchases implements IInAppPurchases {
     async performPurchase(productId: string, entitlementId: string): Promise<IPurchaseResult> {
         try {
             const Purchases = getPurchases()
+            if (!Purchases) return errorPurchase("RevenueCat not available")
             const product = await Purchases.getProducts([productId])
             const { customerInfo } = await Purchases.purchaseStoreProduct(product[0])
             if (typeof customerInfo.entitlements.active[entitlementId] !== "undefined") {
@@ -133,7 +152,9 @@ export default class RevenueCatInAppPurchases implements IInAppPurchases {
 
     async getSubscription(): Promise<SubscriptionWithError> {
         try {
-            const customerInfo = await getPurchases().getCustomerInfo()
+            const Purchases = getPurchases()
+            if (!Purchases) return toSubscriptionResult(InAppSubscription.error, "RevenueCat not available")
+            const customerInfo = await Purchases.getCustomerInfo()
             const hasTier1 = typeof customerInfo.entitlements.active[this.entitlementTier1] !== "undefined"
             const hasTier2 = typeof customerInfo.entitlements.active[this.entitlementTier2] !== "undefined"
             const hasTier3 = typeof customerInfo.entitlements.active[this.entitlementTier3] !== "undefined"

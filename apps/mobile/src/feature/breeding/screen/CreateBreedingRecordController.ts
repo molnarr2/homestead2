@@ -5,7 +5,8 @@ import type { RouteProp } from '@react-navigation/native'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
 import { useAnimalStore } from '../../../store/animalStore'
 import { useAnimalTypeStore } from '../../../store/animalTypeStore'
-import { useUserStore } from '../../../store/userStore'
+import { useHomesteadStore } from '../../../store/homesteadStore'
+import { effectiveSubscription } from '../../subscription/service/ISubscriptionService'
 import { bsBreedingService } from '../../../Bootstrap'
 import { breedingRecord_default, BreedingMethod } from '../../../schema/breeding/BreedingRecord'
 import { calculateGestation } from '../../../util/GestationUtility'
@@ -18,7 +19,7 @@ export function useCreateBreedingRecordController(navigation: Navigation, route:
   const { animalId } = route.params
   const { animals } = useAnimalStore()
   const { getGestationDays } = useAnimalTypeStore()
-  const user = useUserStore(s => s.user)
+  const homestead = useHomesteadStore(s => s.homestead)
 
   const dam = animals.find(a => a.id === animalId)
 
@@ -46,7 +47,7 @@ export function useCreateBreedingRecordController(navigation: Navigation, route:
   }
 
   const submit = async () => {
-    const tier = user?.subscription ?? 'free'
+    const tier = effectiveSubscription(homestead)
     if (tier === 'free') {
       Alert.alert(
         'Pro Feature',

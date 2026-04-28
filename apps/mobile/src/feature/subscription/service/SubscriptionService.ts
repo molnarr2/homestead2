@@ -1,11 +1,11 @@
 import { IResult, SuccessResult, ErrorResult } from '../../../util/Result'
 import { InAppSubscription } from '../../../core/service/purchases/IInAppPurchaseService'
 import IInAppPurchases from '../../../core/plugin/IInAppPurchases'
-import IUserService from '../../user/service/IUserService'
+import IHomesteadService from '../../homestead/service/IHomesteadService'
 import IAuthService from '../../../core/service/auth/IAuthService'
-import { effectiveSubscription } from './ISubscriptionService'
 import type ISubscriptionService from './ISubscriptionService'
 import type { SubscriptionTier } from './ISubscriptionService'
+import { useHomesteadStore } from '../../../store/homesteadStore'
 import Log from '../../../library/log/Log'
 
 const TAG = 'SubscriptionService'
@@ -25,12 +25,12 @@ function revenueCatTierToSubscription(tier: InAppSubscription): SubscriptionTier
 
 export default class SubscriptionService implements ISubscriptionService {
   private purchases: IInAppPurchases
-  private userService: IUserService
+  private homesteadService: IHomesteadService
   private authService: IAuthService
 
-  constructor(purchases: IInAppPurchases, userService: IUserService, authService: IAuthService) {
+  constructor(purchases: IInAppPurchases, homesteadService: IHomesteadService, authService: IAuthService) {
     this.purchases = purchases
-    this.userService = userService
+    this.homesteadService = homesteadService
     this.authService = authService
   }
 
@@ -70,18 +70,17 @@ export default class SubscriptionService implements ISubscriptionService {
 
   async syncSubscription(): Promise<void> {
     try {
-      const userId = this.authService.currentUserId
-      if (!userId) return
+      const { homesteadId, userRole } = useHomesteadStore.getState()
+      if (!homesteadId) return
+      if (userRole !== 'owner') return
 
       const revenueCatTier = await this.getCurrentTier()
-      const user = await this.userService.getUser(userId)
-      if (!user) return
+      const homestead = await this.homesteadService.getHomestead(homesteadId)
+      if (!homestead) return
 
-      if (user.subscriptionRevenuecat === revenueCatTier) return
+      if (homestead.subscriptionRevenuecat === revenueCatTier) return
 
-      user.subscriptionRevenuecat = revenueCatTier
-      user.subscription = effectiveSubscription(user)
-      await this.userService.updateUser(user)
+      await this.homesteadService.updateHomesteadSubscription(homesteadId, revenueCatTier)
     } catch (error: any) {
       Log.error(TAG, `syncSubscription error: ${error.message}`)
     }

@@ -5,6 +5,8 @@ import { useNavigation } from '@react-navigation/native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RootStackParamList } from './RootNavigation'
 import { useSideMenuController } from './SideMenuController'
+import { useHomesteadStore } from '../store/homesteadStore'
+import { effectiveSubscription } from '../feature/subscription/service/ISubscriptionService'
 import PrimaryButton from '../components/button/PrimaryButton'
 
 type RootNavigation = NativeStackNavigationProp<RootStackParamList>
@@ -24,6 +26,8 @@ const Divider: React.FC = () => <View className="h-px bg-border-light my-1" />
 
 export function SideMenu(props: DrawerContentComponentProps) {
   const { user, logout } = useSideMenuController()
+  const homestead = useHomesteadStore(s => s.homestead)
+  const tier = effectiveSubscription(homestead)
   const rootNavigation = useNavigation<RootNavigation>()
 
   const navigateTo = (screen: keyof RootStackParamList) => {
@@ -45,7 +49,7 @@ export function SideMenu(props: DrawerContentComponentProps) {
         <Text className="text-sm text-text-secondary">{user?.email ?? ''}</Text>
         <View className="mt-2 self-start rounded-full bg-accent px-3 py-1">
           <Text className="text-xs font-semibold text-primary-dark">
-            {(user?.subscription ?? 'free').charAt(0).toUpperCase() + (user?.subscription ?? 'free').slice(1)}
+            {tier.charAt(0).toUpperCase() + tier.slice(1)}
           </Text>
         </View>
       </View>

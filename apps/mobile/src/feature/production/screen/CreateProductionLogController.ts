@@ -4,7 +4,8 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RouteProp } from '@react-navigation/native'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
 import { useAnimalStore } from '../../../store/animalStore'
-import { useUserStore } from '../../../store/userStore'
+import { useHomesteadStore } from '../../../store/homesteadStore'
+import { effectiveSubscription } from '../../subscription/service/ISubscriptionService'
 import { bsProductionService } from '../../../Bootstrap'
 import { productionLog_default, ProductionType } from '../../../schema/production/ProductionLog'
 import { getDefaultUnit } from '../../../util/ProductionUtility'
@@ -16,7 +17,7 @@ type Route = RouteProp<RootStackParamList, 'CreateProductionLog'>
 export function useCreateProductionLogController(navigation: Navigation, route: Route) {
   const { animalId: initialAnimalId, groupName: initialGroup, type: initialType } = route.params ?? {}
   const { animals } = useAnimalStore()
-  const user = useUserStore(s => s.user)
+  const homestead = useHomesteadStore(s => s.homestead)
 
   const [productionType, setProductionType] = useState<ProductionType>(initialType ?? 'eggs')
   const [quantity, setQuantity] = useState('')
@@ -33,7 +34,7 @@ export function useCreateProductionLogController(navigation: Navigation, route: 
   }, [productionType])
 
   const submit = async () => {
-    const tier = user?.subscription ?? 'free'
+    const tier = effectiveSubscription(homestead)
     if (tier === 'free') {
       Alert.alert(
         'Pro Feature',

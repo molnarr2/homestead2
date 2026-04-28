@@ -6,7 +6,8 @@ import type { RootStackParamList } from '../../../navigation/RootNavigation'
 import { useAnimalStore } from '../../../store/animalStore'
 import { useCareStore } from '../../../store/careStore'
 import { useAnimalTypeStore } from '../../../store/animalTypeStore'
-import { useUserStore } from '../../../store/userStore'
+import { useHomesteadStore } from '../../../store/homesteadStore'
+import { effectiveSubscription } from '../../subscription/service/ISubscriptionService'
 import { bsCareService } from '../../../Bootstrap'
 import { CareEventType, careEvent_default } from '../../../schema/care/CareEvent'
 import { adminObject_default } from '../../../schema/object/AdminObject'
@@ -22,7 +23,7 @@ export function useCreateCareEventController(navigation: Navigation, route: Rout
   const { animals } = useAnimalStore()
   const { careEvents } = useCareStore()
   const { careTemplates } = useAnimalTypeStore()
-  const user = useUserStore(s => s.user)
+  const homestead = useHomesteadStore(s => s.homestead)
 
   const [selectedAnimalId, setSelectedAnimalId] = useState(routeAnimalId ?? '')
   const [name, setName] = useState('')
@@ -54,7 +55,7 @@ export function useCreateCareEventController(navigation: Navigation, route: Rout
       return
     }
 
-    const tier = user?.subscription ?? 'free'
+    const tier = effectiveSubscription(homestead)
     const eventsForAnimal = careEvents.filter(e => e.animalId === selectedAnimalId)
     if (tier === 'free' && eventsForAnimal.length >= FREE_TIER_CARE_LIMIT) {
       Alert.alert(

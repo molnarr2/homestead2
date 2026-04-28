@@ -3,7 +3,8 @@ import { Alert } from 'react-native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RouteProp } from '@react-navigation/native'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
-import { useUserStore } from '../../../store/userStore'
+import { useHomesteadStore } from '../../../store/homesteadStore'
+import { effectiveSubscription } from '../../subscription/service/ISubscriptionService'
 import { bsHealthService } from '../../../Bootstrap'
 import type HealthRecord from '../../../schema/health/HealthRecord'
 import { healthRecord_default, HealthRecordType, DosageUnit, MedicationRoute, WithdrawalType } from '../../../schema/health/HealthRecord'
@@ -15,7 +16,7 @@ type Route = RouteProp<RootStackParamList, 'CreateHealthRecord'>
 export function useCreateHealthRecordController(navigation: Navigation, route: Route) {
   const { animalId, recordType: initialType } = route.params
 
-  const user = useUserStore(s => s.user)
+  const homestead = useHomesteadStore(s => s.homestead)
 
   const [recordType, setRecordType] = useState<HealthRecordType>(initialType ?? 'vaccination')
   const [name, setName] = useState('')
@@ -60,7 +61,7 @@ export function useCreateHealthRecordController(navigation: Navigation, route: R
       return
     }
 
-    const tier = user?.subscription ?? 'free'
+    const tier = effectiveSubscription(homestead)
     if (tier === 'free') {
       Alert.alert(
         'Pro Feature',

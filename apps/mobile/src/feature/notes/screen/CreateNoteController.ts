@@ -5,7 +5,8 @@ import type { RouteProp } from '@react-navigation/native'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
 import { NoteTag } from '../../../schema/notes/Note'
 import { note_default } from '../../../schema/notes/Note'
-import { useUserStore } from '../../../store/userStore'
+import { useHomesteadStore } from '../../../store/homesteadStore'
+import { effectiveSubscription } from '../../subscription/service/ISubscriptionService'
 import { bsNoteService } from '../../../Bootstrap'
 
 type Navigation = NativeStackNavigationProp<RootStackParamList, 'CreateNote'>
@@ -13,7 +14,7 @@ type Route = RouteProp<RootStackParamList, 'CreateNote'>
 
 export function useCreateNoteController(navigation: Navigation, route: Route) {
   const { animalId } = route.params
-  const user = useUserStore(s => s.user)
+  const homestead = useHomesteadStore(s => s.homestead)
 
   const [text, setText] = useState('')
   const [tags, setTags] = useState<NoteTag[]>([])
@@ -27,7 +28,7 @@ export function useCreateNoteController(navigation: Navigation, route: Route) {
   }
 
   const submit = async () => {
-    const tier = user?.subscription ?? 'free'
+    const tier = effectiveSubscription(homestead)
     if (tier === 'free') {
       Alert.alert(
         'Pro Feature',
