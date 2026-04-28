@@ -16,39 +16,23 @@ export default class ProductionService implements IProductionService {
     return firestore().collection(Col.homestead).doc(homesteadId)
   }
 
-  async getProductionLogs(): Promise<ProductionLog[]> {
-    try {
-      const snapshot = await this.homesteadRef
-        .collection(Col.productionLog)
-        .where('admin.deleted', '==', false)
-        .get()
-
-      return snapshot.docs.map(doc => ({
-        ...doc.data(),
-        id: doc.id,
-      } as ProductionLog))
-    } catch (error: any) {
-      Log.error(TAG, `getProductionLogs error: ${error.message}`)
-      return []
-    }
-  }
-
-  async getProductionLogsForAnimal(animalId: string): Promise<ProductionLog[]> {
-    try {
-      const snapshot = await this.homesteadRef
-        .collection(Col.productionLog)
-        .where('animalId', '==', animalId)
-        .where('admin.deleted', '==', false)
-        .get()
-
-      return snapshot.docs.map(doc => ({
-        ...doc.data(),
-        id: doc.id,
-      } as ProductionLog))
-    } catch (error: any) {
-      Log.error(TAG, `getProductionLogsForAnimal error: ${error.message}`)
-      return []
-    }
+  subscribeProductionLogs(callback: (logs: ProductionLog[]) => void): () => void {
+    return this.homesteadRef
+      .collection(Col.productionLog)
+      .where('admin.deleted', '==', false)
+      .onSnapshot(
+        snapshot => {
+          const logs: ProductionLog[] = snapshot.docs.map(doc => ({
+            ...doc.data(),
+            id: doc.id,
+          } as ProductionLog))
+          callback(logs)
+        },
+        error => {
+          Log.error(TAG, `subscribeProductionLogs error: ${error.message}`)
+          callback([])
+        }
+      )
   }
 
   async createProductionLog(log: ProductionLog): Promise<IResult> {

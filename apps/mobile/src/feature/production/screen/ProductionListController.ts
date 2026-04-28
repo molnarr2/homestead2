@@ -1,7 +1,6 @@
-import { useState, useCallback, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
-import { useFocusEffect } from '@react-navigation/native'
 import { useProductionStore } from '../../../store/productionStore'
 import { ProductionType } from '../../../schema/production/ProductionLog'
 import { aggregateProduction } from '../../../util/ProductionUtility'
@@ -10,14 +9,10 @@ import { todayIso, daysBetween } from '../../../util/DateUtility'
 type Navigation = NativeStackNavigationProp<RootStackParamList>
 
 export function useProductionListController(navigation: Navigation) {
-  const { productionLogs, fetchProductionLogs, loading } = useProductionStore()
+  const { productionLogs, loading } = useProductionStore()
   const [selectedType, setSelectedType] = useState<ProductionType | 'all'>('all')
   const [refreshing, setRefreshing] = useState(false)
   const today = todayIso()
-
-  useFocusEffect(useCallback(() => {
-    fetchProductionLogs()
-  }, []))
 
   const filteredLogs = useMemo(
     () => selectedType === 'all'
@@ -43,7 +38,6 @@ export function useProductionListController(navigation: Navigation) {
 
   const onRefresh = async () => {
     setRefreshing(true)
-    await fetchProductionLogs()
     setRefreshing(false)
   }
 

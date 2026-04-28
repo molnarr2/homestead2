@@ -6,24 +6,37 @@ import { bsWeightService } from '../Bootstrap'
 interface WeightState {
   weightLogs: WeightLog[]
   loading: boolean
-  fetchByAnimal: (animalId: string) => Promise<void>
+  unsubscribe: (() => void) | null
+  subscribe: () => void
+  teardown: () => void
   createWeightLog: (log: WeightLog) => Promise<IResult>
   clear: () => void
 }
 
-export const useWeightStore = create<WeightState>((set) => ({
+export const useWeightStore = create<WeightState>((set, get) => ({
   weightLogs: [],
-  loading: false,
+  loading: true,
+  unsubscribe: null,
 
-  fetchByAnimal: async (animalId: string) => {
+  subscribe: () => {
+    get().teardown()
     set({ loading: true })
-    const weightLogs = await bsWeightService.getWeightLogsForAnimal(animalId)
-    set({ weightLogs, loading: false })
+    const unsub = bsWeightService.subscribeWeightLogs((weightLogs) => {
+      set({ weightLogs, loading: false })
+    })
+    set({ unsubscribe: unsub })
+  },
+
+  teardown: () => {
+    const unsub = get().unsubscribe
+    if (unsub) unsub()
+    set({ unsubscribe: null })
   },
 
   createWeightLog: (log: WeightLog) => bsWeightService.createWeightLog(log),
 
   clear: () => {
-    set({ weightLogs: [], loading: false })
+    get().teardown()
+    set({ weightLogs: [], loading: true, unsubscribe: null })
   },
 }))

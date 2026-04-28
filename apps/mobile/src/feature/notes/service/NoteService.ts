@@ -17,20 +17,23 @@ export default class NoteService implements INoteService {
     return firestore().collection(Col.homestead).doc(homesteadId)
   }
 
-  async fetchNotesByAnimal(animalId: string): Promise<Note[]> {
-    try {
-      const snapshot = await this.homesteadRef
-        .collection(Col.note)
-        .where('animalId', '==', animalId)
-        .where('admin.deleted', '==', false)
-        .orderBy('admin.created_at', 'desc')
-        .get()
-
-      return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Note))
-    } catch (error: any) {
-      Log.error(TAG, `fetchNotesByAnimal error: ${error.message}`)
-      return []
-    }
+  subscribeNotes(callback: (notes: Note[]) => void): () => void {
+    return this.homesteadRef
+      .collection(Col.note)
+      .where('admin.deleted', '==', false)
+      .onSnapshot(
+        snapshot => {
+          const notes: Note[] = snapshot.docs.map(doc => ({
+            ...doc.data(),
+            id: doc.id,
+          } as Note))
+          callback(notes)
+        },
+        error => {
+          Log.error(TAG, `subscribeNotes error: ${error.message}`)
+          callback([])
+        }
+      )
   }
 
   async createNote(note: Note, photoUri?: string): Promise<IResult> {

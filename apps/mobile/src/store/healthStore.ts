@@ -4,29 +4,35 @@ import { bsHealthService } from '../Bootstrap'
 
 interface HealthStoreState {
   healthRecords: HealthRecord[]
-  withdrawalRecords: HealthRecord[]
   loading: boolean
-
-  fetchHealthRecordsByAnimal: (animalId: string) => Promise<void>
-  fetchAllWithdrawalRecords: () => Promise<void>
+  unsubscribe: (() => void) | null
+  subscribe: () => void
+  teardown: () => void
   clear: () => void
 }
 
-export const useHealthStore = create<HealthStoreState>((set) => ({
+export const useHealthStore = create<HealthStoreState>((set, get) => ({
   healthRecords: [],
-  withdrawalRecords: [],
-  loading: false,
+  loading: true,
+  unsubscribe: null,
 
-  fetchHealthRecordsByAnimal: async (animalId) => {
+  subscribe: () => {
+    get().teardown()
     set({ loading: true })
-    const records = await bsHealthService.fetchHealthRecordsByAnimal(animalId)
-    set({ healthRecords: records, loading: false })
+    const unsub = bsHealthService.subscribeHealthRecords((healthRecords) => {
+      set({ healthRecords, loading: false })
+    })
+    set({ unsubscribe: unsub })
   },
 
-  fetchAllWithdrawalRecords: async () => {
-    const records = await bsHealthService.fetchAllWithdrawalRecords()
-    set({ withdrawalRecords: records })
+  teardown: () => {
+    const unsub = get().unsubscribe
+    if (unsub) unsub()
+    set({ unsubscribe: null })
   },
 
-  clear: () => set({ healthRecords: [], withdrawalRecords: [], loading: false }),
+  clear: () => {
+    get().teardown()
+    set({ healthRecords: [], loading: true, unsubscribe: null })
+  },
 }))

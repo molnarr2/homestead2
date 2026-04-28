@@ -13,7 +13,11 @@ export function subscribeAllStores() {
   useUserStore.getState().subscribe()
   useAnimalStore.getState().subscribe()
   useCareStore.getState().subscribe()
+  useHealthStore.getState().subscribe()
   useBreedingStore.getState().subscribe()
+  useNoteStore.getState().subscribe()
+  useWeightStore.getState().subscribe()
+  useProductionStore.getState().subscribe()
   useAnimalTypeStore.getState().subscribe()
 }
 

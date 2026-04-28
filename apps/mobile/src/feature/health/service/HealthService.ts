@@ -25,62 +25,23 @@ export default class HealthService implements IHealthService {
     return firestore().collection(Col.homestead).doc(homesteadId)
   }
 
-  async fetchHealthRecordsByAnimal(animalId: string): Promise<HealthRecord[]> {
-    try {
-      const snapshot = await this.homesteadRef
-        .collection(Col.healthRecord)
-        .where('animalId', '==', animalId)
-        .where('admin.deleted', '==', false)
-        .orderBy('date', 'desc')
-        .get()
-
-      return snapshot.docs.map(doc => ({
-        ...doc.data(),
-        id: doc.id,
-      } as HealthRecord))
-    } catch (error: any) {
-      Log.error(TAG, 'fetchHealthRecordsByAnimal error: ' + error.message)
-      return []
-    }
-  }
-
-  async fetchAllWithdrawalRecords(): Promise<HealthRecord[]> {
-    try {
-      const snapshot = await this.homesteadRef
-        .collection(Col.healthRecord)
-        .where('admin.deleted', '==', false)
-        .where('withdrawalPeriodDays', '>', 0)
-        .get()
-
-      const medicationRecords = snapshot.docs.map(doc => ({
-        ...doc.data(),
-        id: doc.id,
-      } as HealthRecord))
-
-      const dewormSnapshot = await this.homesteadRef
-        .collection(Col.healthRecord)
-        .where('admin.deleted', '==', false)
-        .where('dewormingWithdrawalDays', '>', 0)
-        .get()
-
-      const dewormRecords = dewormSnapshot.docs.map(doc => ({
-        ...doc.data(),
-        id: doc.id,
-      } as HealthRecord))
-
-      const seen = new Set<string>()
-      const combined: HealthRecord[] = []
-      for (const r of [...medicationRecords, ...dewormRecords]) {
-        if (!seen.has(r.id)) {
-          seen.add(r.id)
-          combined.push(r)
+  subscribeHealthRecords(callback: (records: HealthRecord[]) => void): () => void {
+    return this.homesteadRef
+      .collection(Col.healthRecord)
+      .where('admin.deleted', '==', false)
+      .onSnapshot(
+        snapshot => {
+          const records: HealthRecord[] = snapshot.docs.map(doc => ({
+            ...doc.data(),
+            id: doc.id,
+          } as HealthRecord))
+          callback(records)
+        },
+        error => {
+          Log.error(TAG, `subscribeHealthRecords error: ${error.message}`)
+          callback([])
         }
-      }
-      return combined
-    } catch (error: any) {
-      Log.error(TAG, 'fetchAllWithdrawalRecords error: ' + error.message)
-      return []
-    }
+      )
   }
 
   async createHealthRecord(record: HealthRecord, photoUri?: string): Promise<IResult> {

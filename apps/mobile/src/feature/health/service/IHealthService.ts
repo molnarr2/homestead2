@@ -2,7 +2,6 @@ import { IResult } from '../../../util/Result'
 import HealthRecord from '../../../schema/health/HealthRecord'
 
 export default interface IHealthService {
-  fetchHealthRecordsByAnimal(animalId: string): Promise<HealthRecord[]>
-  fetchAllWithdrawalRecords(): Promise<HealthRecord[]>
+  subscribeHealthRecords(callback: (records: HealthRecord[]) => void): () => void
   createHealthRecord(record: HealthRecord, photoUri?: string): Promise<IResult>
 }

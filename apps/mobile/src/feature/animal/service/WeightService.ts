@@ -16,22 +16,23 @@ export default class WeightService implements IWeightService {
     return firestore().collection(Col.homestead).doc(homesteadId)
   }
 
-  async getWeightLogsForAnimal(animalId: string): Promise<WeightLog[]> {
-    try {
-      const snapshot = await this.homesteadRef
-        .collection(Col.weightLog)
-        .where('animalId', '==', animalId)
-        .where('admin.deleted', '==', false)
-        .get()
-
-      return snapshot.docs.map(doc => ({
-        ...doc.data(),
-        id: doc.id,
-      } as WeightLog))
-    } catch (error: any) {
-      Log.error(TAG, `getWeightLogsForAnimal error: ${error.message}`)
-      return []
-    }
+  subscribeWeightLogs(callback: (logs: WeightLog[]) => void): () => void {
+    return this.homesteadRef
+      .collection(Col.weightLog)
+      .where('admin.deleted', '==', false)
+      .onSnapshot(
+        snapshot => {
+          const logs: WeightLog[] = snapshot.docs.map(doc => ({
+            ...doc.data(),
+            id: doc.id,
+          } as WeightLog))
+          callback(logs)
+        },
+        error => {
+          Log.error(TAG, `subscribeWeightLogs error: ${error.message}`)
+          callback([])
+        }
+      )
   }
 
   async createWeightLog(log: WeightLog): Promise<IResult> {

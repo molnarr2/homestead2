@@ -6,29 +6,37 @@ import { bsProductionService } from '../Bootstrap'
 interface ProductionState {
   productionLogs: ProductionLog[]
   loading: boolean
-  fetchProductionLogs: () => Promise<void>
-  fetchProductionLogsByAnimal: (animalId: string) => Promise<void>
+  unsubscribe: (() => void) | null
+  subscribe: () => void
+  teardown: () => void
   createProductionLog: (log: ProductionLog) => Promise<IResult>
   clear: () => void
 }
 
-export const useProductionStore = create<ProductionState>((set) => ({
+export const useProductionStore = create<ProductionState>((set, get) => ({
   productionLogs: [],
-  loading: false,
+  loading: true,
+  unsubscribe: null,
 
-  fetchProductionLogs: async () => {
+  subscribe: () => {
+    get().teardown()
     set({ loading: true })
-    const logs = await bsProductionService.getProductionLogs()
-    set({ productionLogs: logs, loading: false })
+    const unsub = bsProductionService.subscribeProductionLogs((productionLogs) => {
+      set({ productionLogs, loading: false })
+    })
+    set({ unsubscribe: unsub })
   },
 
-  fetchProductionLogsByAnimal: async (animalId: string) => {
-    set({ loading: true })
-    const logs = await bsProductionService.getProductionLogsForAnimal(animalId)
-    set({ productionLogs: logs, loading: false })
+  teardown: () => {
+    const unsub = get().unsubscribe
+    if (unsub) unsub()
+    set({ unsubscribe: null })
   },
 
   createProductionLog: (log: ProductionLog) => bsProductionService.createProductionLog(log),
 
-  clear: () => set({ productionLogs: [], loading: false }),
+  clear: () => {
+    get().teardown()
+    set({ productionLogs: [], loading: true, unsubscribe: null })
+  },
 }))

@@ -1,5 +1,4 @@
-import { useState, useCallback, useMemo } from 'react'
-import { useFocusEffect } from '@react-navigation/native'
+import { useState, useMemo } from 'react'
 import { useUserStore } from '../../store/userStore'
 import { useCareStore } from '../../store/careStore'
 import { useBreedingStore } from '../../store/breedingStore'
@@ -37,8 +36,7 @@ export function useHomeController(navigation: any) {
   const user = useUserStore(s => s.user)
   const careEvents = useCareStore(s => s.careEvents)
   const breedingRecords = useBreedingStore(s => s.breedingRecords)
-  const activeWithdrawalRecords = useHealthStore(s => s.withdrawalRecords)
-  const fetchActiveWithdrawals = useHealthStore(s => s.fetchAllWithdrawalRecords)
+  const healthRecords = useHealthStore(s => s.healthRecords)
   const animals = useAnimalStore(s => s.animals)
   const [refreshing, setRefreshing] = useState(false)
 
@@ -49,12 +47,6 @@ export function useHomeController(navigation: any) {
     }
     return map
   }, [animals])
-
-  useFocusEffect(
-    useCallback(() => {
-      fetchActiveWithdrawals()
-    }, [])
-  )
 
   const overdueEvents: DashboardCareItem[] = useMemo(() => {
     return careEvents
@@ -79,7 +71,7 @@ export function useHomeController(navigation: any) {
 
   const activeWithdrawals: DashboardWithdrawalItem[] = useMemo(() => {
     const results: DashboardWithdrawalItem[] = []
-    for (const record of activeWithdrawalRecords) {
+    for (const record of healthRecords) {
       const animalName = animalMap.get(record.animalId)?.name ?? ''
       if (record.withdrawalPeriodDays > 0) {
         const result = calculateWithdrawal(
@@ -111,7 +103,7 @@ export function useHomeController(navigation: any) {
       }
     }
     return results.sort((a, b) => a.daysRemaining - b.daysRemaining)
-  }, [activeWithdrawalRecords, animalMap])
+  }, [healthRecords, animalMap])
 
   const breedingCountdowns: DashboardBreedingItem[] = useMemo(() => {
     return breedingRecords
@@ -131,7 +123,6 @@ export function useHomeController(navigation: any) {
 
   const onRefresh = async () => {
     setRefreshing(true)
-    await fetchActiveWithdrawals()
     setRefreshing(false)
   }
 

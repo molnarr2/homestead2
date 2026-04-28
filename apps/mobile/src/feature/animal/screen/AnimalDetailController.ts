@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RouteProp } from '@react-navigation/native'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
@@ -21,21 +21,18 @@ export function useAnimalDetailController(navigation: Navigation, route: Route) 
   const animal = animals.find(a => a.id === animalId)
 
   const { careEvents } = useCareStore()
-  const { healthRecords, fetchHealthRecordsByAnimal: fetchHealth } = useHealthStore()
-  const { animalBreedings, fetchByAnimal: fetchBreeding } = useBreedingStore()
-  const { notes, fetchByAnimal: fetchNotes } = useNoteStore()
-  const { weightLogs, fetchByAnimal: fetchWeight } = useWeightStore()
+  const allHealthRecords = useHealthStore(s => s.healthRecords)
+  const { breedingRecords } = useBreedingStore()
+  const allNotes = useNoteStore(s => s.notes)
+  const allWeightLogs = useWeightStore(s => s.weightLogs)
 
   const [activeTab, setActiveTab] = useState<AnimalTab>('timeline')
 
-  useEffect(() => {
-    fetchHealth(animalId)
-    fetchBreeding(animalId)
-    fetchNotes(animalId)
-    fetchWeight(animalId)
-  }, [animalId])
-
   const animalCareEvents = careEvents.filter(e => e.animalId === animalId)
+  const healthRecords = useMemo(() => allHealthRecords.filter(r => r.animalId === animalId), [allHealthRecords, animalId])
+  const breedingRecordsForAnimal = useMemo(() => breedingRecords.filter(r => r.animalId === animalId), [breedingRecords, animalId])
+  const notes = useMemo(() => allNotes.filter(n => n.animalId === animalId), [allNotes, animalId])
+  const weightLogs = useMemo(() => allWeightLogs.filter(w => w.animalId === animalId), [allWeightLogs, animalId])
   const activeWithdrawals = getActiveWithdrawals(healthRecords)
 
   const age = calculateAnimalAge(animal?.birthday ?? '')
@@ -68,7 +65,7 @@ export function useAnimalDetailController(navigation: Navigation, route: Route) 
     setActiveTab,
     careEvents: animalCareEvents,
     healthRecords,
-    breedingRecords: animalBreedings,
+    breedingRecords: breedingRecordsForAnimal,
     notes,
     weightLogs,
     onBack,
