@@ -1,5 +1,5 @@
 import React from 'react'
-import { ScrollView, View, Text, RefreshControl } from 'react-native'
+import { ScrollView, View, Text, Image, TouchableOpacity, RefreshControl } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { useHomeController } from './HomeController'
 import OverdueCareSection from './component/OverdueCareSection'
@@ -24,8 +24,22 @@ const HomeScreen: React.FC = () => {
           <RefreshControl refreshing={controller.refreshing} onRefresh={controller.onRefresh} />
         }
       >
-        <View className="px-4 pt-4 pb-2">
-          <Text className="text-2xl font-bold text-text-primary">
+        <View className="px-4 pt-4 pb-2 flex-row items-center">
+          <TouchableOpacity onPress={controller.onOpenDrawer} className="mr-3">
+            {controller.user?.avatarUrl ? (
+              <Image
+                source={{ uri: controller.user.avatarUrl }}
+                className="w-10 h-10 rounded-full"
+              />
+            ) : (
+              <View className="w-10 h-10 rounded-full bg-primary items-center justify-center">
+                <Text className="text-base font-bold text-text-inverse">
+                  {controller.user?.firstName?.charAt(0)?.toUpperCase() ?? '?'}
+                </Text>
+              </View>
+            )}
+          </TouchableOpacity>
+          <Text className="text-2xl font-bold text-text-primary flex-1">
             {controller.greeting}, {controller.user?.firstName ?? ''}
           </Text>
         </View>

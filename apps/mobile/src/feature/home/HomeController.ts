@@ -242,6 +242,13 @@ export function useHomeController(navigation: any) {
   const onAnimalTypePress = () =>
     navigation.navigate('Animals')
 
+  const onOpenDrawer = () => {
+    const parent = navigation.getParent()
+    if (parent && 'openDrawer' in parent) {
+      ;(parent as any).openDrawer()
+    }
+  }
+
   const getGreeting = (): string => {
     const hour = new Date().getHours()
     if (hour < 12) return 'Good morning'
@@ -270,5 +277,6 @@ export function useHomeController(navigation: any) {
     onQuickRecordCare,
     onQuickAddWeight,
     onAnimalTypePress,
+    onOpenDrawer,
   }
 }

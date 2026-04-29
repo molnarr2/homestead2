@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, FlatList, ActivityIndicator } from 'react-native'
+import { View, Text, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
@@ -11,6 +11,7 @@ import ScreenContainer from '../../../components/layout/ScreenContainer'
 import FloatingActionButton from '../../../components/button/FloatingActionButton'
 import EmptyState from '../../../components/layout/EmptyState'
 import AnimalTypeCard from '../component/AnimalTypeCard'
+import Icon from '@react-native-vector-icons/material-design-icons'
 
 type Navigation = NativeStackNavigationProp<RootStackParamList>
 
@@ -49,8 +50,11 @@ const CustomizationHomeScreen: React.FC = () => {
   return (
     <ScreenContainer>
       <View className="flex-1">
-        <View className="px-4 pt-4 pb-2">
-          <Text className="text-2xl font-bold text-text-primary">Customization</Text>
+        <View className="flex-row items-center px-4 pt-4 pb-2">
+          <TouchableOpacity onPress={() => navigation.goBack()} activeOpacity={0.7}>
+            <Icon name="arrow-left" size={24} color="#333333" />
+          </TouchableOpacity>
+          <Text className="text-lg font-bold text-text-primary ml-3">Customization</Text>
         </View>
 
         {controller.animalTypes.length === 0 ? (
