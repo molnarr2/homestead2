@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, Image } from 'react-native'
 import Icon from '@react-native-vector-icons/material-design-icons'
 import Animal from '../../../schema/animal/Animal'
 import { AnimalAge } from '../../../util/AnimalUtility'
@@ -33,9 +33,11 @@ const AnimalDetailHeader: React.FC<Props> = ({ animal, age, onEdit, onBack }) =>
       <View className="items-center px-4">
         <View className="w-24 h-24 rounded-full bg-backgroundDark items-center justify-center mb-3 overflow-hidden">
           {animal.photoUrl ? (
-            <View className="w-24 h-24 rounded-full bg-primaryLight items-center justify-center">
-              <Text className="text-3xl font-bold text-text-inverse">{animal.name.charAt(0)}</Text>
-            </View>
+            <Image
+              source={{ uri: animal.photoUrl }}
+              className="w-24 h-24 rounded-full"
+              resizeMode="cover"
+            />
           ) : (
             <Text className="text-3xl font-bold text-text-secondary">{animal.name.charAt(0)}</Text>
           )}

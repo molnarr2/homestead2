@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
+import { View, Text, ScrollView, TouchableOpacity, Image, Alert } from 'react-native'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RouteProp } from '@react-navigation/native'
@@ -11,7 +11,7 @@ import PrimaryButton from '../../../components/button/PrimaryButton'
 import ParentSelector from '../component/ParentSelector'
 import Icon from '@react-native-vector-icons/material-design-icons'
 import { AnimalGender, AnimalState } from '../../../schema/animal/Animal'
-import { launchImageLibrary } from 'react-native-image-picker'
+import { launchImageLibrary, launchCamera } from 'react-native-image-picker'
 
 type Navigation = NativeStackNavigationProp<RootStackParamList, 'EditAnimal'>
 type Route = RouteProp<RootStackParamList, 'EditAnimal'>
@@ -34,11 +34,28 @@ const EditAnimalScreen: React.FC = () => {
   const route = useRoute<Route>()
   const controller = useEditAnimalController(navigation, route)
 
-  const handlePhotoPick = async () => {
-    const result = await launchImageLibrary({ mediaType: 'photo', quality: 0.8 })
-    if (result.assets?.[0]?.uri) {
-      controller.setPhotoUri(result.assets[0].uri)
-    }
+  const handlePhotoPick = () => {
+    Alert.alert('Add Photo', 'Choose a source', [
+      {
+        text: 'Camera',
+        onPress: async () => {
+          const result = await launchCamera({ mediaType: 'photo', quality: 0.8 })
+          if (result.assets?.[0]?.uri) {
+            controller.setPhotoUri(result.assets[0].uri)
+          }
+        },
+      },
+      {
+        text: 'Photo Library',
+        onPress: async () => {
+          const result = await launchImageLibrary({ mediaType: 'photo', quality: 0.8 })
+          if (result.assets?.[0]?.uri) {
+            controller.setPhotoUri(result.assets[0].uri)
+          }
+        },
+      },
+      { text: 'Cancel', style: 'cancel' },
+    ])
   }
 
   if (!controller.animal) {
@@ -70,9 +87,11 @@ const EditAnimalScreen: React.FC = () => {
           activeOpacity={0.7}
         >
           {controller.photoUri || controller.animal.photoUrl ? (
-            <View className="w-24 h-24 rounded-full bg-primaryLight items-center justify-center">
-              <Text className="text-3xl font-bold text-text-inverse">{controller.animal.name.charAt(0)}</Text>
-            </View>
+            <Image
+              source={{ uri: controller.photoUri || controller.animal.photoUrl }}
+              className="w-24 h-24 rounded-full"
+              resizeMode="cover"
+            />
           ) : (
             <View className="items-center">
               <Icon name="camera-plus" size={28} color="#6B6B6B" />
