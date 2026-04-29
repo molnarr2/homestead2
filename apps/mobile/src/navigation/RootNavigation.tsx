@@ -33,6 +33,7 @@ import RecordBirthOutcomeScreen from '../feature/breeding/screen/RecordBirthOutc
 import CreateProductionLogScreen from '../feature/production/screen/CreateProductionLogScreen'
 import CreateNoteScreen from '../feature/notes/screen/CreateNoteScreen'
 import NoteDetailScreen from '../feature/notes/screen/NoteDetailScreen'
+import CreateWeightLogScreen from '../feature/animal/screen/CreateWeightLogScreen'
 
 export type RootStackParamList = {
   // Auth
@@ -123,7 +124,7 @@ const RootNavigation: React.FC = () => {
             <Stack.Screen name="CreateProductionLog" component={CreateProductionLogScreen} />
             <Stack.Screen name="CreateNote" component={CreateNoteScreen} />
             <Stack.Screen name="NoteDetail" component={NoteDetailScreen} />
-            <Stack.Screen name="CreateWeightLog" component={PlaceholderScreen} />
+            <Stack.Screen name="CreateWeightLog" component={CreateWeightLogScreen} />
             <Stack.Screen name="Profile" component={ProfileScreen} />
             <Stack.Screen name="EditProfile" component={EditProfileScreen} />
             <Stack.Screen name="Subscription" component={PlaceholderScreen} />

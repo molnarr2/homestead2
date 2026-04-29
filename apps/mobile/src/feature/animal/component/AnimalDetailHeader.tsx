@@ -19,55 +19,68 @@ const STATE_BADGE_COLORS: Record<string, string> = {
 }
 
 const AnimalDetailHeader: React.FC<Props> = ({ animal, age, onEdit, onBack }) => {
-  return (
-    <View className="bg-surface pb-4 border-b border-border-light">
-      <View className="flex-row items-center justify-between px-4 pt-4 mb-3">
-        <TouchableOpacity onPress={onBack} activeOpacity={0.7} className="p-1">
-          <Icon name="arrow-left" size={24} color="#1A1A1A" />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={onEdit} activeOpacity={0.7} className="p-1">
-          <Icon name="pencil" size={24} color="#4A6741" />
-        </TouchableOpacity>
-      </View>
+  const hasPhoto = !!animal.photoUrl
 
-      {animal.photoUrl ? (
-        <View className="mx-4 mb-3 h-52 rounded-2xl overflow-hidden">
+  return (
+    <View className="bg-surface border-b border-border-light">
+      {hasPhoto ? (
+        <View className="relative">
           <Image
             source={{ uri: animal.photoUrl }}
-            className="w-full h-52"
+            className="w-full h-64"
             resizeMode="cover"
           />
+          <View className="absolute top-0 left-0 right-0 flex-row items-center justify-between px-4 pt-4 z-10">
+            <TouchableOpacity onPress={onBack} activeOpacity={0.7} className="p-1" style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.9, shadowRadius: 3, elevation: 5 }}>
+              <Icon name="arrow-left" size={26} color="#FFFFFF" />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={onEdit} activeOpacity={0.7} className="p-1" style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.9, shadowRadius: 3, elevation: 5 }}>
+              <Icon name="pencil" size={24} color="#FFFFFF" />
+            </TouchableOpacity>
+          </View>
         </View>
       ) : (
-        <View className="self-center w-24 h-24 rounded-full bg-backgroundDark items-center justify-center mb-3">
-          <Text className="text-3xl font-bold text-text-secondary">{animal.name.charAt(0)}</Text>
-        </View>
+        <>
+          <View className="flex-row items-center justify-between px-4 pt-4 mb-3">
+            <TouchableOpacity onPress={onBack} activeOpacity={0.7} className="p-1">
+              <Icon name="arrow-left" size={24} color="#1A1A1A" />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={onEdit} activeOpacity={0.7} className="p-1">
+              <Icon name="pencil" size={24} color="#4A6741" />
+            </TouchableOpacity>
+          </View>
+          <View className="self-center w-24 h-24 rounded-full bg-backgroundDark items-center justify-center mb-3">
+            <Text className="text-3xl font-bold text-text-secondary">{animal.name.charAt(0)}</Text>
+          </View>
+        </>
       )}
 
-      <View className="items-center px-4">
-        <Text className="text-2xl font-bold text-text-primary">{animal.name}</Text>
-
-        <View className="flex-row items-center mt-1">
-          {animal.breed ? (
-            <Text className="text-base text-text-secondary">{animal.breed}</Text>
-          ) : null}
-          {animal.breed && age.display ? (
-            <Text className="text-base text-text-secondary"> · </Text>
-          ) : null}
-          {age.display ? (
-            <Text className="text-base text-text-secondary">{age.display}</Text>
-          ) : null}
-        </View>
-
-        <View className="flex-row items-center mt-2 gap-2">
-          <View className={`px-3 py-1 rounded-full ${STATE_BADGE_COLORS[animal.state] || 'bg-primary'}`}>
-            <Text className="text-xs font-bold text-text-inverse capitalize">{animal.state}</Text>
-          </View>
-          {animal.gender !== 'unknown' ? (
-            <View className="px-3 py-1 rounded-full bg-backgroundDark">
-              <Text className="text-xs font-bold text-text-primary capitalize">{animal.gender}</Text>
+      <View className="px-4 py-3">
+        <View className="flex-row items-center justify-between">
+          <View className="flex-1">
+            <Text className="text-2xl font-bold text-text-primary">{animal.name}</Text>
+            <View className="flex-row items-center mt-0.5">
+              {animal.breed ? (
+                <Text className="text-sm text-text-secondary">{animal.breed}</Text>
+              ) : null}
+              {animal.breed && age.display ? (
+                <Text className="text-sm text-text-secondary"> · </Text>
+              ) : null}
+              {age.display ? (
+                <Text className="text-sm text-text-secondary">{age.display}</Text>
+              ) : null}
             </View>
-          ) : null}
+          </View>
+          <View className="flex-row items-center gap-2">
+            <View className={`px-3 py-1 rounded-full ${STATE_BADGE_COLORS[animal.state] || 'bg-primary'}`}>
+              <Text className="text-xs font-bold text-text-inverse capitalize">{animal.state}</Text>
+            </View>
+            {animal.gender !== 'unknown' ? (
+              <View className="px-3 py-1 rounded-full bg-backgroundDark">
+                <Text className="text-xs font-bold text-text-primary capitalize">{animal.gender}</Text>
+              </View>
+            ) : null}
+          </View>
         </View>
       </View>
     </View>
