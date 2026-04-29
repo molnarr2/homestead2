@@ -30,19 +30,21 @@ const AnimalDetailHeader: React.FC<Props> = ({ animal, age, onEdit, onBack }) =>
         </TouchableOpacity>
       </View>
 
-      <View className="items-center px-4">
-        <View className="w-24 h-24 rounded-full bg-backgroundDark items-center justify-center mb-3 overflow-hidden">
-          {animal.photoUrl ? (
-            <Image
-              source={{ uri: animal.photoUrl }}
-              className="w-24 h-24 rounded-full"
-              resizeMode="cover"
-            />
-          ) : (
-            <Text className="text-3xl font-bold text-text-secondary">{animal.name.charAt(0)}</Text>
-          )}
+      {animal.photoUrl ? (
+        <View className="mx-4 mb-3 h-52 rounded-2xl overflow-hidden">
+          <Image
+            source={{ uri: animal.photoUrl }}
+            className="w-full h-52"
+            resizeMode="cover"
+          />
         </View>
+      ) : (
+        <View className="self-center w-24 h-24 rounded-full bg-backgroundDark items-center justify-center mb-3">
+          <Text className="text-3xl font-bold text-text-secondary">{animal.name.charAt(0)}</Text>
+        </View>
+      )}
 
+      <View className="items-center px-4">
         <Text className="text-2xl font-bold text-text-primary">{animal.name}</Text>
 
         <View className="flex-row items-center mt-1">
