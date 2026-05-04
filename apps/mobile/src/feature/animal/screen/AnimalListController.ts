@@ -16,14 +16,14 @@ export function useAnimalListController(navigation: Navigation) {
   const { animals, loading } = useAnimalStore()
   const { animalTypes } = useAnimalTypeStore()
   const [searchQuery, setSearchQuery] = useState('')
-  const [filterStates, setFilterStates] = useState<AnimalState[]>([])
-  const [filterTypes, setFilterTypes] = useState<string[]>([])
+  const [filterState, setFilterState] = useState<AnimalState | null>(null)
+  const [filterType, setFilterType] = useState<string | null>(null)
 
-  const isFilterActive = filterStates.length > 0 || filterTypes.length > 0
+  const isFilterActive = filterState !== null || filterType !== null
 
   const resetFilters = useCallback(() => {
-    setFilterStates([])
-    setFilterTypes([])
+    setFilterState(null)
+    setFilterType(null)
   }, [])
 
   const filteredAnimals = useMemo(() => {
@@ -32,11 +32,11 @@ export function useAnimalListController(navigation: Navigation) {
       const matchesSearch = !query ||
         a.name.toLowerCase().includes(query) ||
         a.breed.toLowerCase().includes(query)
-      const matchesState = filterStates.length === 0 || filterStates.includes(a.state)
-      const matchesType = filterTypes.length === 0 || filterTypes.includes(a.animalTypeId)
+      const matchesState = filterState === null || a.state === filterState
+      const matchesType = filterType === null || a.animalTypeId === filterType
       return matchesSearch && matchesState && matchesType
     })
-  }, [animals, searchQuery, filterStates, filterTypes])
+  }, [animals, searchQuery, filterState, filterType])
 
   const sections = useMemo((): AnimalSection[] => {
     const grouped: Record<string, Animal[]> = {}
@@ -57,10 +57,10 @@ export function useAnimalListController(navigation: Navigation) {
     sections,
     searchQuery,
     setSearchQuery,
-    filterStates,
-    setFilterStates,
-    filterTypes,
-    setFilterTypes,
+    filterState,
+    setFilterState,
+    filterType,
+    setFilterType,
     isFilterActive,
     resetFilters,
     animalTypes,

@@ -85,10 +85,10 @@ const AnimalListScreen: React.FC = () => {
           visible={filterModalVisible}
           onClose={() => setFilterModalVisible(false)}
           animalTypes={controller.animalTypes}
-          selectedTypes={controller.filterTypes}
-          onTypesChange={controller.setFilterTypes}
-          selectedStates={controller.filterStates}
-          onStatesChange={controller.setFilterStates}
+          selectedType={controller.filterType}
+          onTypeChange={controller.setFilterType}
+          selectedState={controller.filterState}
+          onStateChange={controller.setFilterState}
           onReset={controller.resetFilters}
         />
       </View>
