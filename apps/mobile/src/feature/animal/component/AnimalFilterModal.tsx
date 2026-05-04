@@ -8,10 +8,10 @@ interface Props {
   visible: boolean
   onClose: () => void
   animalTypes: AnimalType[]
-  selectedType: string | null
-  onTypeChange: (type: string | null) => void
-  selectedState: AnimalState | null
-  onStateChange: (state: AnimalState | null) => void
+  selectedTypes: string[]
+  onTypesChange: (types: string[]) => void
+  selectedStates: AnimalState[]
+  onStatesChange: (states: AnimalState[]) => void
   onReset: () => void
 }
 
@@ -26,36 +26,40 @@ const AnimalFilterModal: React.FC<Props> = ({
   visible,
   onClose,
   animalTypes,
-  selectedType,
-  onTypeChange,
-  selectedState,
-  onStateChange,
+  selectedTypes,
+  onTypesChange,
+  selectedStates,
+  onStatesChange,
   onReset,
 }) => {
-  const [localType, setLocalType] = useState<string | null>(selectedType)
-  const [localState, setLocalState] = useState<AnimalState | null>(selectedState)
+  const [localTypes, setLocalTypes] = useState<string[]>(selectedTypes)
+  const [localStates, setLocalStates] = useState<AnimalState[]>(selectedStates)
 
   const handleOpen = () => {
-    setLocalType(selectedType)
-    setLocalState(selectedState)
+    setLocalTypes(selectedTypes)
+    setLocalStates(selectedStates)
   }
 
   const toggleType = (typeId: string) => {
-    setLocalType(prev => prev === typeId ? null : typeId)
+    setLocalTypes(prev =>
+      prev.includes(typeId) ? prev.filter(t => t !== typeId) : [...prev, typeId]
+    )
   }
 
   const toggleState = (state: AnimalState) => {
-    setLocalState(prev => prev === state ? null : state)
+    setLocalStates(prev =>
+      prev.includes(state) ? prev.filter(s => s !== state) : [...prev, state]
+    )
   }
 
   const handleReset = () => {
-    setLocalType(null)
-    setLocalState(null)
+    setLocalTypes([])
+    setLocalStates([])
   }
 
   const handleApply = () => {
-    onTypeChange(localType)
-    onStateChange(localState)
+    onTypesChange(localTypes)
+    onStatesChange(localStates)
     onClose()
   }
 
@@ -84,7 +88,7 @@ const AnimalFilterModal: React.FC<Props> = ({
               <Text className="text-base font-semibold text-text-primary mb-2">Animal Type</Text>
               <View className="flex-row flex-wrap gap-2">
                 {animalTypes.map(type => {
-                  const isSelected = localType === type.id
+                  const isSelected = localTypes.includes(type.id)
                   return (
                     <TouchableOpacity
                       key={type.id}
@@ -106,7 +110,7 @@ const AnimalFilterModal: React.FC<Props> = ({
             <Text className="text-base font-semibold text-text-primary mb-2">Status</Text>
             <View className="flex-row flex-wrap gap-2">
               {STATUS_OPTIONS.map(option => {
-                const isSelected = localState === option.value
+                const isSelected = localStates.includes(option.value)
                 return (
                   <TouchableOpacity
                     key={option.value}
