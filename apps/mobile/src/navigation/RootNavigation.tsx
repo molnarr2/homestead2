@@ -96,7 +96,7 @@ const RootNavigation: React.FC = () => {
   const isLoggedIn = useAuthStore(s => s.isLoggedIn)
   const homesteadId = useHomesteadStore(s => s.homesteadId)
   const homestead = useHomesteadStore(s => s.homestead)
-  const showLoading = isLoggedIn === null || (isLoggedIn === true && homesteadId === '')
+  const showLoading = isLoggedIn === null || (isLoggedIn === true && (homesteadId === '' || homestead === null))
 
   return (
     <NavigationContainer>

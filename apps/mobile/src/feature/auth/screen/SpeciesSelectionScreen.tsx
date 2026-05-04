@@ -1,9 +1,9 @@
 import React from 'react'
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import Icon from '@react-native-vector-icons/material-design-icons'
 import { useSpeciesSelectionController } from './SpeciesSelectionController'
 import PrimaryButton from '../../../components/button/PrimaryButton'
+import ScreenContainer from '../../../components/layout/ScreenContainer'
 
 const SpeciesSelectionScreen: React.FC = () => {
   const controller = useSpeciesSelectionController()
@@ -14,7 +14,7 @@ const SpeciesSelectionScreen: React.FC = () => {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
+    <ScreenContainer>
       <View className="flex-1 px-4 pt-6">
         <Text className="text-2xl font-bold text-text-primary text-center">
           What animals do you keep?
@@ -69,7 +69,7 @@ const SpeciesSelectionScreen: React.FC = () => {
           </TouchableOpacity>
         </View>
       </View>
-    </SafeAreaView>
+    </ScreenContainer>
   )
 }
 
