@@ -1,5 +1,6 @@
 import React from 'react'
-import { View, Text, TouchableOpacity, Image } from 'react-native'
+import { View, Text, TouchableOpacity } from 'react-native'
+import TurboImage from 'react-native-turbo-image'
 import Icon from '@react-native-vector-icons/material-design-icons'
 import Animal from '../../../schema/animal/Animal'
 import { AnimalAge } from '../../../util/AnimalUtility'
@@ -25,10 +26,10 @@ const AnimalDetailHeader: React.FC<Props> = ({ animal, age, onEdit, onBack }) =>
     <View className="bg-surface border-b border-border-light">
       {hasPhoto ? (
         <View className="relative">
-          <Image
+          <TurboImage
             source={{ uri: animal.photoUrl }}
-            className="w-full h-64"
-            resizeMode="cover"
+            style={{ width: '100%', height: 256 }}
+            cachePolicy="dataCache"
           />
           <View className="absolute top-0 left-0 right-0 flex-row items-center justify-between px-4 pt-4 z-10">
             <TouchableOpacity onPress={onBack} activeOpacity={0.7} className="p-1" style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.9, shadowRadius: 3, elevation: 5 }}>

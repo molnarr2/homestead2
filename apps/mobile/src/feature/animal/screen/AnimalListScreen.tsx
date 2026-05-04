@@ -1,5 +1,6 @@
 import React from 'react'
-import { View, Text, SectionList, TouchableOpacity, ActivityIndicator, Image } from 'react-native'
+import { View, Text, SectionList, TouchableOpacity, ActivityIndicator } from 'react-native'
+import TurboImage from 'react-native-turbo-image'
 import { useNavigation } from '@react-navigation/native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
@@ -118,10 +119,10 @@ const AnimalCard: React.FC<AnimalCardProps> = ({ animal, onPress }) => {
     >
       <View className="w-12 h-12 rounded-full bg-backgroundDark items-center justify-center mr-3 overflow-hidden">
         {animal.photoUrl ? (
-          <Image
+          <TurboImage
             source={{ uri: animal.photoUrl }}
-            className="w-12 h-12 rounded-full"
-            resizeMode="cover"
+            style={{ width: 48, height: 48, borderRadius: 24 }}
+            cachePolicy="dataCache"
           />
         ) : (
           <Text className="text-lg font-semibold text-text-secondary">{animal.name.charAt(0)}</Text>

@@ -1,5 +1,6 @@
 import React from 'react'
-import { View, Text, ScrollView, TouchableOpacity, Image, Alert } from 'react-native'
+import { View, Text, ScrollView, TouchableOpacity, Alert } from 'react-native'
+import TurboImage from 'react-native-turbo-image'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RouteProp } from '@react-navigation/native'
@@ -68,10 +69,10 @@ const CreateAnimalScreen: React.FC = () => {
           activeOpacity={0.7}
         >
           {controller.photoUri ? (
-            <Image
+            <TurboImage
               source={{ uri: controller.photoUri }}
-              className="w-24 h-24 rounded-full"
-              resizeMode="cover"
+              style={{ width: 96, height: 96, borderRadius: 48 }}
+              cachePolicy="dataCache"
             />
           ) : (
             <View className="items-center">
