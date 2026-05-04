@@ -1,10 +1,7 @@
 import firestore from '@react-native-firebase/firestore'
 import { IResult, SuccessResult, ErrorResult } from '../../../util/Result'
 import { adminObject_default, adminObject_updateLastUpdated } from '../../../schema/object/AdminObject'
-import AnimalType from '../../../schema/animalType/AnimalType'
-import Breed from '../../../schema/animalType/Breed'
-import CareTemplate from '../../../schema/animalType/CareTemplate'
-import EventTemplate from '../../../schema/animalType/EventTemplate'
+import AnimalType, { AnimalTypeBreed, AnimalTypeCareTemplate, AnimalTypeEventTemplate } from '../../../schema/animalType/AnimalType'
 import Log from '../../../library/log/Log'
 import { useHomesteadStore } from '../../../store/homesteadStore'
 import IAnimalTypeService from './IAnimalTypeService'
@@ -24,16 +21,8 @@ export default class AnimalTypeService implements IAnimalTypeService {
     return this.homesteadRef.collection(Col.animalType)
   }
 
-  private breedCollection(animalTypeId: string) {
-    return this.animalTypeCollection().doc(animalTypeId).collection(Col.breed)
-  }
-
-  private careTemplateCollection(animalTypeId: string) {
-    return this.animalTypeCollection().doc(animalTypeId).collection(Col.careTemplate)
-  }
-
-  private eventTemplateCollection(animalTypeId: string) {
-    return this.animalTypeCollection().doc(animalTypeId).collection(Col.eventTemplate)
+  private generateId(): string {
+    return firestore().collection('_').doc().id
   }
 
   subscribeToAnimalTypes(callback: (types: AnimalType[]) => void): () => void {
@@ -117,39 +106,28 @@ export default class AnimalTypeService implements IAnimalTypeService {
     }
   }
 
-  async getBreedsForType(animalTypeId: string): Promise<Breed[]> {
-    try {
-      const snapshot = await this.breedCollection(animalTypeId)
-        .where('admin.deleted', '==', false)
-        .get()
+  // --- Breed array mutations ---
 
-      return snapshot.docs.map(doc => ({
-        ...doc.data(),
-        id: doc.id,
-      } as Breed))
-    } catch (error: any) {
-      Log.error(TAG, `getBreedsForType error: ${error.message}`)
-      return []
-    }
-  }
-
-  async createBreed(animalTypeId: string, breed: Breed): Promise<IResult> {
+  async addBreed(animalTypeId: string, breed: Omit<AnimalTypeBreed, 'id'>): Promise<IResult> {
     try {
-      const ref = this.breedCollection(animalTypeId).doc()
-      breed.id = ref.id
-      await ref.set(breed as any)
-      return SuccessResult
+      const doc = await this.animalTypeCollection().doc(animalTypeId).get()
+      if (!doc.exists) return ErrorResult('Animal type not found')
+      const animalType = { ...doc.data(), id: doc.id } as AnimalType
+      animalType.breeds.push({ ...breed, id: this.generateId() })
+      return this.updateAnimalType(animalType)
     } catch (error: any) {
-      Log.error(TAG, `createBreed error: ${error.message}`)
+      Log.error(TAG, `addBreed error: ${error.message}`)
       return ErrorResult(error.message)
     }
   }
 
-  async updateBreed(animalTypeId: string, breed: Breed): Promise<IResult> {
+  async updateBreed(animalTypeId: string, breed: AnimalTypeBreed): Promise<IResult> {
     try {
-      adminObject_updateLastUpdated(breed.admin)
-      await this.breedCollection(animalTypeId).doc(breed.id).update(breed as any)
-      return SuccessResult
+      const doc = await this.animalTypeCollection().doc(animalTypeId).get()
+      if (!doc.exists) return ErrorResult('Animal type not found')
+      const animalType = { ...doc.data(), id: doc.id } as AnimalType
+      animalType.breeds = animalType.breeds.map(b => b.id === breed.id ? breed : b)
+      return this.updateAnimalType(animalType)
     } catch (error: any) {
       Log.error(TAG, `updateBreed error: ${error.message}`)
       return ErrorResult(error.message)
@@ -158,50 +136,39 @@ export default class AnimalTypeService implements IAnimalTypeService {
 
   async deleteBreed(animalTypeId: string, breedId: string): Promise<IResult> {
     try {
-      await this.breedCollection(animalTypeId).doc(breedId).update({
-        'admin.deleted': true,
-        'admin.updated_at': firestore.FieldValue.serverTimestamp(),
-      })
-      return SuccessResult
+      const doc = await this.animalTypeCollection().doc(animalTypeId).get()
+      if (!doc.exists) return ErrorResult('Animal type not found')
+      const animalType = { ...doc.data(), id: doc.id } as AnimalType
+      animalType.breeds = animalType.breeds.filter(b => b.id !== breedId)
+      return this.updateAnimalType(animalType)
     } catch (error: any) {
       Log.error(TAG, `deleteBreed error: ${error.message}`)
       return ErrorResult(error.message)
     }
   }
 
-  async getCareTemplatesForType(animalTypeId: string): Promise<CareTemplate[]> {
-    try {
-      const snapshot = await this.careTemplateCollection(animalTypeId)
-        .where('admin.deleted', '==', false)
-        .get()
+  // --- CareTemplate array mutations ---
 
-      return snapshot.docs.map(doc => ({
-        ...doc.data(),
-        id: doc.id,
-      } as CareTemplate))
-    } catch (error: any) {
-      Log.error(TAG, `getCareTemplatesForType error: ${error.message}`)
-      return []
-    }
-  }
-
-  async createCareTemplate(animalTypeId: string, template: CareTemplate): Promise<IResult> {
+  async addCareTemplate(animalTypeId: string, template: Omit<AnimalTypeCareTemplate, 'id'>): Promise<IResult> {
     try {
-      const ref = this.careTemplateCollection(animalTypeId).doc()
-      template.id = ref.id
-      await ref.set(template as any)
-      return SuccessResult
+      const doc = await this.animalTypeCollection().doc(animalTypeId).get()
+      if (!doc.exists) return ErrorResult('Animal type not found')
+      const animalType = { ...doc.data(), id: doc.id } as AnimalType
+      animalType.careTemplates.push({ ...template, id: this.generateId() })
+      return this.updateAnimalType(animalType)
     } catch (error: any) {
-      Log.error(TAG, `createCareTemplate error: ${error.message}`)
+      Log.error(TAG, `addCareTemplate error: ${error.message}`)
       return ErrorResult(error.message)
     }
   }
 
-  async updateCareTemplate(animalTypeId: string, template: CareTemplate): Promise<IResult> {
+  async updateCareTemplate(animalTypeId: string, template: AnimalTypeCareTemplate): Promise<IResult> {
     try {
-      adminObject_updateLastUpdated(template.admin)
-      await this.careTemplateCollection(animalTypeId).doc(template.id).update(template as any)
-      return SuccessResult
+      const doc = await this.animalTypeCollection().doc(animalTypeId).get()
+      if (!doc.exists) return ErrorResult('Animal type not found')
+      const animalType = { ...doc.data(), id: doc.id } as AnimalType
+      animalType.careTemplates = animalType.careTemplates.map(t => t.id === template.id ? template : t)
+      return this.updateAnimalType(animalType)
     } catch (error: any) {
       Log.error(TAG, `updateCareTemplate error: ${error.message}`)
       return ErrorResult(error.message)
@@ -210,50 +177,39 @@ export default class AnimalTypeService implements IAnimalTypeService {
 
   async deleteCareTemplate(animalTypeId: string, templateId: string): Promise<IResult> {
     try {
-      await this.careTemplateCollection(animalTypeId).doc(templateId).update({
-        'admin.deleted': true,
-        'admin.updated_at': firestore.FieldValue.serverTimestamp(),
-      })
-      return SuccessResult
+      const doc = await this.animalTypeCollection().doc(animalTypeId).get()
+      if (!doc.exists) return ErrorResult('Animal type not found')
+      const animalType = { ...doc.data(), id: doc.id } as AnimalType
+      animalType.careTemplates = animalType.careTemplates.filter(t => t.id !== templateId)
+      return this.updateAnimalType(animalType)
     } catch (error: any) {
       Log.error(TAG, `deleteCareTemplate error: ${error.message}`)
       return ErrorResult(error.message)
     }
   }
 
-  async getEventTemplatesForType(animalTypeId: string): Promise<EventTemplate[]> {
-    try {
-      const snapshot = await this.eventTemplateCollection(animalTypeId)
-        .where('admin.deleted', '==', false)
-        .get()
+  // --- EventTemplate array mutations ---
 
-      return snapshot.docs.map(doc => ({
-        ...doc.data(),
-        id: doc.id,
-      } as EventTemplate))
-    } catch (error: any) {
-      Log.error(TAG, `getEventTemplatesForType error: ${error.message}`)
-      return []
-    }
-  }
-
-  async createEventTemplate(animalTypeId: string, template: EventTemplate): Promise<IResult> {
+  async addEventTemplate(animalTypeId: string, template: Omit<AnimalTypeEventTemplate, 'id'>): Promise<IResult> {
     try {
-      const ref = this.eventTemplateCollection(animalTypeId).doc()
-      template.id = ref.id
-      await ref.set(template as any)
-      return SuccessResult
+      const doc = await this.animalTypeCollection().doc(animalTypeId).get()
+      if (!doc.exists) return ErrorResult('Animal type not found')
+      const animalType = { ...doc.data(), id: doc.id } as AnimalType
+      animalType.eventTemplates.push({ ...template, id: this.generateId() })
+      return this.updateAnimalType(animalType)
     } catch (error: any) {
-      Log.error(TAG, `createEventTemplate error: ${error.message}`)
+      Log.error(TAG, `addEventTemplate error: ${error.message}`)
       return ErrorResult(error.message)
     }
   }
 
-  async updateEventTemplate(animalTypeId: string, template: EventTemplate): Promise<IResult> {
+  async updateEventTemplate(animalTypeId: string, template: AnimalTypeEventTemplate): Promise<IResult> {
     try {
-      adminObject_updateLastUpdated(template.admin)
-      await this.eventTemplateCollection(animalTypeId).doc(template.id).update(template as any)
-      return SuccessResult
+      const doc = await this.animalTypeCollection().doc(animalTypeId).get()
+      if (!doc.exists) return ErrorResult('Animal type not found')
+      const animalType = { ...doc.data(), id: doc.id } as AnimalType
+      animalType.eventTemplates = animalType.eventTemplates.map(t => t.id === template.id ? template : t)
+      return this.updateAnimalType(animalType)
     } catch (error: any) {
       Log.error(TAG, `updateEventTemplate error: ${error.message}`)
       return ErrorResult(error.message)
@@ -262,16 +218,18 @@ export default class AnimalTypeService implements IAnimalTypeService {
 
   async deleteEventTemplate(animalTypeId: string, templateId: string): Promise<IResult> {
     try {
-      await this.eventTemplateCollection(animalTypeId).doc(templateId).update({
-        'admin.deleted': true,
-        'admin.updated_at': firestore.FieldValue.serverTimestamp(),
-      })
-      return SuccessResult
+      const doc = await this.animalTypeCollection().doc(animalTypeId).get()
+      if (!doc.exists) return ErrorResult('Animal type not found')
+      const animalType = { ...doc.data(), id: doc.id } as AnimalType
+      animalType.eventTemplates = animalType.eventTemplates.filter(t => t.id !== templateId)
+      return this.updateAnimalType(animalType)
     } catch (error: any) {
       Log.error(TAG, `deleteEventTemplate error: ${error.message}`)
       return ErrorResult(error.message)
     }
   }
+
+  // --- Seeding ---
 
   async seedStarterPlaybooks(homesteadId: string, selectedSpecies: string[], userId: string): Promise<IResult> {
     try {
@@ -281,43 +239,32 @@ export default class AnimalTypeService implements IAnimalTypeService {
       for (const species of selectedSpecies) {
         const playbook = STARTER_PLAYBOOKS[species]
         const typeRef = seedRef.collection(Col.animalType).doc()
-        batch.set(typeRef, {
+
+        const animalType: any = {
           id: typeRef.id,
           admin: adminObject_default(),
           name: species,
           colors: playbook?.colors ?? [],
-        } as any)
-
-        if (playbook) {
-          for (const breed of playbook.breeds) {
-            const breedRef = typeRef.collection(Col.breed).doc()
-            batch.set(breedRef, {
-              id: breedRef.id,
-              admin: adminObject_default(),
-              name: breed.name,
-              gestationDays: breed.gestationDays ?? 0,
-              extraData: [],
-            } as any)
-          }
-
-          for (const template of playbook.careTemplates) {
-            const templateRef = typeRef.collection(Col.careTemplate).doc()
-            batch.set(templateRef, {
-              id: templateRef.id,
-              admin: adminObject_default(),
-              name: template.name,
-              type: template.type,
-              cycle: template.cycle,
-              contactName: '',
-              contactPhone: '',
-              extraData: [],
-            } as any)
-          }
+          breeds: (playbook?.breeds ?? []).map(b => ({
+            id: this.generateId(),
+            name: b.name,
+            gestationDays: b.gestationDays ?? 0,
+          })),
+          careTemplates: (playbook?.careTemplates ?? []).map(t => ({
+            id: this.generateId(),
+            name: t.name,
+            type: t.type,
+            cycle: t.cycle,
+            contactName: '',
+            contactPhone: '',
+          })),
+          eventTemplates: [],
         }
+
+        batch.set(typeRef, animalType)
       }
 
       batch.update(firestore().collection(Col.user).doc(userId), {
-        onboardingComplete: true,
         selectedSpecies,
       })
 
@@ -329,15 +276,4 @@ export default class AnimalTypeService implements IAnimalTypeService {
     }
   }
 
-  async skipOnboarding(userId: string): Promise<IResult> {
-    try {
-      await firestore().collection(Col.user).doc(userId).update({
-        onboardingComplete: true,
-      })
-      return SuccessResult
-    } catch (error: any) {
-      Log.error(TAG, `skipOnboarding error: ${error.message}`)
-      return ErrorResult(error.message)
-    }
-  }
 }

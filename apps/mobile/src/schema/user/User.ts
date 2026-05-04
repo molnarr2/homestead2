@@ -9,7 +9,6 @@ export default interface User {
   email: string
   anonymous: boolean
   selectedSpecies: string[]
-  onboardingComplete: boolean
   avatarUrl: string
   photoStorageRef: string
   activeHomesteadId: string
@@ -25,7 +24,6 @@ export function user_default(): User {
     email: '',
     anonymous: false,
     selectedSpecies: [],
-    onboardingComplete: false,
     avatarUrl: '',
     photoStorageRef: '',
     activeHomesteadId: '',

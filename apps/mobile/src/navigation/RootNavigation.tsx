@@ -95,6 +95,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>()
 const RootNavigation: React.FC = () => {
   const isLoggedIn = useAuthStore(s => s.isLoggedIn)
   const homesteadId = useHomesteadStore(s => s.homesteadId)
+  const homestead = useHomesteadStore(s => s.homestead)
   const showLoading = isLoggedIn === null || (isLoggedIn === true && homesteadId === '')
 
   return (
@@ -107,10 +108,11 @@ const RootNavigation: React.FC = () => {
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Register" component={RegisterScreen} />
           </>
+        ) : homestead?.onboardingComplete === false ? (
+          <Stack.Screen name="SpeciesSelection" component={SpeciesSelectionScreen} />
         ) : (
           <>
             <Stack.Screen name="DrawerMain" component={DrawerNavigator} />
-            <Stack.Screen name="SpeciesSelection" component={SpeciesSelectionScreen} />
             <Stack.Screen name="AnimalDetail" component={AnimalDetailScreen} />
             <Stack.Screen name="CreateAnimal" component={CreateAnimalScreen} />
             <Stack.Screen name="EditAnimal" component={EditAnimalScreen} />

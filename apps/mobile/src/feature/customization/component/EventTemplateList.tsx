@@ -1,11 +1,11 @@
 import React from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
 import Icon from '@react-native-vector-icons/material-design-icons'
-import EventTemplate from '../../../schema/animalType/EventTemplate'
+import { AnimalTypeEventTemplate } from '../../../schema/animalType/AnimalType'
 import SectionHeader from '../../../components/layout/SectionHeader'
 
 interface Props {
-  templates: EventTemplate[]
+  templates: AnimalTypeEventTemplate[]
   onAdd: () => void
 }
 

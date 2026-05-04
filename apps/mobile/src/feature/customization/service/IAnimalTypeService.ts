@@ -1,8 +1,5 @@
 import { IResult } from '../../../util/Result'
-import AnimalType from '../../../schema/animalType/AnimalType'
-import Breed from '../../../schema/animalType/Breed'
-import CareTemplate from '../../../schema/animalType/CareTemplate'
-import EventTemplate from '../../../schema/animalType/EventTemplate'
+import AnimalType, { AnimalTypeBreed, AnimalTypeCareTemplate, AnimalTypeEventTemplate } from '../../../schema/animalType/AnimalType'
 
 export default interface IAnimalTypeService {
   subscribeToAnimalTypes(callback: (types: AnimalType[]) => void): () => void
@@ -12,21 +9,17 @@ export default interface IAnimalTypeService {
   updateAnimalType(animalType: AnimalType): Promise<IResult>
   deleteAnimalType(id: string): Promise<IResult>
 
-  getBreedsForType(animalTypeId: string): Promise<Breed[]>
-  createBreed(animalTypeId: string, breed: Breed): Promise<IResult>
-  updateBreed(animalTypeId: string, breed: Breed): Promise<IResult>
+  addBreed(animalTypeId: string, breed: Omit<AnimalTypeBreed, 'id'>): Promise<IResult>
+  updateBreed(animalTypeId: string, breed: AnimalTypeBreed): Promise<IResult>
   deleteBreed(animalTypeId: string, breedId: string): Promise<IResult>
 
-  getCareTemplatesForType(animalTypeId: string): Promise<CareTemplate[]>
-  createCareTemplate(animalTypeId: string, template: CareTemplate): Promise<IResult>
-  updateCareTemplate(animalTypeId: string, template: CareTemplate): Promise<IResult>
+  addCareTemplate(animalTypeId: string, template: Omit<AnimalTypeCareTemplate, 'id'>): Promise<IResult>
+  updateCareTemplate(animalTypeId: string, template: AnimalTypeCareTemplate): Promise<IResult>
   deleteCareTemplate(animalTypeId: string, templateId: string): Promise<IResult>
 
-  getEventTemplatesForType(animalTypeId: string): Promise<EventTemplate[]>
-  createEventTemplate(animalTypeId: string, template: EventTemplate): Promise<IResult>
-  updateEventTemplate(animalTypeId: string, template: EventTemplate): Promise<IResult>
+  addEventTemplate(animalTypeId: string, template: Omit<AnimalTypeEventTemplate, 'id'>): Promise<IResult>
+  updateEventTemplate(animalTypeId: string, template: AnimalTypeEventTemplate): Promise<IResult>
   deleteEventTemplate(animalTypeId: string, templateId: string): Promise<IResult>
 
   seedStarterPlaybooks(homesteadId: string, selectedSpecies: string[], userId: string): Promise<IResult>
-  skipOnboarding(userId: string): Promise<IResult>
 }

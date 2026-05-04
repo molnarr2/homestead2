@@ -35,6 +35,7 @@ export default class HomesteadService implements IHomesteadService {
         id: homesteadRef.id,
         admin: adminObject_default(),
         name,
+        onboardingComplete: false,
         subscriptionRevenuecat: 'free',
         subscriptionOverride: 'free',
       }
@@ -151,6 +152,16 @@ export default class HomesteadService implements IHomesteadService {
     } catch (error: any) {
       Log.error(TAG, `getMemberRole error: ${error.message}`)
       return null
+    }
+  }
+
+  async setOnboardingComplete(homesteadId: string): Promise<IResult> {
+    try {
+      await this.homesteadCollection().doc(homesteadId).update({ onboardingComplete: true })
+      return SuccessResult
+    } catch (error: any) {
+      Log.error(TAG, `setOnboardingComplete error: ${error.message}`)
+      return ErrorResult(error.message)
     }
   }
 

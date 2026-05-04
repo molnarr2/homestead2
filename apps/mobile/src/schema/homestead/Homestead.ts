@@ -5,6 +5,7 @@ export default interface Homestead {
   id: string
   admin: AdminObject
   name: string
+  onboardingComplete: boolean
   subscriptionRevenuecat: SubscriptionTier
   subscriptionOverride: SubscriptionTier
 }
@@ -14,6 +15,7 @@ export function homestead_default(): Homestead {
     id: '',
     admin: adminObject_default(),
     name: '',
+    onboardingComplete: false,
     subscriptionRevenuecat: 'free',
     subscriptionOverride: 'free',
   }

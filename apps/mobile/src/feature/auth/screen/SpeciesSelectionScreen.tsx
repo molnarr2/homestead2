@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, TouchableOpacity, FlatList } from 'react-native'
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Icon from '@react-native-vector-icons/material-design-icons'
 import { useSpeciesSelectionController } from './SpeciesSelectionController'
@@ -8,30 +8,9 @@ import PrimaryButton from '../../../components/button/PrimaryButton'
 const SpeciesSelectionScreen: React.FC = () => {
   const controller = useSpeciesSelectionController()
 
-  const renderSpeciesCard = ({ item }: { item: { name: string; icon: string } }) => {
-    const isSelected = controller.selectedSpecies.includes(item.name)
-    return (
-      <TouchableOpacity
-        className={`flex-1 m-2 p-4 rounded-xl items-center border-2 ${
-          isSelected ? 'border-primary bg-accent-light' : 'border-border-light bg-surface'
-        }`}
-        onPress={() => controller.toggleSpecies(item.name)}
-      >
-        <Icon
-          name={item.icon as React.ComponentProps<typeof Icon>['name']}
-          size={32}
-          color={isSelected ? '#4A6741' : '#6B6B6B'}
-        />
-        <Text className={`text-sm font-medium mt-2 ${isSelected ? 'text-primary' : 'text-text-secondary'}`}>
-          {item.name}
-        </Text>
-        {isSelected ? (
-          <View className="absolute top-2 right-2">
-            <Icon name="check-circle" size={18} color="#4A6741" />
-          </View>
-        ) : null}
-      </TouchableOpacity>
-    )
+  const rows: { name: string; icon: string }[][] = []
+  for (let i = 0; i < controller.availableSpecies.length; i += 2) {
+    rows.push(controller.availableSpecies.slice(i, i + 2))
   }
 
   return (
@@ -44,14 +23,39 @@ const SpeciesSelectionScreen: React.FC = () => {
           Select all that apply — you can add more later
         </Text>
 
-        <FlatList
-          data={controller.availableSpecies}
-          renderItem={renderSpeciesCard}
-          keyExtractor={(item) => item.name}
-          numColumns={2}
-          className="flex-1"
-          showsVerticalScrollIndicator={false}
-        />
+        <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+          {rows.map((row, rowIndex) => (
+            <View key={rowIndex} className="flex-row mb-3">
+              {row.map(item => {
+                const isSelected = controller.selectedSpecies.includes(item.name)
+                return (
+                  <TouchableOpacity
+                    key={item.name}
+                    className={`flex-1 mx-1.5 p-4 rounded-xl items-center border-2 ${
+                      isSelected ? 'border-primary bg-accent-light' : 'border-border-light bg-surface'
+                    }`}
+                    onPress={() => controller.toggleSpecies(item.name)}
+                  >
+                    <Icon
+                      name={item.icon as React.ComponentProps<typeof Icon>['name']}
+                      size={32}
+                      color={isSelected ? '#4A6741' : '#6B6B6B'}
+                    />
+                    <Text className={`text-sm font-medium mt-2 ${isSelected ? 'text-primary' : 'text-text-secondary'}`}>
+                      {item.name}
+                    </Text>
+                    {isSelected ? (
+                      <View className="absolute top-2 right-2">
+                        <Icon name="check-circle" size={18} color="#4A6741" />
+                      </View>
+                    ) : null}
+                  </TouchableOpacity>
+                )
+              })}
+              {row.length === 1 ? <View className="flex-1 mx-1.5" /> : null}
+            </View>
+          ))}
+        </ScrollView>
 
         <View className="py-4">
           <PrimaryButton

@@ -11,7 +11,7 @@ type RegisterNavigation = NativeStackNavigationProp<RootStackParamList, 'Registe
 
 const RegisterScreen: React.FC = () => {
   const navigation = useNavigation<RegisterNavigation>()
-  const controller = useRegisterController(navigation)
+  const controller = useRegisterController()
 
   return (
     <KeyboardAvoidingView

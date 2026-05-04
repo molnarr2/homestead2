@@ -1,12 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { View, Text, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
 import { useCustomizationHomeController } from './CustomizationHomeController'
-import { bsAnimalTypeService } from '../../../Bootstrap'
-import Breed from '../../../schema/animalType/Breed'
-import CareTemplate from '../../../schema/animalType/CareTemplate'
 import ScreenContainer from '../../../components/layout/ScreenContainer'
 import FloatingActionButton from '../../../components/button/FloatingActionButton'
 import EmptyState from '../../../components/layout/EmptyState'
@@ -18,24 +15,6 @@ type Navigation = NativeStackNavigationProp<RootStackParamList>
 const CustomizationHomeScreen: React.FC = () => {
   const navigation = useNavigation<Navigation>()
   const controller = useCustomizationHomeController(navigation)
-  const [breedCounts, setBreedCounts] = useState<Record<string, number>>({})
-  const [careCounts, setCareCounts] = useState<Record<string, number>>({})
-
-  useEffect(() => {
-    const fetchCounts = async () => {
-      const bCounts: Record<string, number> = {}
-      const cCounts: Record<string, number> = {}
-      for (const type of controller.animalTypes) {
-        const breeds = await bsAnimalTypeService.getBreedsForType(type.id)
-        bCounts[type.id] = breeds.length
-        const templates = await bsAnimalTypeService.getCareTemplatesForType(type.id)
-        cCounts[type.id] = templates.length
-      }
-      setBreedCounts(bCounts)
-      setCareCounts(cCounts)
-    }
-    if (controller.animalTypes.length > 0) fetchCounts()
-  }, [controller.animalTypes])
 
   if (controller.loading) {
     return (
@@ -70,8 +49,8 @@ const CustomizationHomeScreen: React.FC = () => {
             renderItem={({ item }) => (
               <AnimalTypeCard
                 name={item.name}
-                breedCount={breedCounts[item.id] ?? 0}
-                careTemplateCount={careCounts[item.id] ?? 0}
+                breedCount={item.breeds?.length ?? 0}
+                careTemplateCount={item.careTemplates?.length ?? 0}
                 onPress={() => controller.onAnimalTypePress(item.id)}
               />
             )}

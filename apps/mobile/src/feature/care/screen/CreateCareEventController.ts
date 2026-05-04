@@ -22,7 +22,7 @@ export function useCreateCareEventController(navigation: Navigation, route: Rout
   const { animalId: routeAnimalId, templateId } = route.params
   const { animals } = useAnimalStore()
   const { careEvents } = useCareStore()
-  const { careTemplates } = useAnimalTypeStore()
+  const { animalTypes } = useAnimalTypeStore()
   const homestead = useHomesteadStore(s => s.homestead)
 
   const [selectedAnimalId, setSelectedAnimalId] = useState(routeAnimalId ?? '')
@@ -37,7 +37,7 @@ export function useCreateCareEventController(navigation: Navigation, route: Rout
 
   useEffect(() => {
     if (templateId) {
-      const allTemplates = Object.values(careTemplates).flat()
+      const allTemplates = animalTypes.flatMap(t => t.careTemplates)
       const template = allTemplates.find(t => t.id === templateId)
       if (template) {
         setName(template.name)

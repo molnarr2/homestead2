@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { bsAuthService, bsUserService, bsAnimalTypeService } from '../../../Bootstrap'
+import { bsAuthService, bsUserService, bsAnimalTypeService, bsHomesteadService } from '../../../Bootstrap'
 
 const AVAILABLE_SPECIES = [
   { name: 'Chicken', icon: 'egg' },
@@ -40,6 +40,7 @@ export function useSpeciesSelectionController() {
 
     if (homesteadId) {
       await bsAnimalTypeService.seedStarterPlaybooks(homesteadId, selectedSpecies, userId)
+      await bsHomesteadService.setOnboardingComplete(homesteadId)
     }
 
     setLoading(false)
@@ -47,7 +48,11 @@ export function useSpeciesSelectionController() {
 
   const skip = async () => {
     const userId = bsAuthService.currentUserId
-    await bsAnimalTypeService.skipOnboarding(userId)
+    const user = await bsUserService.getUser(userId)
+    const homesteadId = user?.activeHomesteadId ?? ''
+    if (homesteadId) {
+      await bsHomesteadService.setOnboardingComplete(homesteadId)
+    }
   }
 
   return { availableSpecies: AVAILABLE_SPECIES, selectedSpecies, toggleSpecies, loading, complete, skip }

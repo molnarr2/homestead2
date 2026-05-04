@@ -10,7 +10,6 @@ import { effectiveSubscription } from '../../subscription/service/ISubscriptionS
 import { bsAnimalService } from '../../../Bootstrap'
 import { animal_default, AnimalGender } from '../../../schema/animal/Animal'
 import { adminObject_default } from '../../../schema/object/AdminObject'
-import Breed from '../../../schema/animalType/Breed'
 
 type Navigation = NativeStackNavigationProp<RootStackParamList, 'CreateAnimal'>
 type Route = RouteProp<RootStackParamList, 'CreateAnimal'>
@@ -19,7 +18,7 @@ const FREE_TIER_ANIMAL_LIMIT = 10
 
 export function useCreateAnimalController(navigation: Navigation, route: Route) {
   const { animals } = useAnimalStore()
-  const { animalTypes, breeds, fetchBreeds } = useAnimalTypeStore()
+  const { animalTypes } = useAnimalTypeStore()
   const homestead = useHomesteadStore(s => s.homestead)
 
   const [name, setName] = useState('')
@@ -35,17 +34,11 @@ export function useCreateAnimalController(navigation: Navigation, route: Route) 
   const [loading, setLoading] = useState(false)
 
   const selectedType = animalTypes.find(t => t.id === animalTypeId)
-  const availableBreeds: Breed[] = animalTypeId ? (breeds[animalTypeId] ?? []) : []
-
-  useEffect(() => {
-    if (animalTypeId) {
-      fetchBreeds(animalTypeId)
-      setBreedId('')
-    }
-  }, [animalTypeId])
+  const availableBreeds = selectedType?.breeds ?? []
 
   const onSelectAnimalType = (typeId: string) => {
     setAnimalTypeId(typeId)
+    setBreedId('')
     setSireId('')
     setDamId('')
   }

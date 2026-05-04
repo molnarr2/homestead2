@@ -1,7 +1,9 @@
+import { AnimalTypeBreed, AnimalTypeCareTemplate } from '../../../schema/animalType/AnimalType'
+
 export interface StarterPlaybook {
   colors: string[]
-  breeds: { name: string; gestationDays?: number }[]
-  careTemplates: { name: string; type: 'careRecurring' | 'careSingle'; cycle: number }[]
+  breeds: (Omit<AnimalTypeBreed, 'id' | 'gestationDays'> & { gestationDays?: number })[]
+  careTemplates: Omit<AnimalTypeCareTemplate, 'id' | 'contactName' | 'contactPhone'>[]
 }
 
 export const STARTER_PLAYBOOKS: Record<string, StarterPlaybook> = {

@@ -1,25 +1,26 @@
 import { create } from 'zustand'
 import { IResult } from '../util/Result'
-import AnimalType from '../schema/animalType/AnimalType'
-import Breed from '../schema/animalType/Breed'
-import CareTemplate from '../schema/animalType/CareTemplate'
+import AnimalType, { AnimalTypeBreed, AnimalTypeCareTemplate, AnimalTypeEventTemplate } from '../schema/animalType/AnimalType'
 import { bsAuthService, bsAnimalTypeService } from '../Bootstrap'
 import { useHomesteadStore } from './homesteadStore'
 import { GESTATION_TABLE } from '../schema/type/GestationTable'
 
 interface AnimalTypeState {
   animalTypes: AnimalType[]
-  breeds: Record<string, Breed[]>
-  careTemplates: Record<string, CareTemplate[]>
   loading: boolean
   _unsubscribe: (() => void) | null
   subscribe: () => void
   teardown: () => void
-  fetchBreeds: (animalTypeId: string) => Promise<void>
-  fetchCareTemplates: (animalTypeId: string) => Promise<void>
   createAnimalType: (type: AnimalType) => Promise<IResult>
-  createBreed: (animalTypeId: string, breed: Breed) => Promise<IResult>
-  createCareTemplate: (animalTypeId: string, template: CareTemplate) => Promise<IResult>
+  addBreed: (animalTypeId: string, breed: Omit<AnimalTypeBreed, 'id'>) => Promise<IResult>
+  updateBreed: (animalTypeId: string, breed: AnimalTypeBreed) => Promise<IResult>
+  deleteBreed: (animalTypeId: string, breedId: string) => Promise<IResult>
+  addCareTemplate: (animalTypeId: string, template: Omit<AnimalTypeCareTemplate, 'id'>) => Promise<IResult>
+  updateCareTemplate: (animalTypeId: string, template: AnimalTypeCareTemplate) => Promise<IResult>
+  deleteCareTemplate: (animalTypeId: string, templateId: string) => Promise<IResult>
+  addEventTemplate: (animalTypeId: string, template: Omit<AnimalTypeEventTemplate, 'id'>) => Promise<IResult>
+  updateEventTemplate: (animalTypeId: string, template: AnimalTypeEventTemplate) => Promise<IResult>
+  deleteEventTemplate: (animalTypeId: string, templateId: string) => Promise<IResult>
   seedStarterPlaybooks: (species: string[]) => Promise<void>
   getGestationDays: (animalTypeId: string, breedId?: string) => number
   clear: () => void
@@ -27,8 +28,6 @@ interface AnimalTypeState {
 
 export const useAnimalTypeStore = create<AnimalTypeState>((set, get) => ({
   animalTypes: [],
-  breeds: {},
-  careTemplates: {},
   loading: true,
   _unsubscribe: null,
 
@@ -49,19 +48,19 @@ export const useAnimalTypeStore = create<AnimalTypeState>((set, get) => ({
     }
   },
 
-  fetchBreeds: async (animalTypeId: string) => {
-    const breeds = await bsAnimalTypeService.getBreedsForType(animalTypeId)
-    set({ breeds: { ...get().breeds, [animalTypeId]: breeds } })
-  },
-
-  fetchCareTemplates: async (animalTypeId: string) => {
-    const templates = await bsAnimalTypeService.getCareTemplatesForType(animalTypeId)
-    set({ careTemplates: { ...get().careTemplates, [animalTypeId]: templates } })
-  },
-
   createAnimalType: (type: AnimalType) => bsAnimalTypeService.createAnimalType(type),
-  createBreed: (animalTypeId: string, breed: Breed) => bsAnimalTypeService.createBreed(animalTypeId, breed),
-  createCareTemplate: (animalTypeId: string, template: CareTemplate) => bsAnimalTypeService.createCareTemplate(animalTypeId, template),
+
+  addBreed: (animalTypeId, breed) => bsAnimalTypeService.addBreed(animalTypeId, breed),
+  updateBreed: (animalTypeId, breed) => bsAnimalTypeService.updateBreed(animalTypeId, breed),
+  deleteBreed: (animalTypeId, breedId) => bsAnimalTypeService.deleteBreed(animalTypeId, breedId),
+
+  addCareTemplate: (animalTypeId, template) => bsAnimalTypeService.addCareTemplate(animalTypeId, template),
+  updateCareTemplate: (animalTypeId, template) => bsAnimalTypeService.updateCareTemplate(animalTypeId, template),
+  deleteCareTemplate: (animalTypeId, templateId) => bsAnimalTypeService.deleteCareTemplate(animalTypeId, templateId),
+
+  addEventTemplate: (animalTypeId, template) => bsAnimalTypeService.addEventTemplate(animalTypeId, template),
+  updateEventTemplate: (animalTypeId, template) => bsAnimalTypeService.updateEventTemplate(animalTypeId, template),
+  deleteEventTemplate: (animalTypeId, templateId) => bsAnimalTypeService.deleteEventTemplate(animalTypeId, templateId),
 
   seedStarterPlaybooks: async (species: string[]) => {
     const homesteadId = useHomesteadStore.getState().homesteadId
@@ -73,8 +72,8 @@ export const useAnimalTypeStore = create<AnimalTypeState>((set, get) => ({
 
   getGestationDays: (animalTypeId: string, breedId?: string) => {
     if (breedId) {
-      const typeBreeds = get().breeds[animalTypeId]
-      const breed = typeBreeds?.find(b => b.id === breedId)
+      const animalType = get().animalTypes.find(t => t.id === animalTypeId)
+      const breed = animalType?.breeds.find(b => b.id === breedId)
       if (breed && breed.gestationDays > 0) return breed.gestationDays
     }
     const animalType = get().animalTypes.find(t => t.id === animalTypeId)
@@ -84,6 +83,6 @@ export const useAnimalTypeStore = create<AnimalTypeState>((set, get) => ({
 
   clear: () => {
     get().teardown()
-    set({ animalTypes: [], breeds: {}, careTemplates: {}, loading: true, _unsubscribe: null })
+    set({ animalTypes: [], loading: true, _unsubscribe: null })
   },
 }))

@@ -1,11 +1,11 @@
 import React from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
 import Icon from '@react-native-vector-icons/material-design-icons'
-import CareTemplate from '../../../schema/animalType/CareTemplate'
+import { AnimalTypeCareTemplate } from '../../../schema/animalType/AnimalType'
 import SectionHeader from '../../../components/layout/SectionHeader'
 
 interface Props {
-  templates: CareTemplate[]
+  templates: AnimalTypeCareTemplate[]
   onAdd: () => void
   onEdit: (templateId: string) => void
 }

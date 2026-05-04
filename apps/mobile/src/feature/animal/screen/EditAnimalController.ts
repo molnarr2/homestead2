@@ -8,7 +8,6 @@ import { useAnimalTypeStore } from '../../../store/animalTypeStore'
 import { bsAnimalService } from '../../../Bootstrap'
 import { AnimalGender, AnimalState } from '../../../schema/animal/Animal'
 import { adminObject_updateLastUpdated } from '../../../schema/object/AdminObject'
-import Breed from '../../../schema/animalType/Breed'
 
 type Navigation = NativeStackNavigationProp<RootStackParamList, 'EditAnimal'>
 type Route = RouteProp<RootStackParamList, 'EditAnimal'>
@@ -17,7 +16,7 @@ export function useEditAnimalController(navigation: Navigation, route: Route) {
   const { animalId } = route.params
   const { animals } = useAnimalStore()
   const animal = animals.find(a => a.id === animalId)
-  const { animalTypes, breeds, fetchBreeds } = useAnimalTypeStore()
+  const { animalTypes } = useAnimalTypeStore()
 
   const [name, setName] = useState('')
   const [animalTypeId, setAnimalTypeId] = useState('')
@@ -46,17 +45,11 @@ export function useEditAnimalController(navigation: Navigation, route: Route) {
       setSireId(animal.sireId)
       setDamId(animal.damId)
       setInitialized(true)
-      if (animal.animalTypeId) fetchBreeds(animal.animalTypeId)
     }
   }, [animal, initialized])
 
-  const availableBreeds: Breed[] = animalTypeId ? (breeds[animalTypeId] ?? []) : []
-
-  useEffect(() => {
-    if (animalTypeId && initialized) {
-      fetchBreeds(animalTypeId)
-    }
-  }, [animalTypeId])
+  const selectedType = animalTypes.find(t => t.id === animalTypeId)
+  const availableBreeds = selectedType?.breeds ?? []
 
   const onSelectAnimalType = (typeId: string) => {
     setAnimalTypeId(typeId)
@@ -73,7 +66,6 @@ export function useEditAnimalController(navigation: Navigation, route: Route) {
     }
 
     setLoading(true)
-    const selectedType = animalTypes.find(t => t.id === animalTypeId)
     const selectedBreed = availableBreeds.find(b => b.id === breedId)
     const updated = {
       ...animal,

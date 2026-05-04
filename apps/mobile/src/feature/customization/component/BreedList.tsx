@@ -1,11 +1,11 @@
 import React from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
 import Icon from '@react-native-vector-icons/material-design-icons'
-import Breed from '../../../schema/animalType/Breed'
+import { AnimalTypeBreed } from '../../../schema/animalType/AnimalType'
 import SectionHeader from '../../../components/layout/SectionHeader'
 
 interface Props {
-  breeds: Breed[]
+  breeds: AnimalTypeBreed[]
   onAdd: () => void
   onEdit: (breedId: string) => void
 }
