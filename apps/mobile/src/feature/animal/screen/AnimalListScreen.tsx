@@ -1,30 +1,25 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { View, Text, SectionList, TouchableOpacity, ActivityIndicator } from 'react-native'
 import TurboImage from 'react-native-turbo-image'
+import Icon from '@react-native-vector-icons/material-design-icons'
 import { useNavigation } from '@react-navigation/native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
-import { useAnimalListController, AnimalStateFilter } from './AnimalListController'
+import { useAnimalListController } from './AnimalListController'
 import ScreenContainer from '../../../components/layout/ScreenContainer'
 import SearchBar from '../../../components/input/SearchBar'
 import FloatingActionButton from '../../../components/button/FloatingActionButton'
 import EmptyState from '../../../components/layout/EmptyState'
 import AnimalListByType from '../component/AnimalListByType'
+import AnimalFilterModal from '../component/AnimalFilterModal'
 import Animal from '../../../schema/animal/Animal'
 
 type Navigation = NativeStackNavigationProp<RootStackParamList>
 
-const STATE_FILTERS: { label: string; value: AnimalStateFilter }[] = [
-  { label: 'All', value: 'all' },
-  { label: 'Owned', value: 'own' },
-  { label: 'Sold', value: 'sold' },
-  { label: 'Died', value: 'died' },
-  { label: 'Processed', value: 'processed' },
-]
-
 const AnimalListScreen: React.FC = () => {
   const navigation = useNavigation<Navigation>()
   const controller = useAnimalListController(navigation)
+  const [filterModalVisible, setFilterModalVisible] = useState(false)
 
   if (controller.loading) {
     return (
@@ -42,32 +37,24 @@ const AnimalListScreen: React.FC = () => {
         <View className="px-4 pt-4 pb-2">
           <View className="flex-row items-center justify-between mb-3">
             <Text className="text-2xl font-bold text-text-primary">Animals</Text>
-            <View className="bg-primary px-3 py-1 rounded-full">
-              <Text className="text-sm font-semibold text-text-inverse">{controller.animalCount}</Text>
-            </View>
+            <TouchableOpacity
+              onPress={() => setFilterModalVisible(true)}
+              activeOpacity={0.7}
+              className="p-1"
+            >
+              <View>
+                <Icon name="filter-variant" size={24} color="#1A1A1A" />
+                {controller.isFilterActive ? (
+                  <View className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-primary" />
+                ) : null}
+              </View>
+            </TouchableOpacity>
           </View>
           <SearchBar
             value={controller.searchQuery}
             onChangeText={controller.setSearchQuery}
             placeholder="Search by name or breed..."
           />
-          <View className="flex-row mt-3 flex-wrap gap-2">
-            {STATE_FILTERS.map(filter => {
-              const isActive = controller.filterState === filter.value
-              return (
-                <TouchableOpacity
-                  key={filter.value}
-                  className={`px-3 py-1.5 rounded-full border ${isActive ? 'bg-primary border-primary' : 'bg-surface border-border-light'}`}
-                  onPress={() => controller.setFilterState(filter.value)}
-                  activeOpacity={0.7}
-                >
-                  <Text className={`text-sm font-medium ${isActive ? 'text-text-inverse' : 'text-text-secondary'}`}>
-                    {filter.label}
-                  </Text>
-                </TouchableOpacity>
-              )
-            })}
-          </View>
         </View>
 
         {controller.sections.length === 0 ? (
@@ -93,6 +80,17 @@ const AnimalListScreen: React.FC = () => {
         )}
 
         <FloatingActionButton onPress={controller.onCreateAnimal} />
+
+        <AnimalFilterModal
+          visible={filterModalVisible}
+          onClose={() => setFilterModalVisible(false)}
+          animalTypes={controller.animalTypes}
+          selectedTypes={controller.filterTypes}
+          onTypesChange={controller.setFilterTypes}
+          selectedStates={controller.filterStates}
+          onStatesChange={controller.setFilterStates}
+          onReset={controller.resetFilters}
+        />
       </View>
     </ScreenContainer>
   )
@@ -106,7 +104,7 @@ interface AnimalCardProps {
 const STATE_BADGE_COLORS: Record<string, string> = {
   own: 'bg-status-success',
   sold: 'bg-status-info',
-  died: 'bg-status-error',
+  deceased: 'bg-status-error',
   processed: 'bg-status-warning',
 }
 

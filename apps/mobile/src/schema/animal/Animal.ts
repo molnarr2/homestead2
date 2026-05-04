@@ -1,6 +1,6 @@
 import AdminObject, { adminObject_default } from '../object/AdminObject'
 
-export type AnimalState = 'own' | 'sold' | 'died' | 'processed'
+export type AnimalState = 'own' | 'sold' | 'deceased' | 'processed'
 export type AnimalGender = 'male' | 'female' | 'unknown'
 
 export default interface Animal {

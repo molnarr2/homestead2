@@ -15,7 +15,7 @@ interface Props {
 const STATE_BADGE_COLORS: Record<string, string> = {
   own: 'bg-status-success',
   sold: 'bg-status-info',
-  died: 'bg-status-error',
+  deceased: 'bg-status-error',
   processed: 'bg-status-warning',
 }
 

@@ -26,7 +26,7 @@ const GENDERS: { label: string; value: AnimalGender }[] = [
 const STATES: { label: string; value: AnimalState }[] = [
   { label: 'Owned', value: 'own' },
   { label: 'Sold', value: 'sold' },
-  { label: 'Died', value: 'died' },
+  { label: 'Deceased', value: 'deceased' },
   { label: 'Processed', value: 'processed' },
 ]
 
