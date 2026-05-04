@@ -39,6 +39,34 @@ const AnimalDetailHeader: React.FC<Props> = ({ animal, age, onEdit, onBack }) =>
               <Icon name="pencil" size={24} color="#FFFFFF" />
             </TouchableOpacity>
           </View>
+          <View className="absolute bottom-0 left-0 right-0 px-4 pb-3 pt-10" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+            <View className="flex-row items-center justify-between">
+              <View className="flex-1">
+                <Text className="text-2xl font-bold text-white">{animal.name}</Text>
+                <View className="flex-row items-center mt-0.5">
+                  {animal.register ? (
+                    <Text className="text-sm text-gray-200">#{animal.register}</Text>
+                  ) : null}
+                  {animal.register && age.display ? (
+                    <Text className="text-sm text-gray-200"> · </Text>
+                  ) : null}
+                  {age.display ? (
+                    <Text className="text-sm text-gray-200">{age.display}</Text>
+                  ) : null}
+                </View>
+              </View>
+              <View className="flex-row items-center gap-2">
+                <View className={`px-3 py-1 rounded-full ${STATE_BADGE_COLORS[animal.state] || 'bg-primary'}`}>
+                  <Text className="text-xs font-bold text-white capitalize">{animal.state}</Text>
+                </View>
+                {animal.gender !== 'unknown' ? (
+                  <View className="px-3 py-1 rounded-full bg-white/30">
+                    <Text className="text-xs font-bold text-white capitalize">{animal.gender}</Text>
+                  </View>
+                ) : null}
+              </View>
+            </View>
+          </View>
         </View>
       ) : (
         <>
@@ -53,37 +81,36 @@ const AnimalDetailHeader: React.FC<Props> = ({ animal, age, onEdit, onBack }) =>
           <View className="self-center w-24 h-24 rounded-full bg-backgroundDark items-center justify-center mb-3">
             <Text className="text-3xl font-bold text-text-secondary">{animal.name.charAt(0)}</Text>
           </View>
+          <View className="px-4 py-3">
+            <View className="flex-row items-center justify-between">
+              <View className="flex-1">
+                <Text className="text-2xl font-bold text-text-primary">{animal.name}</Text>
+                <View className="flex-row items-center mt-0.5">
+                  {animal.register ? (
+                    <Text className="text-sm text-text-secondary">#{animal.register}</Text>
+                  ) : null}
+                  {animal.register && age.display ? (
+                    <Text className="text-sm text-text-secondary"> · </Text>
+                  ) : null}
+                  {age.display ? (
+                    <Text className="text-sm text-text-secondary">{age.display}</Text>
+                  ) : null}
+                </View>
+              </View>
+              <View className="flex-row items-center gap-2">
+                <View className={`px-3 py-1 rounded-full ${STATE_BADGE_COLORS[animal.state] || 'bg-primary'}`}>
+                  <Text className="text-xs font-bold text-text-inverse capitalize">{animal.state}</Text>
+                </View>
+                {animal.gender !== 'unknown' ? (
+                  <View className="px-3 py-1 rounded-full bg-backgroundDark">
+                    <Text className="text-xs font-bold text-text-primary capitalize">{animal.gender}</Text>
+                  </View>
+                ) : null}
+              </View>
+            </View>
+          </View>
         </>
       )}
-
-      <View className="px-4 py-3">
-        <View className="flex-row items-center justify-between">
-          <View className="flex-1">
-            <Text className="text-2xl font-bold text-text-primary">{animal.name}</Text>
-            <View className="flex-row items-center mt-0.5">
-              {animal.breed ? (
-                <Text className="text-sm text-text-secondary">{animal.breed}</Text>
-              ) : null}
-              {animal.breed && age.display ? (
-                <Text className="text-sm text-text-secondary"> · </Text>
-              ) : null}
-              {age.display ? (
-                <Text className="text-sm text-text-secondary">{age.display}</Text>
-              ) : null}
-            </View>
-          </View>
-          <View className="flex-row items-center gap-2">
-            <View className={`px-3 py-1 rounded-full ${STATE_BADGE_COLORS[animal.state] || 'bg-primary'}`}>
-              <Text className="text-xs font-bold text-text-inverse capitalize">{animal.state}</Text>
-            </View>
-            {animal.gender !== 'unknown' ? (
-              <View className="px-3 py-1 rounded-full bg-backgroundDark">
-                <Text className="text-xs font-bold text-text-primary capitalize">{animal.gender}</Text>
-              </View>
-            ) : null}
-          </View>
-        </View>
-      </View>
     </View>
   )
 }
