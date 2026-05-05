@@ -20,15 +20,15 @@ type Route = RouteProp<RootStackParamList, 'CreateCareEvent'>
 const FREE_TIER_CARE_LIMIT = 3
 
 export function useCreateCareEventController(navigation: Navigation, route: Route) {
-  const { animalId: routeAnimalId, templateId } = route.params
+  const { animalId: routeAnimalId, templateId, groupId: routeGroupId } = route.params
   const { animals } = useAnimalStore()
   const { careEvents } = useCareStore()
   const { animalTypes } = useAnimalTypeStore()
   const { groups } = useGroupStore()
   const homestead = useHomesteadStore(s => s.homestead)
 
-  const [selectedAnimalId, setSelectedAnimalId] = useState(routeAnimalId ?? '')
-  const [selectedGroupId, setSelectedGroupId] = useState('')
+  const [selectedAnimalId, setSelectedAnimalId] = useState(routeGroupId ? '' : (routeAnimalId ?? ''))
+  const [selectedGroupId, setSelectedGroupId] = useState(routeGroupId ?? '')
   const [name, setName] = useState('')
   const [type, setType] = useState<CareEventType>('careSingle')
   const [cycle, setCycle] = useState(0)

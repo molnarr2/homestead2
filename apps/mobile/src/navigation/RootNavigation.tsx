@@ -54,11 +54,11 @@ export type RootStackParamList = {
 
   // Care screens
   CareEventDetail: { eventId: string }
-  CreateCareEvent: { animalId: string; templateId?: string }
+  CreateCareEvent: { animalId: string; templateId?: string; groupId?: string }
 
   // Health screens
   HealthRecordDetail: { recordId: string }
-  CreateHealthRecord: { animalId: string; recordType?: HealthRecordType }
+  CreateHealthRecord: { animalId: string; recordType?: HealthRecordType; groupId?: string }
 
   // Breeding screens
   BreedingRecordDetail: { recordId: string }

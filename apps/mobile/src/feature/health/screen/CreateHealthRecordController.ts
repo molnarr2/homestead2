@@ -16,12 +16,12 @@ type Navigation = NativeStackNavigationProp<RootStackParamList, 'CreateHealthRec
 type Route = RouteProp<RootStackParamList, 'CreateHealthRecord'>
 
 export function useCreateHealthRecordController(navigation: Navigation, route: Route) {
-  const { animalId, recordType: initialType } = route.params
+  const { animalId, recordType: initialType, groupId: routeGroupId } = route.params
 
   const homestead = useHomesteadStore(s => s.homestead)
   const { animals } = useAnimalStore()
   const { groups } = useGroupStore()
-  const [selectedGroupId, setSelectedGroupId] = useState('')
+  const [selectedGroupId, setSelectedGroupId] = useState(routeGroupId ?? '')
 
   const [recordType, setRecordType] = useState<HealthRecordType>(initialType ?? 'vaccination')
   const [name, setName] = useState('')

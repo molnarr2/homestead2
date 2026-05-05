@@ -31,8 +31,8 @@ export function useGroupDetailController(navigation: Navigation, route: Route) {
   const onBack = () => navigation.goBack()
   const onEdit = () => navigation.navigate('EditGroup', { groupId })
   const onMemberPress = (animalId: string) => navigation.navigate('AnimalDetail', { animalId })
-  const onAddCare = () => navigation.navigate('CreateCareEvent', { animalId: '', templateId: undefined })
-  const onAddHealth = () => navigation.navigate('CreateHealthRecord', { animalId: '', recordType: undefined })
+  const onAddCare = () => navigation.navigate('CreateCareEvent', { animalId: '', groupId: groupId })
+  const onAddHealth = () => navigation.navigate('CreateHealthRecord', { animalId: '', groupId: groupId })
 
   const onDelete = () => {
     Alert.alert('Delete Group', `Are you sure you want to delete "${group?.name}"?`, [
