@@ -1,5 +1,6 @@
-import React from 'react'
-import { View, Text, ScrollView, ActivityIndicator } from 'react-native'
+import React, { useState } from 'react'
+import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native'
+import Icon from '@react-native-vector-icons/material-design-icons'
 import { useNavigation } from '@react-navigation/native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
@@ -7,14 +8,15 @@ import { useCareListController } from './CareListController'
 import ScreenContainer from '../../../components/layout/ScreenContainer'
 import FloatingActionButton from '../../../components/button/FloatingActionButton'
 import EmptyState from '../../../components/layout/EmptyState'
-import CareFilterBar from '../component/CareFilterBar'
 import CareEventsByStatus from '../component/CareEventsByStatus'
+import CareFilterModal from '../component/CareFilterModal'
 
 type Navigation = NativeStackNavigationProp<RootStackParamList>
 
 const CareListScreen: React.FC = () => {
   const navigation = useNavigation<Navigation>()
   const controller = useCareListController(navigation)
+  const [filterModalVisible, setFilterModalVisible] = useState(false)
 
   if (controller.loading) {
     return (
@@ -35,12 +37,21 @@ const CareListScreen: React.FC = () => {
     <ScreenContainer>
       <View className="flex-1">
         <View className="px-4 pt-4 pb-2">
-          <Text className="text-2xl font-bold text-text-primary mb-3">Care Schedule</Text>
-          <CareFilterBar
-            animals={controller.animals}
-            selectedAnimalId={controller.filterAnimalId}
-            onSelect={controller.setFilterAnimalId}
-          />
+          <View className="flex-row items-center justify-between mb-3">
+            <Text className="text-2xl font-bold text-text-primary">Care Schedule</Text>
+            <TouchableOpacity
+              onPress={() => setFilterModalVisible(true)}
+              activeOpacity={0.7}
+              className="p-1"
+            >
+              <View>
+                <Icon name="filter-variant" size={24} color="#1A1A1A" />
+                {controller.isFilterActive ? (
+                  <View className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-primary" />
+                ) : null}
+              </View>
+            </TouchableOpacity>
+          </View>
         </View>
 
         {isEmpty ? (
@@ -99,6 +110,15 @@ const CareListScreen: React.FC = () => {
         )}
 
         <FloatingActionButton onPress={controller.onCreateEvent} />
+
+        <CareFilterModal
+          visible={filterModalVisible}
+          onClose={() => setFilterModalVisible(false)}
+          animalTypes={controller.animalTypes}
+          selectedType={controller.filterType}
+          onTypeChange={controller.setFilterType}
+          onReset={controller.resetFilters}
+        />
       </View>
     </ScreenContainer>
   )
