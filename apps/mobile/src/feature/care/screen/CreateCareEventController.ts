@@ -94,8 +94,11 @@ export function useCreateCareEventController(navigation: Navigation, route: Rout
 
   const onBack = () => navigation.goBack()
 
+  const selectedAnimal = animals.find(a => a.id === selectedAnimalId) ?? null
+
   return {
     selectedAnimalId, setSelectedAnimalId,
+    selectedAnimal,
     name, setName,
     type, setType,
     cycle, setCycle,

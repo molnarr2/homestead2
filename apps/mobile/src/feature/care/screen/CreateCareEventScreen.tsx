@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
+import TurboImage from 'react-native-turbo-image'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RouteProp } from '@react-navigation/native'
@@ -8,6 +9,7 @@ import { useCreateCareEventController } from './CreateCareEventController'
 import ScreenContainer from '../../../components/layout/ScreenContainer'
 import TextInput from '../../../components/input/TextInput'
 import PrimaryButton from '../../../components/button/PrimaryButton'
+import AnimalPickerModal from '../component/AnimalPickerModal'
 import Icon from '@react-native-vector-icons/material-design-icons'
 
 type Navigation = NativeStackNavigationProp<RootStackParamList, 'CreateCareEvent'>
@@ -17,6 +19,7 @@ const CreateCareEventScreen: React.FC = () => {
   const navigation = useNavigation<Navigation>()
   const route = useRoute<Route>()
   const controller = useCreateCareEventController(navigation, route)
+  const [pickerVisible, setPickerVisible] = useState(false)
 
   return (
     <ScreenContainer>
@@ -30,23 +33,43 @@ const CreateCareEventScreen: React.FC = () => {
 
       <ScrollView className="flex-1 px-4" showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
         <Text className="text-sm font-medium text-text-primary mb-1 mt-4">Animal *</Text>
-        <View className="flex-row flex-wrap gap-2 mb-4">
-          {controller.animals.map(animal => {
-            const isSelected = controller.selectedAnimalId === animal.id
-            return (
-              <TouchableOpacity
-                key={animal.id}
-                className={`px-4 py-2 rounded-lg border ${isSelected ? 'bg-primary border-primary' : 'bg-surface border-border-light'}`}
-                onPress={() => controller.setSelectedAnimalId(animal.id)}
-                activeOpacity={0.7}
-              >
-                <Text className={`text-sm font-medium ${isSelected ? 'text-text-inverse' : 'text-text-primary'}`}>
-                  {animal.name}
+        <TouchableOpacity
+          className="flex-row items-center border border-border-light rounded-lg px-3 py-3 mb-4 bg-surface"
+          onPress={() => setPickerVisible(true)}
+          activeOpacity={0.7}
+        >
+          {controller.selectedAnimal ? (
+            <>
+              <View className="w-10 h-10 rounded-full bg-backgroundDark items-center justify-center mr-3 overflow-hidden">
+                {controller.selectedAnimal.photoUrl ? (
+                  <TurboImage
+                    source={{ uri: controller.selectedAnimal.photoUrl }}
+                    style={{ width: 40, height: 40, borderRadius: 20 }}
+                    cachePolicy="dataCache"
+                  />
+                ) : (
+                  <Text className="text-base font-semibold text-text-secondary">
+                    {controller.selectedAnimal.name.charAt(0)}
+                  </Text>
+                )}
+              </View>
+              <View className="flex-1">
+                <Text className="text-base font-medium text-text-primary">{controller.selectedAnimal.name}</Text>
+                <Text className="text-sm text-text-secondary capitalize">
+                  {controller.selectedAnimal.gender !== 'unknown' ? controller.selectedAnimal.gender : ''}{controller.selectedAnimal.gender !== 'unknown' && controller.selectedAnimal.register ? ' · ' : ''}{controller.selectedAnimal.register ? `#${controller.selectedAnimal.register}` : ''}
                 </Text>
-              </TouchableOpacity>
-            )
-          })}
-        </View>
+              </View>
+            </>
+          ) : (
+            <>
+              <View className="w-10 h-10 rounded-full bg-backgroundDark items-center justify-center mr-3">
+                <Icon name="cow" size={20} color="#BDBDBD" />
+              </View>
+              <Text className="flex-1 text-base text-text-secondary">Select Animal</Text>
+            </>
+          )}
+          <Icon name="chevron-right" size={20} color="#BDBDBD" />
+        </TouchableOpacity>
 
         <TextInput
           label="Event Name *"
@@ -128,6 +151,13 @@ const CreateCareEventScreen: React.FC = () => {
           />
         </View>
       </ScrollView>
+
+      <AnimalPickerModal
+        visible={pickerVisible}
+        onClose={() => setPickerVisible(false)}
+        animals={controller.animals}
+        onSelect={controller.setSelectedAnimalId}
+      />
     </ScreenContainer>
   )
 }
