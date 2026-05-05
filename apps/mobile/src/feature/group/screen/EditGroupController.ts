@@ -91,6 +91,8 @@ export function useEditGroupController(navigation: Navigation, route: Route) {
 
   const onBack = () => navigation.goBack()
 
+  const displayPhotoUrl = photoUri || existingGroup?.photoUrl || ''
+
   return {
     isEditing,
     name,
@@ -99,6 +101,7 @@ export function useEditGroupController(navigation: Navigation, route: Route) {
     toggleAnimal,
     photoUri,
     setPhotoUri,
+    displayPhotoUrl,
     ownedAnimals,
     loading,
     memberPickerVisible,

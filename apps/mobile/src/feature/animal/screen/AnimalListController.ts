@@ -51,7 +51,7 @@ export function useAnimalListController(navigation: Navigation) {
   const sections = useMemo((): AnimalSection[] => {
     const result: AnimalSection[] = []
 
-    if (!filterStates?.length && !filterTypes?.length) {
+    if (filteredGroups.length > 0 && !filterStates?.length && !filterTypes?.length) {
       result.push({ title: 'Groups', data: filteredGroups, isGroupSection: true })
     }
 

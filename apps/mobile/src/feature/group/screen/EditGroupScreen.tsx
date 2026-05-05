@@ -1,6 +1,8 @@
 import React from 'react'
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
+import { View, Text, ScrollView, TouchableOpacity, Alert } from 'react-native'
+import TurboImage from 'react-native-turbo-image'
 import Icon from '@react-native-vector-icons/material-design-icons'
+import { launchImageLibrary, launchCamera } from 'react-native-image-picker'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RouteProp } from '@react-navigation/native'
@@ -19,6 +21,30 @@ const EditGroupScreen: React.FC = () => {
   const route = useRoute<Route>()
   const controller = useEditGroupController(navigation, route)
 
+  const handlePhotoPick = () => {
+    Alert.alert('Add Photo', 'Choose a source', [
+      {
+        text: 'Camera',
+        onPress: async () => {
+          const result = await launchCamera({ mediaType: 'photo', quality: 0.8 })
+          if (result.assets?.[0]?.uri) {
+            controller.setPhotoUri(result.assets[0].uri)
+          }
+        },
+      },
+      {
+        text: 'Photo Library',
+        onPress: async () => {
+          const result = await launchImageLibrary({ mediaType: 'photo', quality: 0.8 })
+          if (result.assets?.[0]?.uri) {
+            controller.setPhotoUri(result.assets[0].uri)
+          }
+        },
+      },
+      { text: 'Cancel', style: 'cancel' },
+    ])
+  }
+
   return (
     <ScreenContainer>
       <View className="flex-row items-center justify-between px-4 pt-4 pb-2">
@@ -32,6 +58,25 @@ const EditGroupScreen: React.FC = () => {
       </View>
 
       <ScrollView className="flex-1 px-4" showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
+        <TouchableOpacity
+          className="self-center mt-4 mb-6 w-24 h-24 rounded-full bg-backgroundDark items-center justify-center overflow-hidden border-2 border-border-light"
+          onPress={handlePhotoPick}
+          activeOpacity={0.7}
+        >
+          {controller.displayPhotoUrl ? (
+            <TurboImage
+              source={{ uri: controller.displayPhotoUrl }}
+              style={{ width: 96, height: 96, borderRadius: 48 }}
+              cachePolicy="dataCache"
+            />
+          ) : (
+            <View className="items-center">
+              <Icon name="camera-plus" size={28} color="#6B6B6B" />
+              <Text className="text-xs text-text-secondary mt-1">Add Photo</Text>
+            </View>
+          )}
+        </TouchableOpacity>
+
         <TextInput
           label="Group Name *"
           value={controller.name}

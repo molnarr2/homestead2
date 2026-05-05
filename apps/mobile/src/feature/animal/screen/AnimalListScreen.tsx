@@ -8,7 +8,7 @@ import type { RootStackParamList } from '../../../navigation/RootNavigation'
 import { useAnimalListController, AnimalSection } from './AnimalListController'
 import ScreenContainer from '../../../components/layout/ScreenContainer'
 import SearchBar from '../../../components/input/SearchBar'
-import FloatingActionButton from '../../../components/button/FloatingActionButton'
+import SpeedDialFab from '../../../components/button/SpeedDialFab'
 import EmptyState from '../../../components/layout/EmptyState'
 import AnimalListByType from '../component/AnimalListByType'
 import AnimalFilterModal from '../component/AnimalFilterModal'
@@ -69,19 +69,7 @@ const AnimalListScreen: React.FC = () => {
             sections={controller.sections}
             keyExtractor={(item) => item.id}
             renderSectionHeader={({ section }) => (
-              <View className="flex-row items-center justify-between px-4 pt-4 pb-2">
-                <View className="flex-row items-center">
-                  <Text className="text-lg font-semibold text-text-primary">{section.title}</Text>
-                  <View className="ml-2 px-2 py-0.5 rounded-full bg-primary">
-                    <Text className="text-xs font-bold text-text-inverse">{section.data.length}</Text>
-                  </View>
-                </View>
-                {(section as AnimalSection).isGroupSection ? (
-                  <TouchableOpacity onPress={() => navigation.navigate('EditGroup', {})} activeOpacity={0.7} className="p-1">
-                    <Icon name="plus" size={22} color="#4A6741" />
-                  </TouchableOpacity>
-                ) : null}
-              </View>
+              <AnimalListByType title={section.title} count={section.data.length} />
             )}
             renderItem={({ item, section }) => {
               if ((section as AnimalSection).isGroupSection) {
@@ -97,7 +85,12 @@ const AnimalListScreen: React.FC = () => {
           />
         )}
 
-        <FloatingActionButton onPress={controller.onCreateAnimal} />
+        <SpeedDialFab
+          actions={[
+            { label: 'New Group', icon: 'account-group', onPress: () => navigation.navigate('EditGroup', {}) },
+            { label: 'New Animal', icon: 'cow', onPress: controller.onCreateAnimal },
+          ]}
+        />
 
         <AnimalFilterModal
           visible={filterModalVisible}
