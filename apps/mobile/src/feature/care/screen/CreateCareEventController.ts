@@ -7,8 +7,9 @@ import { useAnimalStore } from '../../../store/animalStore'
 import { useCareStore } from '../../../store/careStore'
 import { useAnimalTypeStore } from '../../../store/animalTypeStore'
 import { useHomesteadStore } from '../../../store/homesteadStore'
+import { useGroupStore } from '../../../store/groupStore'
 import { effectiveSubscription } from '../../subscription/service/ISubscriptionService'
-import { bsCareService } from '../../../Bootstrap'
+import { bsCareService, bsGroupService } from '../../../Bootstrap'
 import { CareEventType, careEvent_default } from '../../../schema/care/CareEvent'
 import { adminObject_default } from '../../../schema/object/AdminObject'
 import { dateToTstamp } from '../../../schema/type/Tstamp'
@@ -23,9 +24,11 @@ export function useCreateCareEventController(navigation: Navigation, route: Rout
   const { animals } = useAnimalStore()
   const { careEvents } = useCareStore()
   const { animalTypes } = useAnimalTypeStore()
+  const { groups } = useGroupStore()
   const homestead = useHomesteadStore(s => s.homestead)
 
   const [selectedAnimalId, setSelectedAnimalId] = useState(routeAnimalId ?? '')
+  const [selectedGroupId, setSelectedGroupId] = useState('')
   const [name, setName] = useState('')
   const [type, setType] = useState<CareEventType>('careSingle')
   const [cycle, setCycle] = useState(0)
@@ -49,24 +52,37 @@ export function useCreateCareEventController(navigation: Navigation, route: Rout
     }
   }, [templateId])
 
+  const handleSelectAnimal = (animalId: string) => {
+    setSelectedAnimalId(animalId)
+    setSelectedGroupId('')
+  }
+
+  const handleSelectGroup = (groupId: string) => {
+    setSelectedGroupId(groupId)
+    setSelectedAnimalId('')
+  }
+
   const submit = async () => {
-    if (!name.trim() || !selectedAnimalId) {
-      Alert.alert('Required', 'Please enter a name and select an animal.')
+    if (!name.trim() || (!selectedAnimalId && !selectedGroupId)) {
+      Alert.alert('Required', 'Please enter a name and select an animal or group.')
       return
     }
 
     const tier = effectiveSubscription(homestead)
-    const eventsForAnimal = careEvents.filter(e => e.animalId === selectedAnimalId)
-    if (tier === 'free' && eventsForAnimal.length >= FREE_TIER_CARE_LIMIT) {
-      Alert.alert(
-        'Care Event Limit Reached',
-        `Free accounts can add up to ${FREE_TIER_CARE_LIMIT} care events per animal. Upgrade to Pro for unlimited care events.`,
-        [
-          { text: 'Cancel', style: 'cancel' },
-          { text: 'Upgrade', onPress: () => navigation.navigate('Subscription') },
-        ]
-      )
-      return
+
+    if (selectedAnimalId) {
+      const eventsForAnimal = careEvents.filter(e => e.animalId === selectedAnimalId)
+      if (tier === 'free' && eventsForAnimal.length >= FREE_TIER_CARE_LIMIT) {
+        Alert.alert(
+          'Care Event Limit Reached',
+          `Free accounts can add up to ${FREE_TIER_CARE_LIMIT} care events per animal. Upgrade to Pro for unlimited care events.`,
+          [
+            { text: 'Cancel', style: 'cancel' },
+            { text: 'Upgrade', onPress: () => navigation.navigate('Subscription') },
+          ]
+        )
+        return
+      }
     }
 
     setLoading(true)
@@ -83,7 +99,14 @@ export function useCreateCareEventController(navigation: Navigation, route: Rout
       notes,
       admin: adminObject_default(),
     }
-    const result = await bsCareService.createCareEvent(event)
+
+    let result
+    if (selectedGroupId) {
+      result = await bsGroupService.createGroupCareEvent(selectedGroupId, event)
+    } else {
+      result = await bsCareService.createCareEvent(event)
+    }
+
     setLoading(false)
     if (result.success) {
       navigation.goBack()
@@ -95,10 +118,13 @@ export function useCreateCareEventController(navigation: Navigation, route: Rout
   const onBack = () => navigation.goBack()
 
   const selectedAnimal = animals.find(a => a.id === selectedAnimalId) ?? null
+  const selectedGroup = groups.find(g => g.id === selectedGroupId) ?? null
 
   return {
-    selectedAnimalId, setSelectedAnimalId,
+    selectedAnimalId, setSelectedAnimalId: handleSelectAnimal,
+    selectedGroupId, setSelectedGroupId: handleSelectGroup,
     selectedAnimal,
+    selectedGroup,
     name, setName,
     type, setType,
     cycle, setCycle,

@@ -25,6 +25,8 @@ import AnimalTypeService from './feature/customization/service/AnimalTypeService
 import type IAnimalTypeService from './feature/customization/service/IAnimalTypeService'
 import SubscriptionService from './feature/subscription/service/SubscriptionService'
 import type ISubscriptionService from './feature/subscription/service/ISubscriptionService'
+import GroupService from './feature/group/service/GroupService'
+import type IGroupService from './feature/group/service/IGroupService'
 import RevenueCatInAppPurchases from './library/purchases/revenuecat/RevenueCatInAppPurchases'
 
 const firebaseAuth = new FirebaseAuth()
@@ -43,4 +45,5 @@ export const bsNoteService: INoteService = new NoteService()
 export const bsWeightService: IWeightService = new WeightService()
 export const bsProfileService: IProfileService = new ProfileService()
 export const bsAnimalTypeService: IAnimalTypeService = new AnimalTypeService()
+export const bsGroupService: IGroupService = new GroupService()
 export const bsSubscriptionService: ISubscriptionService = new SubscriptionService(revenueCat, bsHomesteadService, bsAuthService)

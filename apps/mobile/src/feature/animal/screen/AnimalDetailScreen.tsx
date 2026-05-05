@@ -51,8 +51,10 @@ const AnimalDetailScreen: React.FC = () => {
         return (
           <AnimalHealthTab
             healthRecords={controller.healthRecords}
+            groupHealthRecords={controller.groupHealthRecords}
             activeWithdrawals={controller.activeWithdrawals}
             onAddHealth={controller.onAddHealth}
+            onGroupPress={controller.onGroupPress}
           />
         )
       case 'breeding':
@@ -66,7 +68,9 @@ const AnimalDetailScreen: React.FC = () => {
         return (
           <AnimalCareTab
             careEvents={controller.careEvents}
+            groupCareEvents={controller.groupCareEvents}
             onAddCare={controller.onAddCare}
+            onGroupPress={controller.onGroupPress}
           />
         )
       case 'notes':

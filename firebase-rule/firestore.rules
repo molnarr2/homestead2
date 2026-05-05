@@ -158,6 +158,27 @@ service cloud.firestore {
         allow delete: if false;
       }
 
+      match /animalGroup_v2/{groupId} {
+        allow read: if isHomesteadMember(homesteadId);
+        allow create: if isHomesteadMember(homesteadId);
+        allow update: if isHomesteadMember(homesteadId);
+        allow delete: if false;
+
+        match /careEvent_v2/{eventId} {
+          allow read: if isHomesteadMember(homesteadId);
+          allow create: if isHomesteadMember(homesteadId);
+          allow update: if isHomesteadMember(homesteadId);
+          allow delete: if false;
+        }
+
+        match /healthRecord_v2/{recordId} {
+          allow read: if isHomesteadMember(homesteadId);
+          allow create: if isHomesteadMember(homesteadId);
+          allow update: if isHomesteadMember(homesteadId);
+          allow delete: if false;
+        }
+      }
+
       match /animalType_v2/{typeId} {
         allow read: if isHomesteadMember(homesteadId);
         allow create: if isHomesteadMember(homesteadId);

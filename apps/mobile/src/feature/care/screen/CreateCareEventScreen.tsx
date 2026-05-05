@@ -32,7 +32,7 @@ const CreateCareEventScreen: React.FC = () => {
       </View>
 
       <ScrollView className="flex-1 px-4" showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
-        <Text className="text-sm font-medium text-text-primary mb-1 mt-4">Animal *</Text>
+        <Text className="text-sm font-medium text-text-primary mb-1 mt-4">Animal or Group *</Text>
         <TouchableOpacity
           className="flex-row items-center border border-border-light rounded-lg px-3 py-3 mb-4 bg-surface"
           onPress={() => setPickerVisible(true)}
@@ -60,12 +60,24 @@ const CreateCareEventScreen: React.FC = () => {
                 </Text>
               </View>
             </>
+          ) : controller.selectedGroup ? (
+            <>
+              <View className="w-10 h-10 rounded-full bg-backgroundDark items-center justify-center mr-3">
+                <Icon name="account-group" size={20} color="#4A6741" />
+              </View>
+              <View className="flex-1">
+                <Text className="text-base font-medium text-text-primary">{controller.selectedGroup.name}</Text>
+                <Text className="text-sm text-text-secondary">
+                  {controller.selectedGroup.animalIds.length} member{controller.selectedGroup.animalIds.length !== 1 ? 's' : ''}
+                </Text>
+              </View>
+            </>
           ) : (
             <>
               <View className="w-10 h-10 rounded-full bg-backgroundDark items-center justify-center mr-3">
                 <Icon name="cow" size={20} color="#BDBDBD" />
               </View>
-              <Text className="flex-1 text-base text-text-secondary">Select Animal</Text>
+              <Text className="flex-1 text-base text-text-secondary">Select Animal or Group</Text>
             </>
           )}
           <Icon name="chevron-right" size={20} color="#BDBDBD" />
@@ -147,7 +159,7 @@ const CreateCareEventScreen: React.FC = () => {
             title="Save Care Event"
             onPress={controller.submit}
             loading={controller.loading}
-            disabled={!controller.name.trim() || !controller.selectedAnimalId}
+            disabled={!controller.name.trim() || (!controller.selectedAnimalId && !controller.selectedGroupId)}
           />
         </View>
       </ScrollView>
@@ -157,6 +169,8 @@ const CreateCareEventScreen: React.FC = () => {
         onClose={() => setPickerVisible(false)}
         animals={controller.animals}
         onSelect={controller.setSelectedAnimalId}
+        onSelectGroup={controller.setSelectedGroupId}
+        showGroups={true}
       />
     </ScreenContainer>
   )

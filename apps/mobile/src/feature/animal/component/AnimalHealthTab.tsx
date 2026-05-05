@@ -5,11 +5,14 @@ import HealthRecord from '../../../schema/health/HealthRecord'
 import { WithdrawalResult } from '../../../util/WithdrawalUtility'
 import { formatDate } from '../../../util/DateUtility'
 import EmptyState from '../../../components/layout/EmptyState'
+import type { GroupHealthRecord } from '../screen/AnimalDetailController'
 
 interface Props {
   healthRecords: HealthRecord[]
+  groupHealthRecords?: GroupHealthRecord[]
   activeWithdrawals: WithdrawalResult[]
   onAddHealth: () => void
+  onGroupPress?: (groupId: string) => void
 }
 
 const RECORD_TYPE_ICONS: Record<string, React.ComponentProps<typeof Icon>['name']> = {
@@ -21,10 +24,17 @@ const RECORD_TYPE_ICONS: Record<string, React.ComponentProps<typeof Icon>['name'
   injury: 'bandage',
 }
 
-const AnimalHealthTab: React.FC<Props> = ({ healthRecords, activeWithdrawals, onAddHealth }) => {
-  const sortedRecords = [...healthRecords].sort((a, b) => {
-    if (!a.date || !b.date) return 0
-    return new Date(b.date).getTime() - new Date(a.date).getTime()
+const AnimalHealthTab: React.FC<Props> = ({ healthRecords, groupHealthRecords, activeWithdrawals, onAddHealth, onGroupPress }) => {
+  type HealthListItem = { record: HealthRecord; groupName?: string; groupId?: string }
+
+  const allItems: HealthListItem[] = [
+    ...healthRecords.map(r => ({ record: r })),
+    ...(groupHealthRecords ?? []).map(g => ({ record: g.record, groupName: g.groupName, groupId: g.groupId })),
+  ]
+
+  const sortedItems = [...allItems].sort((a, b) => {
+    if (!a.record.date || !b.record.date) return 0
+    return new Date(b.record.date).getTime() - new Date(a.record.date).getTime()
   })
 
   return (
@@ -45,26 +55,44 @@ const AnimalHealthTab: React.FC<Props> = ({ healthRecords, activeWithdrawals, on
         </View>
       ) : null}
 
-      {sortedRecords.length === 0 ? (
+      {sortedItems.length === 0 ? (
         <EmptyState icon="heart-pulse" title="No health records" subtitle="Add health records to track vaccinations, medications, and more" />
       ) : (
         <FlatList
-          data={sortedRecords}
-          keyExtractor={item => item.id}
-          renderItem={({ item }) => (
-            <View className="mx-4 mt-2 bg-surface rounded-lg p-3 border border-border-light">
-              <View className="flex-row items-center">
-                <Icon name={RECORD_TYPE_ICONS[item.recordType] || 'medical-bag'} size={20} color="#4A6741" />
-                <View className="flex-1 ml-2">
-                  <Text className="text-sm font-semibold text-text-primary">{item.name}</Text>
-                  <Text className="text-xs text-text-secondary capitalize">{item.recordType} · {formatDate(item.date)}</Text>
+          data={sortedItems}
+          keyExtractor={(item, index) => `${item.record.id}-${index}`}
+          renderItem={({ item }) => {
+            const content = (
+              <View className="mx-4 mt-2 bg-surface rounded-lg p-3 border border-border-light">
+                <View className="flex-row items-center">
+                  <Icon name={RECORD_TYPE_ICONS[item.record.recordType] || 'medical-bag'} size={20} color="#4A6741" />
+                  <View className="flex-1 ml-2">
+                    <View className="flex-row items-center">
+                      <Text className="text-sm font-semibold text-text-primary">{item.record.name}</Text>
+                      {item.groupName ? (
+                        <View className="ml-2 px-2 py-0.5 rounded-full bg-primary/15">
+                          <Text className="text-xs font-medium text-primary">{item.groupName}</Text>
+                        </View>
+                      ) : null}
+                    </View>
+                    <Text className="text-xs text-text-secondary capitalize">{item.record.recordType} · {formatDate(item.record.date)}</Text>
+                  </View>
                 </View>
+                {item.record.notes ? (
+                  <Text className="text-xs text-text-secondary mt-2">{item.record.notes}</Text>
+                ) : null}
               </View>
-              {item.notes ? (
-                <Text className="text-xs text-text-secondary mt-2">{item.notes}</Text>
-              ) : null}
-            </View>
-          )}
+            )
+
+            if (item.groupId && onGroupPress) {
+              return (
+                <TouchableOpacity onPress={() => onGroupPress(item.groupId!)} activeOpacity={0.7}>
+                  {content}
+                </TouchableOpacity>
+              )
+            }
+            return content
+          }}
           contentContainerStyle={{ paddingBottom: 80 }}
           showsVerticalScrollIndicator={false}
         />

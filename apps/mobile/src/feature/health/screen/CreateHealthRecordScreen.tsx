@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
@@ -14,6 +14,7 @@ import MedicationFields from '../component/MedicationFields'
 import DewormingFields from '../component/DewormingFields'
 import VetVisitFields from '../component/VetVisitFields'
 import IllnessInjuryFields from '../component/IllnessInjuryFields'
+import AnimalPickerModal from '../../care/component/AnimalPickerModal'
 import Icon from '@react-native-vector-icons/material-design-icons'
 
 type Navigation = NativeStackNavigationProp<RootStackParamList, 'CreateHealthRecord'>
@@ -23,6 +24,7 @@ const CreateHealthRecordScreen: React.FC = () => {
   const navigation = useNavigation<Navigation>()
   const route = useRoute<Route>()
   const c = useCreateHealthRecordController(navigation, route)
+  const [groupPickerVisible, setGroupPickerVisible] = useState(false)
 
   return (
     <ScreenContainer>
@@ -37,6 +39,42 @@ const CreateHealthRecordScreen: React.FC = () => {
       <ScrollView className="flex-1 px-4" showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
         <Text className="text-sm font-medium text-text-primary mb-1 mt-4">Record Type</Text>
         <HealthRecordTypeSelector selected={c.recordType} onSelect={c.setRecordType} />
+
+        {c.showGroupPicker && (
+          <>
+            <Text className="text-sm font-medium text-text-primary mb-1 mt-2">Apply to Group (optional)</Text>
+            <TouchableOpacity
+              className="flex-row items-center border border-border-light rounded-lg px-3 py-3 mb-4 bg-surface"
+              onPress={() => setGroupPickerVisible(true)}
+              activeOpacity={0.7}
+            >
+              {c.selectedGroup ? (
+                <>
+                  <View className="w-10 h-10 rounded-full bg-backgroundDark items-center justify-center mr-3">
+                    <Icon name="account-group" size={20} color="#4A6741" />
+                  </View>
+                  <View className="flex-1">
+                    <Text className="text-base font-medium text-text-primary">{c.selectedGroup.name}</Text>
+                    <Text className="text-sm text-text-secondary">
+                      {c.selectedGroup.animalIds.length} member{c.selectedGroup.animalIds.length !== 1 ? 's' : ''}
+                    </Text>
+                  </View>
+                  <TouchableOpacity onPress={c.clearGroupSelection} activeOpacity={0.7} className="p-1">
+                    <Icon name="close-circle" size={20} color="#BDBDBD" />
+                  </TouchableOpacity>
+                </>
+              ) : (
+                <>
+                  <View className="w-10 h-10 rounded-full bg-backgroundDark items-center justify-center mr-3">
+                    <Icon name="account-group" size={20} color="#BDBDBD" />
+                  </View>
+                  <Text className="flex-1 text-base text-text-secondary">Select Group (optional)</Text>
+                  <Icon name="chevron-right" size={20} color="#BDBDBD" />
+                </>
+              )}
+            </TouchableOpacity>
+          </>
+        )}
 
         <TextInput
           label="Name *"
@@ -165,6 +203,19 @@ const CreateHealthRecordScreen: React.FC = () => {
           />
         </View>
       </ScrollView>
+
+      {c.showGroupPicker && (
+        <AnimalPickerModal
+          visible={groupPickerVisible}
+          onClose={() => setGroupPickerVisible(false)}
+          animals={c.animals}
+          onSelect={() => {}}
+          onSelectGroup={(groupId) => {
+            c.handleSelectGroup(groupId)
+          }}
+          showGroups={true}
+        />
+      )}
     </ScreenContainer>
   )
 }

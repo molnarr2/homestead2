@@ -5,7 +5,7 @@ import Icon from '@react-native-vector-icons/material-design-icons'
 import { useNavigation } from '@react-navigation/native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
-import { useAnimalListController } from './AnimalListController'
+import { useAnimalListController, AnimalSection } from './AnimalListController'
 import ScreenContainer from '../../../components/layout/ScreenContainer'
 import SearchBar from '../../../components/input/SearchBar'
 import FloatingActionButton from '../../../components/button/FloatingActionButton'
@@ -13,6 +13,7 @@ import EmptyState from '../../../components/layout/EmptyState'
 import AnimalListByType from '../component/AnimalListByType'
 import AnimalFilterModal from '../component/AnimalFilterModal'
 import Animal from '../../../schema/animal/Animal'
+import AnimalGroup from '../../../schema/animalGroup/AnimalGroup'
 
 type Navigation = NativeStackNavigationProp<RootStackParamList>
 
@@ -66,13 +67,30 @@ const AnimalListScreen: React.FC = () => {
         ) : (
           <SectionList
             sections={controller.sections}
-            keyExtractor={(item: Animal) => item.id}
+            keyExtractor={(item) => item.id}
             renderSectionHeader={({ section }) => (
-              <AnimalListByType title={section.title} count={section.data.length} />
+              <View className="flex-row items-center justify-between px-4 pt-4 pb-2">
+                <View className="flex-row items-center">
+                  <Text className="text-lg font-semibold text-text-primary">{section.title}</Text>
+                  <View className="ml-2 px-2 py-0.5 rounded-full bg-primary">
+                    <Text className="text-xs font-bold text-text-inverse">{section.data.length}</Text>
+                  </View>
+                </View>
+                {(section as AnimalSection).isGroupSection ? (
+                  <TouchableOpacity onPress={() => navigation.navigate('EditGroup', {})} activeOpacity={0.7} className="p-1">
+                    <Icon name="plus" size={22} color="#4A6741" />
+                  </TouchableOpacity>
+                ) : null}
+              </View>
             )}
-            renderItem={({ item }) => (
-              <AnimalCard animal={item} onPress={() => controller.onAnimalPress(item.id)} />
-            )}
+            renderItem={({ item, section }) => {
+              if ((section as AnimalSection).isGroupSection) {
+                const group = item as AnimalGroup
+                return <GroupCard group={group} onPress={() => controller.onGroupPress(group.id)} />
+              }
+              const animal = item as Animal
+              return <AnimalCard animal={animal} onPress={() => controller.onAnimalPress(animal.id)} />
+            }}
             contentContainerStyle={{ paddingBottom: 80 }}
             showsVerticalScrollIndicator={false}
             stickySectionHeadersEnabled={false}
@@ -93,6 +111,40 @@ const AnimalListScreen: React.FC = () => {
         />
       </View>
     </ScreenContainer>
+  )
+}
+
+interface GroupCardProps {
+  group: AnimalGroup
+  onPress: () => void
+}
+
+const GroupCard: React.FC<GroupCardProps> = ({ group, onPress }) => {
+  return (
+    <TouchableOpacity
+      className="mx-4 mb-2 bg-surface rounded-xl p-3 flex-row items-center border border-border-light"
+      onPress={onPress}
+      activeOpacity={0.7}
+    >
+      <View className="w-12 h-12 rounded-full bg-backgroundDark items-center justify-center mr-3 overflow-hidden">
+        {group.photoUrl ? (
+          <TurboImage
+            source={{ uri: group.photoUrl }}
+            style={{ width: 48, height: 48, borderRadius: 24 }}
+            cachePolicy="dataCache"
+          />
+        ) : (
+          <Text className="text-lg font-semibold text-text-secondary">{group.name.charAt(0)}</Text>
+        )}
+      </View>
+      <View className="flex-1">
+        <Text className="text-base font-semibold text-text-primary">{group.name}</Text>
+        <Text className="text-sm text-text-secondary">
+          {group.animalIds.length} member{group.animalIds.length !== 1 ? 's' : ''}
+        </Text>
+      </View>
+      <Icon name="chevron-right" size={20} color="#BDBDBD" />
+    </TouchableOpacity>
   )
 }
 

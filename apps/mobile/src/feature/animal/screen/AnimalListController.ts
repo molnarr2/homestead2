@@ -3,18 +3,22 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
 import { useAnimalStore } from '../../../store/animalStore'
 import { useAnimalTypeStore } from '../../../store/animalTypeStore'
+import { useGroupStore } from '../../../store/groupStore'
 import Animal, { AnimalState } from '../../../schema/animal/Animal'
+import AnimalGroup from '../../../schema/animalGroup/AnimalGroup'
 
 type Navigation = NativeStackNavigationProp<RootStackParamList>
 
 export interface AnimalSection {
   title: string
-  data: Animal[]
+  data: (Animal | AnimalGroup)[]
+  isGroupSection?: boolean
 }
 
 export function useAnimalListController(navigation: Navigation) {
   const { animals, loading } = useAnimalStore()
   const { animalTypes } = useAnimalTypeStore()
+  const { groups } = useGroupStore()
   const [searchQuery, setSearchQuery] = useState('')
   const [filterStates, setFilterStates] = useState<AnimalState[]>([])
   const [filterTypes, setFilterTypes] = useState<string[]>([])
@@ -38,23 +42,40 @@ export function useAnimalListController(navigation: Navigation) {
     })
   }, [animals, searchQuery, filterStates, filterTypes])
 
+  const filteredGroups = useMemo(() => {
+    if (!searchQuery) return groups
+    const query = searchQuery.toLowerCase()
+    return groups.filter(g => g.name.toLowerCase().includes(query))
+  }, [groups, searchQuery])
+
   const sections = useMemo((): AnimalSection[] => {
+    const result: AnimalSection[] = []
+
+    if (!filterStates?.length && !filterTypes?.length) {
+      result.push({ title: 'Groups', data: filteredGroups, isGroupSection: true })
+    }
+
     const grouped: Record<string, Animal[]> = {}
     for (const animal of filteredAnimals) {
       const key = animal.animalType || 'Other'
       if (!grouped[key]) grouped[key] = []
       grouped[key].push(animal)
     }
-    return Object.entries(grouped)
+    const animalSections = Object.entries(grouped)
       .sort(([a], [b]) => a.localeCompare(b))
       .map(([title, data]) => ({ title, data }))
-  }, [filteredAnimals])
+
+    result.push(...animalSections)
+    return result
+  }, [filteredAnimals, filteredGroups, filterStates, filterTypes])
 
   const onAnimalPress = (animalId: string) => navigation.navigate('AnimalDetail', { animalId })
+  const onGroupPress = (groupId: string) => navigation.navigate('GroupDetail', { groupId })
   const onCreateAnimal = () => navigation.navigate('CreateAnimal', {})
 
   return {
     sections,
+    groups,
     searchQuery,
     setSearchQuery,
     filterStates,
@@ -66,6 +87,7 @@ export function useAnimalListController(navigation: Navigation) {
     animalTypes,
     loading,
     onAnimalPress,
+    onGroupPress,
     onCreateAnimal,
   }
 }

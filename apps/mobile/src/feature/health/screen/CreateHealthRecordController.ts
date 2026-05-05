@@ -4,8 +4,10 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RouteProp } from '@react-navigation/native'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
 import { useHomesteadStore } from '../../../store/homesteadStore'
+import { useAnimalStore } from '../../../store/animalStore'
+import { useGroupStore } from '../../../store/groupStore'
 import { effectiveSubscription } from '../../subscription/service/ISubscriptionService'
-import { bsHealthService } from '../../../Bootstrap'
+import { bsHealthService, bsGroupService } from '../../../Bootstrap'
 import type HealthRecord from '../../../schema/health/HealthRecord'
 import { healthRecord_default, HealthRecordType, DosageUnit, MedicationRoute, WithdrawalType } from '../../../schema/health/HealthRecord'
 import { todayIso } from '../../../util/DateUtility'
@@ -17,6 +19,9 @@ export function useCreateHealthRecordController(navigation: Navigation, route: R
   const { animalId, recordType: initialType } = route.params
 
   const homestead = useHomesteadStore(s => s.homestead)
+  const { animals } = useAnimalStore()
+  const { groups } = useGroupStore()
+  const [selectedGroupId, setSelectedGroupId] = useState('')
 
   const [recordType, setRecordType] = useState<HealthRecordType>(initialType ?? 'vaccination')
   const [name, setName] = useState('')
@@ -98,7 +103,12 @@ export function useCreateHealthRecordController(navigation: Navigation, route: R
       ...((recordType === 'illness' || recordType === 'injury') && { symptoms, treatment, resolvedDate, outcome }),
     }
 
-    const result = await bsHealthService.createHealthRecord(record, photoUri || undefined)
+    let result
+    if (selectedGroupId) {
+      result = await bsGroupService.createGroupHealthRecord(selectedGroupId, record, photoUri || undefined)
+    } else {
+      result = await bsHealthService.createHealthRecord(record, photoUri || undefined)
+    }
     setLoading(false)
     if (result.success) {
       navigation.goBack()
@@ -106,6 +116,17 @@ export function useCreateHealthRecordController(navigation: Navigation, route: R
       Alert.alert('Error', result.error)
     }
   }
+
+  const handleSelectGroup = (groupId: string) => {
+    setSelectedGroupId(groupId)
+  }
+
+  const clearGroupSelection = () => {
+    setSelectedGroupId('')
+  }
+
+  const selectedGroup = groups.find(g => g.id === selectedGroupId) ?? null
+  const showGroupPicker = recordType === 'vaccination' || recordType === 'deworming'
 
   const onBack = () => navigation.goBack()
 
@@ -142,5 +163,11 @@ export function useCreateHealthRecordController(navigation: Navigation, route: R
     loading,
     submit,
     onBack,
+    selectedGroupId,
+    handleSelectGroup,
+    clearGroupSelection,
+    selectedGroup,
+    showGroupPicker,
+    animals,
   }
 }

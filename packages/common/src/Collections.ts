@@ -15,4 +15,5 @@ export const Col = {
   careTemplate: 'careTemplate_v2',
   eventTemplate: 'eventTemplate_v2',
   feedback: 'feedback_v2',
+  animalGroup: 'animalGroup_v2',
 } as const

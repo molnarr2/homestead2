@@ -5,10 +5,13 @@ import CareEvent from '../../../schema/care/CareEvent'
 import { tstampToDateOrNow } from '../../../schema/type/Tstamp'
 import { isBefore, isToday, startOfToday, differenceInDays } from 'date-fns'
 import EmptyState from '../../../components/layout/EmptyState'
+import type { GroupCareEvent } from '../screen/AnimalDetailController'
 
 interface Props {
   careEvents: CareEvent[]
+  groupCareEvents?: GroupCareEvent[]
   onAddCare: () => void
+  onGroupPress?: (groupId: string) => void
 }
 
 type CareStatus = 'overdue' | 'dueToday' | 'upcoming' | 'completed'
@@ -29,46 +32,69 @@ function getCareStatus(event: CareEvent): CareStatus {
   return 'upcoming'
 }
 
-const AnimalCareTab: React.FC<Props> = ({ careEvents, onAddCare }) => {
-  const sortedEvents = [...careEvents].sort((a, b) => {
+const AnimalCareTab: React.FC<Props> = ({ careEvents, groupCareEvents, onAddCare, onGroupPress }) => {
+  type CareListItem = { event: CareEvent; groupName?: string; groupId?: string }
+
+  const allItems: CareListItem[] = [
+    ...careEvents.map(e => ({ event: e })),
+    ...(groupCareEvents ?? []).map(g => ({ event: g.event, groupName: g.groupName, groupId: g.groupId })),
+  ]
+
+  const sortedItems = [...allItems].sort((a, b) => {
     const statusOrder: Record<CareStatus, number> = { overdue: 0, dueToday: 1, upcoming: 2, completed: 3 }
-    const statusA = getCareStatus(a)
-    const statusB = getCareStatus(b)
+    const statusA = getCareStatus(a.event)
+    const statusB = getCareStatus(b.event)
     if (statusOrder[statusA] !== statusOrder[statusB]) return statusOrder[statusA] - statusOrder[statusB]
-    const dateA = tstampToDateOrNow(a.dueDate).getTime()
-    const dateB = tstampToDateOrNow(b.dueDate).getTime()
+    const dateA = tstampToDateOrNow(a.event.dueDate).getTime()
+    const dateB = tstampToDateOrNow(b.event.dueDate).getTime()
     return dateA - dateB
   })
 
   return (
     <View className="flex-1">
-      {sortedEvents.length === 0 ? (
+      {sortedItems.length === 0 ? (
         <EmptyState icon="medical-bag" title="No care events" subtitle="Track scheduled care tasks for this animal" />
       ) : (
         <FlatList
-          data={sortedEvents}
-          keyExtractor={item => item.id}
+          data={sortedItems}
+          keyExtractor={(item, index) => `${item.event.id}-${index}`}
           renderItem={({ item }) => {
-            const status = getCareStatus(item)
+            const status = getCareStatus(item.event)
             const style = STATUS_STYLES[status]
-            const dueDate = tstampToDateOrNow(item.dueDate)
+            const dueDate = tstampToDateOrNow(item.event.dueDate)
             const daysInfo = differenceInDays(dueDate, new Date())
 
-            return (
+            const content = (
               <View className={`mx-4 mt-2 rounded-lg p-3 border border-border-light ${style.bg}`}>
                 <View className="flex-row items-center justify-between">
                   <View className="flex-1">
-                    <Text className="text-sm font-semibold text-text-primary">{item.name}</Text>
+                    <View className="flex-row items-center">
+                      <Text className="text-sm font-semibold text-text-primary">{item.event.name}</Text>
+                      {item.groupName ? (
+                        <View className="ml-2 px-2 py-0.5 rounded-full bg-primary/15">
+                          <Text className="text-xs font-medium text-primary">{item.groupName}</Text>
+                        </View>
+                      ) : null}
+                    </View>
                     <Text className={`text-xs mt-0.5 ${style.text}`}>
                       {style.label}{status !== 'completed' && daysInfo !== 0 ? ` · ${Math.abs(daysInfo)} day${Math.abs(daysInfo) !== 1 ? 's' : ''} ${daysInfo < 0 ? 'ago' : 'away'}` : ''}
                     </Text>
                   </View>
-                  {item.type === 'careRecurring' ? (
+                  {item.event.type === 'careRecurring' ? (
                     <Icon name="refresh" size={16} color="#6B6B6B" />
                   ) : null}
                 </View>
               </View>
             )
+
+            if (item.groupId && onGroupPress) {
+              return (
+                <TouchableOpacity onPress={() => onGroupPress(item.groupId!)} activeOpacity={0.7}>
+                  {content}
+                </TouchableOpacity>
+              )
+            }
+            return content
           }}
           contentContainerStyle={{ paddingBottom: 80 }}
           showsVerticalScrollIndicator={false}

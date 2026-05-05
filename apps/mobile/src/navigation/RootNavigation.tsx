@@ -34,6 +34,8 @@ import CreateProductionLogScreen from '../feature/production/screen/CreateProduc
 import CreateNoteScreen from '../feature/notes/screen/CreateNoteScreen'
 import NoteDetailScreen from '../feature/notes/screen/NoteDetailScreen'
 import CreateWeightLogScreen from '../feature/animal/screen/CreateWeightLogScreen'
+import GroupDetailScreen from '../feature/group/screen/GroupDetailScreen'
+import EditGroupScreen from '../feature/group/screen/EditGroupScreen'
 
 export type RootStackParamList = {
   // Auth
@@ -69,6 +71,10 @@ export type RootStackParamList = {
   // Notes screens
   CreateNote: { animalId: string }
   NoteDetail: { noteId: string; animalId: string }
+
+  // Group screens
+  GroupDetail: { groupId: string }
+  EditGroup: { groupId?: string }
 
   // Weight screens
   CreateWeightLog: { animalId: string }
@@ -126,6 +132,8 @@ const RootNavigation: React.FC = () => {
             <Stack.Screen name="CreateProductionLog" component={CreateProductionLogScreen} />
             <Stack.Screen name="CreateNote" component={CreateNoteScreen} />
             <Stack.Screen name="NoteDetail" component={NoteDetailScreen} />
+            <Stack.Screen name="GroupDetail" component={GroupDetailScreen} />
+            <Stack.Screen name="EditGroup" component={EditGroupScreen} />
             <Stack.Screen name="CreateWeightLog" component={CreateWeightLogScreen} />
             <Stack.Screen name="Profile" component={ProfileScreen} />
             <Stack.Screen name="EditProfile" component={EditProfileScreen} />

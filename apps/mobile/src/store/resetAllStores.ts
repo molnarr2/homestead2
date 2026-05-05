@@ -8,6 +8,7 @@ import { useProductionStore } from './productionStore'
 import { useNoteStore } from './noteStore'
 import { useWeightStore } from './weightStore'
 import { useAnimalTypeStore } from './animalTypeStore'
+import { useGroupStore } from './groupStore'
 
 export function subscribeAllStores() {
   useUserStore.getState().subscribe()
@@ -19,6 +20,7 @@ export function subscribeAllStores() {
   useWeightStore.getState().subscribe()
   useProductionStore.getState().subscribe()
   useAnimalTypeStore.getState().subscribe()
+  useGroupStore.getState().subscribe()
 }
 
 export function resetAllStores() {
@@ -31,5 +33,6 @@ export function resetAllStores() {
   useWeightStore.getState().clear()
   useAnimalTypeStore.getState().clear()
   useUserStore.getState().clear()
+  useGroupStore.getState().clear()
   useHomesteadStore.getState().clear()
 }
