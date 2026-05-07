@@ -1,0 +1,2 @@
+Update the schemas:
+Actually, what what we need to do is have a homestead level and then under that homestead level all of the collections that pertain to a homestead should be under that. Because we want to also have at some point allow multiple users into a single homestead or invite somebody to take care of the homestead while gone.

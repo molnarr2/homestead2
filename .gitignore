@@ -25,10 +25,6 @@ DerivedData/
 !debug.keystore
 local.properties
 
-# Vault / secrets
-vault/**
-!vault/.env.example
-
 # Env files
 .env
 .env.local
