@@ -38,9 +38,16 @@ export default class FirebaseAuth implements IFirebaseAuth {
     isLoggedIn: boolean = false;
 
     constructor() {
-        this.isLoggedIn = this.storage.getBoolean(LOGGED_IN_KEY) ?? false;
+        const hadSession = this.storage.getBoolean(LOGGED_IN_KEY);
+        this.isLoggedIn = hadSession ?? false;
         this.loggedInSubject = new BehaviorSubject<boolean>(this.isLoggedIn);
         this.loggedIn = this.loggedInSubject;
+
+        // Fresh install: MMKV is empty but Keychain may still hold a Firebase
+        // Auth session from before the app was uninstalled. Sign out to clear it.
+        if (hadSession === undefined && auth().currentUser) {
+            auth().signOut();
+        }
 
         auth().onAuthStateChanged(user => {
             this.isLoggedIn = user !== null;

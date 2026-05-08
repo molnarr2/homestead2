@@ -6,8 +6,8 @@ import Log from '../../library/log/Log.ts';
 export type Tstamp = FirebaseFirestoreTypes.Timestamp | FieldValue
 
 /// If timestamp is a FieldValue ie set the time to the server's current then would have to return undefined.
-export function tstampToDate(tstamp: Tstamp | undefined): Date | undefined {
-  if (tstamp === undefined) {
+export function tstampToDate(tstamp: Tstamp | undefined | null): Date | undefined {
+  if (tstamp === undefined || tstamp === null) {
     return undefined
   }
 
@@ -27,8 +27,8 @@ export function tstampToDate(tstamp: Tstamp | undefined): Date | undefined {
   return timestamp.toDate()
 }
 
-export function tstampToDateOrNow(tstamp: Tstamp | undefined): Date {
-  if (tstamp === undefined) {
+export function tstampToDateOrNow(tstamp: Tstamp | undefined | null): Date {
+  if (tstamp === undefined || tstamp === null) {
     return new Date()
   }
 
@@ -51,8 +51,8 @@ export function tstampServerTime(): Tstamp {
   return serverTimestamp()
 }
 
-export function tstampToMilliseconds(tstamp: Tstamp | undefined): number  {
-  if (tstamp === undefined) {
+export function tstampToMilliseconds(tstamp: Tstamp | undefined | null): number  {
+  if (tstamp === undefined || tstamp === null) {
     return 0
   }
 

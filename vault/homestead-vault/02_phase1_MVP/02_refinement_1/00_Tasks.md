@@ -2,7 +2,7 @@
 # Bugs
 
 - [ ] Images should always be cached
-- [ ] Sire / Dam doesn't seem to work
+- [x] Sire / Dam doesn't seem to work
 - [ ] Dates are wrong within the app it should be the date picker
 - [ ] We need a way to export data from an animal
 - [ ] Search animals by tag #

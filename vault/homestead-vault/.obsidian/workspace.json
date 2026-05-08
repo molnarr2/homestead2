@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "02_phase1_MVP/02_refinement_1/08_Onboarding Navigation Fix.md",
+                "file": "02_phase1_MVP/02_refinement_1/00_Tasks.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "08_Onboarding Navigation Fix"
+              "title": "00_Tasks"
             }
           }
         ]
@@ -185,6 +185,10 @@
   },
   "active": "10a27489f83c15d7",
   "lastOpenFiles": [
+    "00_ops/custom_metro_port_physical_device.md",
+    "00_ops",
+    "02_phase1_MVP/01_Accounts.md",
+    "02_phase1_MVP/02_refinement_1/08_Onboarding Navigation Fix.md",
     "02_phase1_MVP/09_production_logging.md",
     "00_research/01_homesteader-persona-research.md",
     "02_phase1_MVP/02_refinement_1/07_animal_groups.md",
@@ -196,14 +200,12 @@
     "02_phase1_MVP/02_refinement_1/06_animal_picker_modal.md",
     "02_phase1_MVP/02_refinement_1/05_care_schedule_filter.md",
     "00_research",
-    "02_phase1_MVP/02_refinement_1/08_Onboarding Navigation Fix.md",
     "02_phase1_MVP/02_refinement_1/03_Inline AnimalType Subcollections.md",
     "02_phase1_MVP/02_refinement_1/02_Home Dashboard.md",
     "02_phase1_MVP/02_refinement_1/01_Create Weight Log.md",
     "02_phase1_MVP/02_refinement_1/04_Animal List Filter Modal.md",
     "02_phase1_MVP/01_research/03_outsider_feature_audit.md",
     "02_phase1_MVP/02_TODO.md",
-    "02_phase1_MVP/01_Accounts.md",
     "02_phase1_MVP/01_research/02_feature_audit.md",
     "02_phase1_MVP/01_research/01_home_empty_state.md",
     "01_phase0/00_docs/homestead-master-plan.md",
@@ -214,12 +216,10 @@
     "02_phase1_MVP/02_refinement_1/work",
     "02_phase1_MVP/02_refinement_1",
     "02_phase1_MVP/01_research",
-    "01_phase0/01_plan/00_gen/03. TDD/00. Master Implementation Guide.md",
     "02_phase1_MVP",
     "00_operations",
     "00_research/01_plan/00_gen/03. TDD/work",
     "00_research/01_plan/00_gen/02. ERD/research",
-    "00_research/01_plan/00_gen/02. ERD/working",
-    "00_research/01_plan/00_gen/01. PRD"
+    "00_research/01_plan/00_gen/02. ERD/working"
   ]
 }
