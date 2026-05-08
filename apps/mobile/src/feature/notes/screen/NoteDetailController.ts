@@ -11,12 +11,15 @@ export function useNoteDetailController(navigation: Navigation, route: Route) {
   const { noteId } = route.params
   const note = useNoteStore(s => s.notes.find(n => n.id === noteId) ?? null)
 
+  const { animalId } = route.params
+
   const onDelete = async () => {
     await bsNoteService.deleteNote(noteId)
     navigation.goBack()
   }
 
   const onBack = () => navigation.goBack()
+  const onEdit = () => navigation.navigate('EditNote', { noteId, animalId })
 
-  return { note, onDelete, onBack }
+  return { note, onDelete, onBack, onEdit }
 }

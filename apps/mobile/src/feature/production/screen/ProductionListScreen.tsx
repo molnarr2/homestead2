@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, FlatList, ActivityIndicator, RefreshControl } from 'react-native'
+import { View, Text, FlatList, ActivityIndicator, RefreshControl, TouchableOpacity } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
@@ -26,10 +26,14 @@ const TYPE_ICONS: Record<string, string> = {
   other: 'package-variant',
 }
 
-const ProductionCard: React.FC<{ log: ProductionLog }> = ({ log }) => {
+const ProductionCard: React.FC<{ log: ProductionLog; onPress?: () => void }> = ({ log, onPress }) => {
   const iconName = TYPE_ICONS[log.productionType] ?? 'package-variant'
   return (
-    <View className="bg-surface rounded-xl p-4 border border-border-light mb-2 flex-row items-center">
+    <TouchableOpacity
+      className="bg-surface rounded-xl p-4 border border-border-light mb-2 flex-row items-center"
+      onPress={onPress}
+      activeOpacity={0.7}
+    >
       <View className="w-10 h-10 rounded-full bg-primary/10 items-center justify-center mr-3">
         <Icon name={iconName as React.ComponentProps<typeof Icon>['name']} size={20} color="#4A6741" />
       </View>
@@ -43,7 +47,7 @@ const ProductionCard: React.FC<{ log: ProductionLog }> = ({ log }) => {
         </Text>
       </View>
       <Text className="text-xs text-text-secondary">{formatDate(log.date)}</Text>
-    </View>
+    </TouchableOpacity>
   )
 }
 
@@ -69,7 +73,9 @@ const ProductionListScreen: React.FC = () => {
         <FlatList
           data={c.recentLogs}
           keyExtractor={item => item.id}
-          renderItem={({ item }) => <ProductionCard log={item} />}
+          renderItem={({ item }) => (
+            <ProductionCard log={item} onPress={() => navigation.navigate('EditProductionLog', { logId: item.id })} />
+          )}
           refreshControl={
             <RefreshControl refreshing={c.refreshing} onRefresh={c.onRefresh} tintColor="#4A6741" />
           }

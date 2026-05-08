@@ -1,7 +1,7 @@
 import firestore from '@react-native-firebase/firestore'
 import storage from '@react-native-firebase/storage'
 import { IResult, SuccessResult, ErrorResult } from '../../../util/Result'
-import { adminObject_default } from '../../../schema/object/AdminObject'
+import { adminObject_default, adminObject_updateLastUpdated } from '../../../schema/object/AdminObject'
 import HealthRecord from '../../../schema/health/HealthRecord'
 import ICareService from '../../care/service/ICareService'
 import IHealthService from './IHealthService'
@@ -83,6 +83,27 @@ export default class HealthService implements IHealthService {
       return SuccessResult
     } catch (error: any) {
       Log.error(TAG, 'createHealthRecord error: ' + error.message)
+      return ErrorResult(error.message)
+    }
+  }
+
+  async updateHealthRecord(record: HealthRecord, photoUri?: string): Promise<IResult> {
+    try {
+      adminObject_updateLastUpdated(record.admin)
+
+      if (photoUri) {
+        const homesteadId = this.homesteadRef.id
+        const storagePath = `homestead/${homesteadId}/healthRecord/${record.id}/photo.jpg`
+        await storage().ref(storagePath).putFile(photoUri)
+        const downloadUrl = await storage().ref(storagePath).getDownloadURL()
+        record.photoStorageRef = storagePath
+        record.photoUrl = downloadUrl
+      }
+
+      await this.homesteadRef.collection(Col.healthRecord).doc(record.id).update(record as any)
+      return SuccessResult
+    } catch (error: any) {
+      Log.error(TAG, 'updateHealthRecord error: ' + error.message)
       return ErrorResult(error.message)
     }
   }

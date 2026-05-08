@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { View, Text, FlatList } from 'react-native'
+import { View, Text, FlatList, TouchableOpacity } from 'react-native'
 import Icon from '@react-native-vector-icons/material-design-icons'
 import CareEvent from '../../../schema/care/CareEvent'
 import HealthRecord from '../../../schema/health/HealthRecord'
@@ -16,10 +16,13 @@ interface Props {
   breedingRecords: BreedingRecord[]
   notes: Note[]
   weightLogs: WeightLog[]
+  onItemPress?: (type: string, recordId: string) => void
 }
 
 interface TimelineItem {
   id: string
+  type: 'care' | 'health' | 'breeding' | 'note' | 'weight'
+  recordId: string
   icon: React.ComponentProps<typeof Icon>['name']
   description: string
   date: string
@@ -27,7 +30,7 @@ interface TimelineItem {
   color: string
 }
 
-const AnimalTimelineTab: React.FC<Props> = ({ careEvents, healthRecords, breedingRecords, notes, weightLogs }) => {
+const AnimalTimelineTab: React.FC<Props> = ({ careEvents, healthRecords, breedingRecords, notes, weightLogs, onItemPress }) => {
   const timelineItems = useMemo((): TimelineItem[] => {
     const items: TimelineItem[] = []
 
@@ -35,6 +38,8 @@ const AnimalTimelineTab: React.FC<Props> = ({ careEvents, healthRecords, breedin
       const date = tstampToDateOrNow(event.completedDate ?? event.dueDate)
       items.push({
         id: `care-${event.id}`,
+        type: 'care',
+        recordId: event.id,
         icon: 'medical-bag',
         description: `Care: ${event.name}`,
         date: formatDate(date.toISOString()),
@@ -46,6 +51,8 @@ const AnimalTimelineTab: React.FC<Props> = ({ careEvents, healthRecords, breedin
     for (const record of healthRecords) {
       items.push({
         id: `health-${record.id}`,
+        type: 'health',
+        recordId: record.id,
         icon: 'heart-pulse',
         description: `${record.recordType}: ${record.name}`,
         date: formatDate(record.date),
@@ -57,6 +64,8 @@ const AnimalTimelineTab: React.FC<Props> = ({ careEvents, healthRecords, breedin
     for (const record of breedingRecords) {
       items.push({
         id: `breeding-${record.id}`,
+        type: 'breeding',
+        recordId: record.id,
         icon: 'heart-multiple',
         description: `Breeding: ${record.status}${record.sireName ? ` with ${record.sireName}` : ''}`,
         date: formatDate(record.breedingDate),
@@ -69,6 +78,8 @@ const AnimalTimelineTab: React.FC<Props> = ({ careEvents, healthRecords, breedin
       const date = tstampToDateOrNow(note.admin.created_at)
       items.push({
         id: `note-${note.id}`,
+        type: 'note',
+        recordId: note.id,
         icon: 'note-text',
         description: `Note: ${note.text.substring(0, 60)}${note.text.length > 60 ? '...' : ''}`,
         date: formatDate(date.toISOString()),
@@ -80,6 +91,8 @@ const AnimalTimelineTab: React.FC<Props> = ({ careEvents, healthRecords, breedin
     for (const log of weightLogs) {
       items.push({
         id: `weight-${log.id}`,
+        type: 'weight',
+        recordId: log.id,
         icon: 'scale-bathroom',
         description: `Weight: ${log.weight} ${log.weightUnit}${log.bodyConditionScore ? ` (BCS: ${log.bodyConditionScore})` : ''}`,
         date: formatDate(log.date),
@@ -101,7 +114,11 @@ const AnimalTimelineTab: React.FC<Props> = ({ careEvents, healthRecords, breedin
       data={timelineItems}
       keyExtractor={item => item.id}
       renderItem={({ item }) => (
-        <View className="flex-row items-start px-4 py-3 border-b border-border-light">
+        <TouchableOpacity
+          className="flex-row items-start px-4 py-3 border-b border-border-light"
+          onPress={() => onItemPress?.(item.type, item.recordId)}
+          activeOpacity={0.7}
+        >
           <View className="w-8 h-8 rounded-full items-center justify-center mr-3" style={{ backgroundColor: item.color + '20' }}>
             <Icon name={item.icon} size={16} color={item.color} />
           </View>
@@ -109,7 +126,7 @@ const AnimalTimelineTab: React.FC<Props> = ({ careEvents, healthRecords, breedin
             <Text className="text-sm text-text-primary">{item.description}</Text>
             <Text className="text-xs text-text-secondary mt-1">{item.date}</Text>
           </View>
-        </View>
+        </TouchableOpacity>
       )}
       showsVerticalScrollIndicator={false}
     />

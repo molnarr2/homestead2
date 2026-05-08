@@ -27,6 +27,7 @@ export function useHealthRecordDetailController(navigation: Navigation, route: R
   const onAnimalPress = () => {
     if (animal) navigation.navigate('AnimalDetail', { animalId: animal.id })
   }
+  const onEdit = () => navigation.navigate('EditHealthRecord', { recordId })
 
-  return { record, animal, withdrawalStatus, onBack, onAnimalPress }
+  return { record, animal, withdrawalStatus, onBack, onAnimalPress, onEdit }
 }

@@ -34,6 +34,13 @@ import CreateProductionLogScreen from '../feature/production/screen/CreateProduc
 import CreateNoteScreen from '../feature/notes/screen/CreateNoteScreen'
 import NoteDetailScreen from '../feature/notes/screen/NoteDetailScreen'
 import CreateWeightLogScreen from '../feature/animal/screen/CreateWeightLogScreen'
+import WeightLogDetailScreen from '../feature/animal/screen/WeightLogDetailScreen'
+import EditWeightLogScreen from '../feature/animal/screen/EditWeightLogScreen'
+import EditHealthRecordScreen from '../feature/health/screen/EditHealthRecordScreen'
+import EditCareEventScreen from '../feature/care/screen/EditCareEventScreen'
+import EditBreedingRecordScreen from '../feature/breeding/screen/EditBreedingRecordScreen'
+import EditNoteScreen from '../feature/notes/screen/EditNoteScreen'
+import EditProductionLogScreen from '../feature/production/screen/EditProductionLogScreen'
 import GroupDetailScreen from '../feature/group/screen/GroupDetailScreen'
 import EditGroupScreen from '../feature/group/screen/EditGroupScreen'
 
@@ -78,6 +85,15 @@ export type RootStackParamList = {
 
   // Weight screens
   CreateWeightLog: { animalId: string }
+  WeightLogDetail: { logId: string; animalId: string }
+  EditWeightLog: { logId: string; animalId: string }
+
+  // Edit screens
+  EditHealthRecord: { recordId: string }
+  EditCareEvent: { eventId: string }
+  EditBreedingRecord: { recordId: string }
+  EditNote: { noteId: string; animalId: string }
+  EditProductionLog: { logId: string }
 
   // Settings screens
   Profile: undefined
@@ -135,6 +151,13 @@ const RootNavigation: React.FC = () => {
             <Stack.Screen name="GroupDetail" component={GroupDetailScreen} />
             <Stack.Screen name="EditGroup" component={EditGroupScreen} />
             <Stack.Screen name="CreateWeightLog" component={CreateWeightLogScreen} />
+            <Stack.Screen name="WeightLogDetail" component={WeightLogDetailScreen} />
+            <Stack.Screen name="EditWeightLog" component={EditWeightLogScreen} />
+            <Stack.Screen name="EditHealthRecord" component={EditHealthRecordScreen} />
+            <Stack.Screen name="EditCareEvent" component={EditCareEventScreen} />
+            <Stack.Screen name="EditBreedingRecord" component={EditBreedingRecordScreen} />
+            <Stack.Screen name="EditNote" component={EditNoteScreen} />
+            <Stack.Screen name="EditProductionLog" component={EditProductionLogScreen} />
             <Stack.Screen name="Profile" component={ProfileScreen} />
             <Stack.Screen name="EditProfile" component={EditProfileScreen} />
             <Stack.Screen name="Subscription" component={PlaceholderScreen} />

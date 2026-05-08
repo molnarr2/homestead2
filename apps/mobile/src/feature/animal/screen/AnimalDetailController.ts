@@ -85,6 +85,21 @@ export function useAnimalDetailController(navigation: Navigation, route: Route) 
   const onAddNote = () => navigation.navigate('CreateNote', { animalId })
   const onAddWeight = () => navigation.navigate('CreateWeightLog', { animalId })
   const onGroupPress = (groupId: string) => navigation.navigate('GroupDetail', { groupId })
+  const onHealthRecordPress = (recordId: string) => navigation.navigate('HealthRecordDetail', { recordId })
+  const onBreedingRecordPress = (recordId: string) => navigation.navigate('BreedingRecordDetail', { recordId })
+  const onCareEventPress = (eventId: string) => navigation.navigate('CareEventDetail', { eventId })
+  const onWeightLogPress = (logId: string) => navigation.navigate('WeightLogDetail', { logId, animalId })
+  const onNotePress = (noteId: string) => navigation.navigate('NoteDetail', { noteId, animalId })
+
+  const onTimelineItemPress = (type: string, recordId: string) => {
+    switch (type) {
+      case 'care': navigation.navigate('CareEventDetail', { eventId: recordId }); break
+      case 'health': navigation.navigate('HealthRecordDetail', { recordId }); break
+      case 'breeding': navigation.navigate('BreedingRecordDetail', { recordId }); break
+      case 'note': navigation.navigate('NoteDetail', { noteId: recordId, animalId }); break
+      case 'weight': navigation.navigate('WeightLogDetail', { logId: recordId, animalId }); break
+    }
+  }
 
   const getFabAction = useCallback(() => {
     const actions: Record<AnimalTab, () => void> = {
@@ -119,6 +134,12 @@ export function useAnimalDetailController(navigation: Navigation, route: Route) 
     onAddNote,
     onAddWeight,
     onGroupPress,
+    onHealthRecordPress,
+    onBreedingRecordPress,
+    onCareEventPress,
+    onWeightLogPress,
+    onNotePress,
+    onTimelineItemPress,
     getFabAction,
   }
 }

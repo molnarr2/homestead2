@@ -45,6 +45,7 @@ const AnimalDetailScreen: React.FC = () => {
             breedingRecords={controller.breedingRecords}
             notes={controller.notes}
             weightLogs={controller.weightLogs}
+            onItemPress={controller.onTimelineItemPress}
           />
         )
       case 'health':
@@ -55,6 +56,7 @@ const AnimalDetailScreen: React.FC = () => {
             activeWithdrawals={controller.activeWithdrawals}
             onAddHealth={controller.onAddHealth}
             onGroupPress={controller.onGroupPress}
+            onHealthRecordPress={controller.onHealthRecordPress}
           />
         )
       case 'breeding':
@@ -62,6 +64,7 @@ const AnimalDetailScreen: React.FC = () => {
           <AnimalBreedingTab
             breedingRecords={controller.breedingRecords}
             onAddBreeding={controller.onAddBreeding}
+            onBreedingRecordPress={controller.onBreedingRecordPress}
           />
         )
       case 'care':
@@ -71,6 +74,7 @@ const AnimalDetailScreen: React.FC = () => {
             groupCareEvents={controller.groupCareEvents}
             onAddCare={controller.onAddCare}
             onGroupPress={controller.onGroupPress}
+            onCareEventPress={controller.onCareEventPress}
           />
         )
       case 'notes':
@@ -85,6 +89,7 @@ const AnimalDetailScreen: React.FC = () => {
           <AnimalWeightTab
             weightLogs={controller.weightLogs}
             onAddWeight={controller.onAddWeight}
+            onWeightLogPress={controller.onWeightLogPress}
           />
         )
     }

@@ -8,9 +8,10 @@ import EmptyState from '../../../components/layout/EmptyState'
 interface Props {
   weightLogs: WeightLog[]
   onAddWeight: () => void
+  onWeightLogPress?: (logId: string) => void
 }
 
-const AnimalWeightTab: React.FC<Props> = ({ weightLogs, onAddWeight }) => {
+const AnimalWeightTab: React.FC<Props> = ({ weightLogs, onAddWeight, onWeightLogPress }) => {
   const sortedLogs = [...weightLogs].sort((a, b) => {
     if (!a.date || !b.date) return 0
     return new Date(b.date).getTime() - new Date(a.date).getTime()
@@ -35,7 +36,11 @@ const AnimalWeightTab: React.FC<Props> = ({ weightLogs, onAddWeight }) => {
               const weightChange = prevLog ? item.weight - prevLog.weight : null
 
               return (
-                <View className="flex-row items-center px-4 py-3 border-b border-border-light">
+                <TouchableOpacity
+                  className="flex-row items-center px-4 py-3 border-b border-border-light"
+                  onPress={() => onWeightLogPress?.(item.id)}
+                  activeOpacity={0.7}
+                >
                   <View className="flex-1">
                     <Text className="text-sm text-text-primary">{formatDate(item.date)}</Text>
                   </View>
@@ -52,7 +57,7 @@ const AnimalWeightTab: React.FC<Props> = ({ weightLogs, onAddWeight }) => {
                   <View className="w-16 items-end">
                     <Text className="text-sm text-text-primary">{item.bodyConditionScore || '-'}</Text>
                   </View>
-                </View>
+                </TouchableOpacity>
               )
             }}
             contentContainerStyle={{ paddingBottom: 80 }}

@@ -6,6 +6,7 @@ export default interface IBreedingService {
   subscribe(callback: (records: BreedingRecord[]) => void): () => void
   getBreedingRecordsForAnimal(animalId: string): Promise<BreedingRecord[]>
   createBreedingRecord(record: BreedingRecord): Promise<IResult>
+  updateBreedingRecord(record: BreedingRecord): Promise<IResult>
   completeBirth(recordId: string, outcome: BirthOutcome, dam: Animal): Promise<IResult>
   failBreeding(recordId: string): Promise<IResult>
   deleteBreedingRecord(id: string): Promise<IResult>

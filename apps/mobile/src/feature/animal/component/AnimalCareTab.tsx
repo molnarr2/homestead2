@@ -12,6 +12,7 @@ interface Props {
   groupCareEvents?: GroupCareEvent[]
   onAddCare: () => void
   onGroupPress?: (groupId: string) => void
+  onCareEventPress?: (eventId: string) => void
 }
 
 type CareStatus = 'overdue' | 'dueToday' | 'upcoming' | 'completed'
@@ -32,7 +33,7 @@ function getCareStatus(event: CareEvent): CareStatus {
   return 'upcoming'
 }
 
-const AnimalCareTab: React.FC<Props> = ({ careEvents, groupCareEvents, onAddCare, onGroupPress }) => {
+const AnimalCareTab: React.FC<Props> = ({ careEvents, groupCareEvents, onAddCare, onGroupPress, onCareEventPress }) => {
   type CareListItem = { event: CareEvent; groupName?: string; groupId?: string }
 
   const allItems: CareListItem[] = [
@@ -90,6 +91,13 @@ const AnimalCareTab: React.FC<Props> = ({ careEvents, groupCareEvents, onAddCare
             if (item.groupId && onGroupPress) {
               return (
                 <TouchableOpacity onPress={() => onGroupPress(item.groupId!)} activeOpacity={0.7}>
+                  {content}
+                </TouchableOpacity>
+              )
+            }
+            if (onCareEventPress) {
+              return (
+                <TouchableOpacity onPress={() => onCareEventPress(item.event.id)} activeOpacity={0.7}>
                   {content}
                 </TouchableOpacity>
               )

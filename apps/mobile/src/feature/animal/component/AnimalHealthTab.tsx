@@ -13,6 +13,7 @@ interface Props {
   activeWithdrawals: WithdrawalResult[]
   onAddHealth: () => void
   onGroupPress?: (groupId: string) => void
+  onHealthRecordPress?: (recordId: string) => void
 }
 
 const RECORD_TYPE_ICONS: Record<string, React.ComponentProps<typeof Icon>['name']> = {
@@ -24,7 +25,7 @@ const RECORD_TYPE_ICONS: Record<string, React.ComponentProps<typeof Icon>['name'
   injury: 'bandage',
 }
 
-const AnimalHealthTab: React.FC<Props> = ({ healthRecords, groupHealthRecords, activeWithdrawals, onAddHealth, onGroupPress }) => {
+const AnimalHealthTab: React.FC<Props> = ({ healthRecords, groupHealthRecords, activeWithdrawals, onAddHealth, onGroupPress, onHealthRecordPress }) => {
   type HealthListItem = { record: HealthRecord; groupName?: string; groupId?: string }
 
   const allItems: HealthListItem[] = [
@@ -87,6 +88,13 @@ const AnimalHealthTab: React.FC<Props> = ({ healthRecords, groupHealthRecords, a
             if (item.groupId && onGroupPress) {
               return (
                 <TouchableOpacity onPress={() => onGroupPress(item.groupId!)} activeOpacity={0.7}>
+                  {content}
+                </TouchableOpacity>
+              )
+            }
+            if (onHealthRecordPress) {
+              return (
+                <TouchableOpacity onPress={() => onHealthRecordPress(item.record.id)} activeOpacity={0.7}>
                   {content}
                 </TouchableOpacity>
               )

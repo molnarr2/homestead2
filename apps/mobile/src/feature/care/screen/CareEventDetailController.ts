@@ -26,6 +26,7 @@ export function useCareEventDetailController(navigation: Navigation, route: Rout
   }
 
   const onBack = () => navigation.goBack()
+  const onEdit = () => navigation.navigate('EditCareEvent', { eventId })
 
-  return { event, animal, status, isComplete, onComplete, onBack }
+  return { event, animal, status, isComplete, onComplete, onBack, onEdit }
 }

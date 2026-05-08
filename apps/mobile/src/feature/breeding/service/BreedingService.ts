@@ -1,6 +1,6 @@
 import firestore from '@react-native-firebase/firestore'
 import { IResult, SuccessResult, ErrorResult } from '../../../util/Result'
-import { adminObject_default } from '../../../schema/object/AdminObject'
+import { adminObject_default, adminObject_updateLastUpdated } from '../../../schema/object/AdminObject'
 import BreedingRecord, { BirthOutcome } from '../../../schema/breeding/BreedingRecord'
 import Animal from '../../../schema/animal/Animal'
 import Log from '../../../library/log/Log'
@@ -62,6 +62,17 @@ export default class BreedingService implements IBreedingService {
       return SuccessResult
     } catch (error: any) {
       Log.error(TAG, `createBreedingRecord error: ${error.message}`)
+      return ErrorResult(error.message)
+    }
+  }
+
+  async updateBreedingRecord(record: BreedingRecord): Promise<IResult> {
+    try {
+      adminObject_updateLastUpdated(record.admin)
+      await this.homesteadRef.collection(Col.breedingRecord).doc(record.id).update(record as any)
+      return SuccessResult
+    } catch (error: any) {
+      Log.error(TAG, `updateBreedingRecord error: ${error.message}`)
       return ErrorResult(error.message)
     }
   }

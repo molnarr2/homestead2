@@ -9,6 +9,7 @@ import EmptyState from '../../../components/layout/EmptyState'
 interface Props {
   breedingRecords: BreedingRecord[]
   onAddBreeding: () => void
+  onBreedingRecordPress?: (recordId: string) => void
 }
 
 const STATUS_COLORS: Record<string, string> = {
@@ -17,7 +18,7 @@ const STATUS_COLORS: Record<string, string> = {
   failed: 'bg-status-error',
 }
 
-const AnimalBreedingTab: React.FC<Props> = ({ breedingRecords, onAddBreeding }) => {
+const AnimalBreedingTab: React.FC<Props> = ({ breedingRecords, onAddBreeding, onBreedingRecordPress }) => {
   const sortedRecords = [...breedingRecords].sort((a, b) => {
     if (a.status === 'active' && b.status !== 'active') return -1
     if (a.status !== 'active' && b.status === 'active') return 1
@@ -39,7 +40,11 @@ const AnimalBreedingTab: React.FC<Props> = ({ breedingRecords, onAddBreeding }) 
               : null
 
             return (
-              <View className="mx-4 mt-2 bg-surface rounded-lg p-3 border border-border-light">
+              <TouchableOpacity
+                className="mx-4 mt-2 bg-surface rounded-lg p-3 border border-border-light"
+                onPress={() => onBreedingRecordPress?.(item.id)}
+                activeOpacity={0.7}
+              >
                 <View className="flex-row items-center justify-between">
                   <View className="flex-1">
                     <Text className="text-sm font-semibold text-text-primary">
@@ -70,7 +75,7 @@ const AnimalBreedingTab: React.FC<Props> = ({ breedingRecords, onAddBreeding }) 
                     </Text>
                   </View>
                 ) : null}
-              </View>
+              </TouchableOpacity>
             )
           }}
           contentContainerStyle={{ paddingBottom: 80 }}

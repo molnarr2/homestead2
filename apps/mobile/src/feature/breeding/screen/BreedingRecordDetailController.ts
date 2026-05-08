@@ -33,6 +33,7 @@ export function useBreedingRecordDetailController(navigation: Navigation, route:
 
   const onBack = () => navigation.goBack()
   const onAnimalPress = (animalId: string) => navigation.navigate('AnimalDetail', { animalId })
+  const onEdit = () => navigation.navigate('EditBreedingRecord', { recordId })
 
-  return { record, dam, sire, gestationStatus, offspring, onRecordBirth, onMarkFailed, onBack, onAnimalPress }
+  return { record, dam, sire, gestationStatus, offspring, onRecordBirth, onMarkFailed, onBack, onAnimalPress, onEdit }
 }

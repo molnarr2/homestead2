@@ -1,7 +1,7 @@
 import firestore from '@react-native-firebase/firestore'
 import storage from '@react-native-firebase/storage'
 import { IResult, SuccessResult, ErrorResult } from '../../../util/Result'
-import { adminObject_default } from '../../../schema/object/AdminObject'
+import { adminObject_default, adminObject_updateLastUpdated } from '../../../schema/object/AdminObject'
 import Note from '../../../schema/notes/Note'
 import Log from '../../../library/log/Log'
 import { useHomesteadStore } from '../../../store/homesteadStore'
@@ -58,6 +58,27 @@ export default class NoteService implements INoteService {
       return SuccessResult
     } catch (error: any) {
       Log.error(TAG, `createNote error: ${error.message}`)
+      return ErrorResult(error.message)
+    }
+  }
+
+  async updateNote(note: Note, photoUri?: string): Promise<IResult> {
+    try {
+      adminObject_updateLastUpdated(note.admin)
+
+      if (photoUri) {
+        const homesteadId = useHomesteadStore.getState().homesteadId
+        const storagePath = `homestead/${homesteadId}/note/${note.id}/photo.jpg`
+        await storage().ref(storagePath).putFile(photoUri)
+        const downloadUrl = await storage().ref(storagePath).getDownloadURL()
+        note.photoStorageRef = storagePath
+        note.photoUrl = downloadUrl
+      }
+
+      await this.homesteadRef.collection(Col.note).doc(note.id).update(note as any)
+      return SuccessResult
+    } catch (error: any) {
+      Log.error(TAG, `updateNote error: ${error.message}`)
       return ErrorResult(error.message)
     }
   }

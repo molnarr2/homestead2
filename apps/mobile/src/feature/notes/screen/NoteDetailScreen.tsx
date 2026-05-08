@@ -52,7 +52,9 @@ const NoteDetailScreen: React.FC = () => {
           <Icon name="arrow-left" size={24} color="#1A1A1A" />
         </TouchableOpacity>
         <Text className="text-xl font-bold text-text-primary">Note</Text>
-        <View className="w-8" />
+        <TouchableOpacity onPress={controller.onEdit} activeOpacity={0.7} className="p-1">
+          <Icon name="pencil" size={24} color="#1A1A1A" />
+        </TouchableOpacity>
       </View>
 
       <ScrollView className="flex-1 px-4" showsVerticalScrollIndicator={false}>
