@@ -73,7 +73,7 @@ export type RootStackParamList = {
   RecordBirthOutcome: { recordId: string }
 
   // Production screens
-  CreateProductionLog: { animalId?: string; groupName?: string; type?: import('../schema/production/ProductionLog').ProductionType }
+  CreateProductionLog: { animalId?: string; groupId?: string; type?: import('../schema/production/ProductionLog').ProductionType }
 
   // Notes screens
   CreateNote: { animalId: string }

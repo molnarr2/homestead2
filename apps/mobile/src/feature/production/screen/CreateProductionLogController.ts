@@ -4,6 +4,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RouteProp } from '@react-navigation/native'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
 import { useAnimalStore } from '../../../store/animalStore'
+import { useGroupStore } from '../../../store/groupStore'
 import { useHomesteadStore } from '../../../store/homesteadStore'
 import { effectiveSubscription } from '../../subscription/service/ISubscriptionService'
 import { bsProductionService } from '../../../Bootstrap'
@@ -15,23 +16,37 @@ type Navigation = NativeStackNavigationProp<RootStackParamList, 'CreateProductio
 type Route = RouteProp<RootStackParamList, 'CreateProductionLog'>
 
 export function useCreateProductionLogController(navigation: Navigation, route: Route) {
-  const { animalId: initialAnimalId, groupName: initialGroup, type: initialType } = route.params ?? {}
+  const { animalId: routeAnimalId, groupId: routeGroupId, type: initialType } = route.params ?? {}
   const { animals } = useAnimalStore()
+  const { groups } = useGroupStore()
   const homestead = useHomesteadStore(s => s.homestead)
 
   const [productionType, setProductionType] = useState<ProductionType>(initialType ?? 'eggs')
   const [quantity, setQuantity] = useState('')
   const [unit, setUnit] = useState(getDefaultUnit(initialType ?? 'eggs'))
   const [date, setDate] = useState(todayIso().split('T')[0])
-  const [animalId, setAnimalId] = useState(initialAnimalId ?? '')
-  const [groupName, setGroupName] = useState(initialGroup ?? '')
+  const [selectedAnimalId, setSelectedAnimalId] = useState(routeGroupId ? '' : (routeAnimalId ?? ''))
+  const [selectedGroupId, setSelectedGroupId] = useState(routeGroupId ?? '')
   const [notes, setNotes] = useState('')
-  const [logMode, setLogMode] = useState<'animal' | 'group'>(initialAnimalId ? 'animal' : 'group')
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     setUnit(getDefaultUnit(productionType))
   }, [productionType])
+
+  const handleSelectAnimal = (animalId: string) => {
+    setSelectedAnimalId(animalId)
+    setSelectedGroupId('')
+  }
+
+  const handleSelectGroup = (groupId: string) => {
+    setSelectedGroupId(groupId)
+    setSelectedAnimalId('')
+  }
+
+  const isReadOnly = !!(routeAnimalId || routeGroupId)
+  const selectedAnimal = animals.find(a => a.id === selectedAnimalId) ?? null
+  const selectedGroup = groups.find(g => g.id === selectedGroupId) ?? null
 
   const submit = async () => {
     const tier = effectiveSubscription(homestead)
@@ -58,8 +73,8 @@ export function useCreateProductionLogController(navigation: Navigation, route: 
       unit,
       date,
       notes,
-      animalId: logMode === 'animal' ? animalId : '',
-      groupName: logMode === 'group' ? groupName : '',
+      animalId: selectedAnimalId,
+      groupName: selectedGroup?.name ?? '',
     }
     await bsProductionService.createProductionLog(log)
     setLoading(false)
@@ -73,10 +88,12 @@ export function useCreateProductionLogController(navigation: Navigation, route: 
     quantity, setQuantity,
     unit, setUnit,
     date, setDate,
-    animalId, setAnimalId,
-    groupName, setGroupName,
+    selectedAnimalId, handleSelectAnimal,
+    selectedGroupId, handleSelectGroup,
+    isReadOnly,
+    selectedAnimal,
+    selectedGroup,
     notes, setNotes,
-    logMode, setLogMode,
     animals, loading, submit, onBack,
   }
 }

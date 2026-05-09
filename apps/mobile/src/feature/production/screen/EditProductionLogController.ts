@@ -5,6 +5,7 @@ import type { RouteProp } from '@react-navigation/native'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
 import { useProductionStore } from '../../../store/productionStore'
 import { useAnimalStore } from '../../../store/animalStore'
+import { useGroupStore } from '../../../store/groupStore'
 import { bsProductionService } from '../../../Bootstrap'
 import { ProductionType } from '../../../schema/production/ProductionLog'
 import { getDefaultUnit } from '../../../util/ProductionUtility'
@@ -16,20 +17,23 @@ export function useEditProductionLogController(navigation: Navigation, route: Ro
   const { logId } = route.params
   const log = useProductionStore(s => s.productionLogs.find(l => l.id === logId))
   const { animals } = useAnimalStore()
+  const { groups } = useGroupStore()
 
   const [productionType, setProductionType] = useState<ProductionType>(log?.productionType ?? 'eggs')
   const [quantity, setQuantity] = useState(log ? String(log.quantity) : '')
   const [unit, setUnit] = useState(log?.unit ?? getDefaultUnit('eggs'))
   const [date, setDate] = useState(log?.date ?? '')
-  const [animalId, setAnimalId] = useState(log?.animalId ?? '')
-  const [groupName, setGroupName] = useState(log?.groupName ?? '')
   const [notes, setNotes] = useState(log?.notes ?? '')
-  const [logMode, setLogMode] = useState<'animal' | 'group'>(log?.animalId ? 'animal' : 'group')
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     setUnit(getDefaultUnit(productionType))
   }, [productionType])
+
+  const selectedAnimal = animals.find(a => a.id === log?.animalId) ?? null
+  const selectedGroup = log?.groupName
+    ? groups.find(g => g.name === log.groupName) ?? null
+    : null
 
   const submit = async () => {
     if (!log) return
@@ -44,8 +48,6 @@ export function useEditProductionLogController(navigation: Navigation, route: Ro
       unit,
       date,
       notes,
-      animalId: logMode === 'animal' ? animalId : '',
-      groupName: logMode === 'group' ? groupName : '',
     }
     const result = await bsProductionService.updateProductionLog(updated)
     setLoading(false)
@@ -64,10 +66,9 @@ export function useEditProductionLogController(navigation: Navigation, route: Ro
     quantity, setQuantity,
     unit, setUnit,
     date, setDate,
-    animalId, setAnimalId,
-    groupName, setGroupName,
+    selectedAnimal,
+    selectedGroup,
     notes, setNotes,
-    logMode, setLogMode,
-    animals, loading, submit, onBack,
+    loading, submit, onBack,
   }
 }

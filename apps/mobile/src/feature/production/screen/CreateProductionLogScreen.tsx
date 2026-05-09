@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
@@ -9,6 +9,8 @@ import ScreenContainer from '../../../components/layout/ScreenContainer'
 import TextInput from '../../../components/input/TextInput'
 import DatePickerInput from '../../../components/input/DatePickerInput'
 import PrimaryButton from '../../../components/button/PrimaryButton'
+import AnimalOrGroupField from '../../../components/input/AnimalOrGroupField'
+import AnimalPickerModal from '../../care/component/AnimalPickerModal'
 import ProductionTypeSelector from '../component/ProductionTypeSelector'
 import Icon from '@react-native-vector-icons/material-design-icons'
 
@@ -19,6 +21,7 @@ const CreateProductionLogScreen: React.FC = () => {
   const navigation = useNavigation<Navigation>()
   const route = useRoute<Route>()
   const c = useCreateProductionLogController(navigation, route)
+  const [pickerVisible, setPickerVisible] = useState(false)
 
   return (
     <ScreenContainer>
@@ -31,7 +34,16 @@ const CreateProductionLogScreen: React.FC = () => {
       </View>
 
       <ScrollView className="flex-1 px-4" showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
-        <Text className="text-sm font-medium text-text-primary mb-2 mt-4">Production Type</Text>
+        <AnimalOrGroupField
+          selectedAnimal={c.selectedAnimal}
+          selectedGroup={c.selectedGroup}
+          onPress={() => setPickerVisible(true)}
+          readOnly={c.isReadOnly}
+          label="Animal or Group"
+          showGroups={true}
+        />
+
+        <Text className="text-sm font-medium text-text-primary mb-2">Production Type</Text>
         <ProductionTypeSelector
           selected={c.productionType}
           onSelect={type => { if (type !== 'all') c.setProductionType(type) }}
@@ -64,69 +76,6 @@ const CreateProductionLogScreen: React.FC = () => {
           onChange={c.setDate}
         />
 
-        <Text className="text-sm font-medium text-text-primary mb-2">Log Mode</Text>
-        <View className="flex-row gap-2 mb-4">
-          <TouchableOpacity
-            className={`flex-1 py-2 rounded-lg border items-center ${
-              c.logMode === 'animal' ? 'bg-primary border-primary' : 'bg-surface border-border-light'
-            }`}
-            onPress={() => c.setLogMode('animal')}
-            activeOpacity={0.7}
-          >
-            <Text className={`text-sm font-medium ${
-              c.logMode === 'animal' ? 'text-text-inverse' : 'text-text-primary'
-            }`}>
-              Per Animal
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            className={`flex-1 py-2 rounded-lg border items-center ${
-              c.logMode === 'group' ? 'bg-primary border-primary' : 'bg-surface border-border-light'
-            }`}
-            onPress={() => c.setLogMode('group')}
-            activeOpacity={0.7}
-          >
-            <Text className={`text-sm font-medium ${
-              c.logMode === 'group' ? 'text-text-inverse' : 'text-text-primary'
-            }`}>
-              Per Group
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        {c.logMode === 'animal' ? (
-          <View className="mb-4">
-            <Text className="text-sm font-medium text-text-primary mb-2">Animal</Text>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              <View className="flex-row gap-2">
-                {c.animals.map(animal => (
-                  <TouchableOpacity
-                    key={animal.id}
-                    className={`px-3 py-2 rounded-lg border ${
-                      c.animalId === animal.id ? 'bg-primary border-primary' : 'bg-surface border-border-light'
-                    }`}
-                    onPress={() => c.setAnimalId(animal.id)}
-                    activeOpacity={0.7}
-                  >
-                    <Text className={`text-sm ${
-                      c.animalId === animal.id ? 'text-text-inverse' : 'text-text-primary'
-                    }`}>
-                      {animal.name}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </ScrollView>
-          </View>
-        ) : (
-          <TextInput
-            label="Group Name"
-            value={c.groupName}
-            onChangeText={c.setGroupName}
-            placeholder="e.g. Laying Hens, Dairy Goats"
-          />
-        )}
-
         <TextInput
           label="Notes"
           value={c.notes}
@@ -144,6 +93,17 @@ const CreateProductionLogScreen: React.FC = () => {
           />
         </View>
       </ScrollView>
+
+      {!c.isReadOnly && (
+        <AnimalPickerModal
+          visible={pickerVisible}
+          onClose={() => setPickerVisible(false)}
+          animals={c.animals}
+          onSelect={c.handleSelectAnimal}
+          onSelectGroup={c.handleSelectGroup}
+          showGroups={true}
+        />
+      )}
     </ScreenContainer>
   )
 }

@@ -9,6 +9,7 @@ import ScreenContainer from '../../../components/layout/ScreenContainer'
 import TextInput from '../../../components/input/TextInput'
 import DatePickerInput from '../../../components/input/DatePickerInput'
 import PrimaryButton from '../../../components/button/PrimaryButton'
+import AnimalOrGroupField from '../../../components/input/AnimalOrGroupField'
 import ProductionTypeSelector from '../component/ProductionTypeSelector'
 import Icon from '@react-native-vector-icons/material-design-icons'
 
@@ -41,7 +42,16 @@ const EditProductionLogScreen: React.FC = () => {
       </View>
 
       <ScrollView className="flex-1 px-4" showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
-        <Text className="text-sm font-medium text-text-primary mb-2 mt-4">Production Type</Text>
+        <AnimalOrGroupField
+          selectedAnimal={c.selectedAnimal}
+          selectedGroup={c.selectedGroup}
+          onPress={() => {}}
+          readOnly={true}
+          label="Animal or Group"
+          showGroups={true}
+        />
+
+        <Text className="text-sm font-medium text-text-primary mb-2">Production Type</Text>
         <ProductionTypeSelector
           selected={c.productionType}
           onSelect={type => { if (type !== 'all') c.setProductionType(type) }}
@@ -73,69 +83,6 @@ const EditProductionLogScreen: React.FC = () => {
           value={c.date}
           onChange={c.setDate}
         />
-
-        <Text className="text-sm font-medium text-text-primary mb-2">Log Mode</Text>
-        <View className="flex-row gap-2 mb-4">
-          <TouchableOpacity
-            className={`flex-1 py-2 rounded-lg border items-center ${
-              c.logMode === 'animal' ? 'bg-primary border-primary' : 'bg-surface border-border-light'
-            }`}
-            onPress={() => c.setLogMode('animal')}
-            activeOpacity={0.7}
-          >
-            <Text className={`text-sm font-medium ${
-              c.logMode === 'animal' ? 'text-text-inverse' : 'text-text-primary'
-            }`}>
-              Per Animal
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            className={`flex-1 py-2 rounded-lg border items-center ${
-              c.logMode === 'group' ? 'bg-primary border-primary' : 'bg-surface border-border-light'
-            }`}
-            onPress={() => c.setLogMode('group')}
-            activeOpacity={0.7}
-          >
-            <Text className={`text-sm font-medium ${
-              c.logMode === 'group' ? 'text-text-inverse' : 'text-text-primary'
-            }`}>
-              Per Group
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        {c.logMode === 'animal' ? (
-          <View className="mb-4">
-            <Text className="text-sm font-medium text-text-primary mb-2">Animal</Text>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              <View className="flex-row gap-2">
-                {c.animals.map(animal => (
-                  <TouchableOpacity
-                    key={animal.id}
-                    className={`px-3 py-2 rounded-lg border ${
-                      c.animalId === animal.id ? 'bg-primary border-primary' : 'bg-surface border-border-light'
-                    }`}
-                    onPress={() => c.setAnimalId(animal.id)}
-                    activeOpacity={0.7}
-                  >
-                    <Text className={`text-sm ${
-                      c.animalId === animal.id ? 'text-text-inverse' : 'text-text-primary'
-                    }`}>
-                      {animal.name}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </ScrollView>
-          </View>
-        ) : (
-          <TextInput
-            label="Group Name"
-            value={c.groupName}
-            onChangeText={c.setGroupName}
-            placeholder="e.g. Laying Hens, Dairy Goats"
-          />
-        )}
 
         <TextInput
           label="Notes"
