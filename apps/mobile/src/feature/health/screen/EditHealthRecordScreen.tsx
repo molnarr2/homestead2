@@ -7,6 +7,7 @@ import type { RootStackParamList } from '../../../navigation/RootNavigation'
 import { useEditHealthRecordController } from './EditHealthRecordController'
 import ScreenContainer from '../../../components/layout/ScreenContainer'
 import TextInput from '../../../components/input/TextInput'
+import DatePickerInput from '../../../components/input/DatePickerInput'
 import PrimaryButton from '../../../components/button/PrimaryButton'
 import HealthRecordTypeSelector from '../component/HealthRecordTypeSelector'
 import VaccinationFields from '../component/VaccinationFields'
@@ -56,12 +57,10 @@ const EditHealthRecordScreen: React.FC = () => {
           autoCapitalize="words"
         />
 
-        <TextInput
+        <DatePickerInput
           label="Date *"
           value={c.date}
-          onChangeText={c.setDate}
-          placeholder="YYYY-MM-DD"
-          keyboardType="numbers-and-punctuation"
+          onChange={c.setDate}
         />
 
         {c.recordType === 'vaccination' && (

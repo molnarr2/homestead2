@@ -1,6 +1,7 @@
 import React from 'react'
 import { View } from 'react-native'
 import TextInput from '../../../components/input/TextInput'
+import DatePickerInput from '../../../components/input/DatePickerInput'
 
 interface Props {
   vetClinicName: string
@@ -42,12 +43,10 @@ const VetVisitFields: React.FC<Props> = ({
         multiline
         numberOfLines={3}
       />
-      <TextInput
+      <DatePickerInput
         label="Follow-up Date"
         value={vetFollowUpDate}
-        onChangeText={setVetFollowUpDate}
-        placeholder="YYYY-MM-DD"
-        keyboardType="numbers-and-punctuation"
+        onChange={setVetFollowUpDate}
       />
     </View>
   )

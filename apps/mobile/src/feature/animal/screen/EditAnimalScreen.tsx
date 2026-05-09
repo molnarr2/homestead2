@@ -8,6 +8,7 @@ import type { RootStackParamList } from '../../../navigation/RootNavigation'
 import { useEditAnimalController } from './EditAnimalController'
 import ScreenContainer from '../../../components/layout/ScreenContainer'
 import TextInput from '../../../components/input/TextInput'
+import DatePickerInput from '../../../components/input/DatePickerInput'
 import PrimaryButton from '../../../components/button/PrimaryButton'
 import ParentSelector from '../component/ParentSelector'
 import Icon from '@react-native-vector-icons/material-design-icons'
@@ -151,12 +152,10 @@ const EditAnimalScreen: React.FC = () => {
           </>
         ) : null}
 
-        <TextInput
+        <DatePickerInput
           label="Birthday"
           value={controller.birthday}
-          onChangeText={controller.setBirthday}
-          placeholder="YYYY-MM-DD"
-          keyboardType="numbers-and-punctuation"
+          onChange={controller.setBirthday}
         />
 
         <Text className="text-sm font-medium text-text-primary mb-1">Gender</Text>

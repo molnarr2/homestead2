@@ -1,6 +1,7 @@
 import React from 'react'
 import { View } from 'react-native'
 import TextInput from '../../../components/input/TextInput'
+import DatePickerInput from '../../../components/input/DatePickerInput'
 
 interface Props {
   symptoms: string
@@ -37,12 +38,10 @@ const IllnessInjuryFields: React.FC<Props> = ({
         multiline
         numberOfLines={3}
       />
-      <TextInput
+      <DatePickerInput
         label="Resolved Date"
         value={resolvedDate}
-        onChangeText={setResolvedDate}
-        placeholder="YYYY-MM-DD"
-        keyboardType="numbers-and-punctuation"
+        onChange={setResolvedDate}
       />
       <TextInput
         label="Outcome"

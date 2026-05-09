@@ -8,6 +8,7 @@ import type { RootStackParamList } from '../../../navigation/RootNavigation'
 import { useCreateCareEventController } from './CreateCareEventController'
 import ScreenContainer from '../../../components/layout/ScreenContainer'
 import TextInput from '../../../components/input/TextInput'
+import DatePickerInput from '../../../components/input/DatePickerInput'
 import PrimaryButton from '../../../components/button/PrimaryButton'
 import AnimalPickerModal from '../component/AnimalPickerModal'
 import Icon from '@react-native-vector-icons/material-design-icons'
@@ -121,12 +122,10 @@ const CreateCareEventScreen: React.FC = () => {
           />
         )}
 
-        <TextInput
+        <DatePickerInput
           label="Due Date"
           value={controller.dueDate}
-          onChangeText={controller.setDueDate}
-          placeholder="YYYY-MM-DD"
-          keyboardType="numbers-and-punctuation"
+          onChange={controller.setDueDate}
         />
 
         <TextInput

@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
 import TextInput from '../../../components/input/TextInput'
+import DatePickerInput from '../../../components/input/DatePickerInput'
 import type { DamCondition } from '../../../schema/breeding/BreedingRecord'
 
 interface Props {
@@ -27,12 +28,10 @@ const BirthOutcomeForm: React.FC<Props> = ({
 }) => {
   return (
     <View>
-      <TextInput
+      <DatePickerInput
         label="Birth Date *"
         value={birthDate}
-        onChangeText={setBirthDate}
-        placeholder="YYYY-MM-DD"
-        keyboardType="numbers-and-punctuation"
+        onChange={setBirthDate}
       />
 
       <TextInput

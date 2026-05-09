@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
 import TextInput from '../../../components/input/TextInput'
+import DatePickerInput from '../../../components/input/DatePickerInput'
 import type { MedicationRoute } from '../../../schema/health/HealthRecord'
 
 const ROUTES: MedicationRoute[] = ['Injection', 'Oral', 'Topical', 'IV', 'Intranasal', 'Subcutaneous', 'Intramuscular']
@@ -47,12 +48,11 @@ const VaccinationFields: React.FC<Props> = ({
         })}
       </View>
 
-      <TextInput
+      <DatePickerInput
         label="Next Due Date"
         value={vaccineNextDueDate}
-        onChangeText={setVaccineNextDueDate}
-        placeholder="YYYY-MM-DD (auto-creates care reminder)"
-        keyboardType="numbers-and-punctuation"
+        onChange={setVaccineNextDueDate}
+        placeholder="Select date (auto-creates care reminder)"
       />
     </View>
   )

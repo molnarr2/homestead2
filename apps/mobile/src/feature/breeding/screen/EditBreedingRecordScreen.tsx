@@ -7,6 +7,7 @@ import type { RootStackParamList } from '../../../navigation/RootNavigation'
 import { useEditBreedingRecordController } from './EditBreedingRecordController'
 import ScreenContainer from '../../../components/layout/ScreenContainer'
 import TextInput from '../../../components/input/TextInput'
+import DatePickerInput from '../../../components/input/DatePickerInput'
 import PrimaryButton from '../../../components/button/PrimaryButton'
 import SireSelector from '../component/SireSelector'
 import Icon from '@react-native-vector-icons/material-design-icons'
@@ -67,12 +68,10 @@ const EditBreedingRecordScreen: React.FC = () => {
           />
         </View>
 
-        <TextInput
+        <DatePickerInput
           label="Breeding Date *"
           value={c.breedingDate}
-          onChangeText={c.setBreedingDate}
-          placeholder="YYYY-MM-DD"
-          keyboardType="numbers-and-punctuation"
+          onChange={c.setBreedingDate}
         />
 
         <Text className="text-sm font-medium text-text-primary mb-2">Method</Text>

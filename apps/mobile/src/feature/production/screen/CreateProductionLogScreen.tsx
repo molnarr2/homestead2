@@ -7,6 +7,7 @@ import type { RootStackParamList } from '../../../navigation/RootNavigation'
 import { useCreateProductionLogController } from './CreateProductionLogController'
 import ScreenContainer from '../../../components/layout/ScreenContainer'
 import TextInput from '../../../components/input/TextInput'
+import DatePickerInput from '../../../components/input/DatePickerInput'
 import PrimaryButton from '../../../components/button/PrimaryButton'
 import ProductionTypeSelector from '../component/ProductionTypeSelector'
 import Icon from '@react-native-vector-icons/material-design-icons'
@@ -57,12 +58,10 @@ const CreateProductionLogScreen: React.FC = () => {
           </View>
         </View>
 
-        <TextInput
+        <DatePickerInput
           label="Date"
           value={c.date}
-          onChangeText={c.setDate}
-          placeholder="YYYY-MM-DD"
-          keyboardType="numbers-and-punctuation"
+          onChange={c.setDate}
         />
 
         <Text className="text-sm font-medium text-text-primary mb-2">Log Mode</Text>

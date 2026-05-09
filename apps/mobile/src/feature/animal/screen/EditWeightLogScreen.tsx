@@ -7,6 +7,7 @@ import type { RootStackParamList } from '../../../navigation/RootNavigation'
 import { useEditWeightLogController } from './EditWeightLogController'
 import ScreenContainer from '../../../components/layout/ScreenContainer'
 import TextInput from '../../../components/input/TextInput'
+import DatePickerInput from '../../../components/input/DatePickerInput'
 import PrimaryButton from '../../../components/button/PrimaryButton'
 import Icon from '@react-native-vector-icons/material-design-icons'
 
@@ -54,12 +55,10 @@ const EditWeightLogScreen: React.FC = () => {
           </View>
         )}
 
-        <TextInput
+        <DatePickerInput
           label="Date *"
           value={c.date}
-          onChangeText={c.setDate}
-          placeholder="YYYY-MM-DD"
-          keyboardType="numbers-and-punctuation"
+          onChange={c.setDate}
         />
 
         <TextInput
