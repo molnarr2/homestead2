@@ -34,9 +34,9 @@ export function getDefaultUnit(productionType: string): string {
   switch (productionType) {
     case 'eggs': return 'count'
     case 'milk': return 'gallons'
-    case 'fiber': return 'lbs'
-    case 'honey': return 'lbs'
-    case 'meat': return 'lbs'
+    case 'fiber': return 'pounds'
+    case 'honey': return 'pounds'
+    case 'meat': return 'pounds'
     default: return 'count'
   }
 }

@@ -11,7 +11,6 @@ import DatePickerInput from '../../../components/input/DatePickerInput'
 import PrimaryButton from '../../../components/button/PrimaryButton'
 import AnimalOrGroupField from '../../../components/input/AnimalOrGroupField'
 import AnimalPickerModal from '../../care/component/AnimalPickerModal'
-import ProductionTypeSelector from '../component/ProductionTypeSelector'
 import Icon from '@react-native-vector-icons/material-design-icons'
 
 type Navigation = NativeStackNavigationProp<RootStackParamList, 'CreateProductionLog'>
@@ -29,7 +28,7 @@ const CreateProductionLogScreen: React.FC = () => {
         <TouchableOpacity onPress={c.onBack} activeOpacity={0.7} className="p-1">
           <Icon name="arrow-left" size={24} color="#1A1A1A" />
         </TouchableOpacity>
-        <Text className="text-xl font-bold text-text-primary">Log Production</Text>
+        <Text className="text-xl font-bold text-text-primary">Log {c.productionType.charAt(0).toUpperCase() + c.productionType.slice(1)}</Text>
         <View className="w-8" />
       </View>
 
@@ -43,32 +42,14 @@ const CreateProductionLogScreen: React.FC = () => {
           showGroups={true}
         />
 
-        <Text className="text-sm font-medium text-text-primary mb-2">Production Type</Text>
-        <ProductionTypeSelector
-          selected={c.productionType}
-          onSelect={type => { if (type !== 'all') c.setProductionType(type) }}
-          showAll={false}
+        <TextInput
+          label="Quantity *"
+          value={c.quantity}
+          onChangeText={c.setQuantity}
+          placeholder="0"
+          keyboardType="decimal-pad"
+          suffix={c.unit}
         />
-
-        <View className="flex-row gap-3 mt-4">
-          <View className="flex-1">
-            <TextInput
-              label="Quantity *"
-              value={c.quantity}
-              onChangeText={c.setQuantity}
-              placeholder="0"
-              keyboardType="decimal-pad"
-            />
-          </View>
-          <View className="flex-1">
-            <TextInput
-              label="Unit"
-              value={c.unit}
-              onChangeText={c.setUnit}
-              placeholder="count"
-            />
-          </View>
-        </View>
 
         <DatePickerInput
           label="Date"

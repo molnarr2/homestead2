@@ -5,7 +5,8 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
 import { useProductionListController } from './ProductionListController'
 import ScreenContainer from '../../../components/layout/ScreenContainer'
-import FloatingActionButton from '../../../components/button/FloatingActionButton'
+import SpeedDialFab from '../../../components/button/SpeedDialFab'
+import type { SpeedDialAction } from '../../../components/button/SpeedDialFab'
 import EmptyState from '../../../components/layout/EmptyState'
 import QuickLogEntry from '../component/QuickLogEntry'
 import ProductionSummaryCard from '../component/ProductionSummaryCard'
@@ -23,7 +24,6 @@ const TYPE_ICONS: Record<string, string> = {
   fiber: 'sheep',
   honey: 'bee',
   meat: 'food-steak',
-  other: 'package-variant',
 }
 
 const ProductionCard: React.FC<{ log: ProductionLog; onPress?: () => void }> = ({ log, onPress }) => {
@@ -123,7 +123,13 @@ const ProductionListScreen: React.FC = () => {
           }
         />
 
-        <FloatingActionButton onPress={() => c.onCreateLog()} />
+        <SpeedDialFab actions={[
+          { label: 'Eggs', icon: 'egg', onPress: () => c.onCreateLog('eggs') },
+          { label: 'Milk', icon: 'cup', onPress: () => c.onCreateLog('milk') },
+          { label: 'Fiber', icon: 'sheep', onPress: () => c.onCreateLog('fiber') },
+          { label: 'Honey', icon: 'bee', onPress: () => c.onCreateLog('honey') },
+          { label: 'Meat', icon: 'food-steak', onPress: () => c.onCreateLog('meat') },
+        ] as SpeedDialAction[]} />
       </View>
     </ScreenContainer>
   )

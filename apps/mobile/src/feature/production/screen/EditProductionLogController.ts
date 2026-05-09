@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Alert } from 'react-native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RouteProp } from '@react-navigation/native'
@@ -19,16 +19,12 @@ export function useEditProductionLogController(navigation: Navigation, route: Ro
   const { animals } = useAnimalStore()
   const { groups } = useGroupStore()
 
-  const [productionType, setProductionType] = useState<ProductionType>(log?.productionType ?? 'eggs')
+  const productionType = log?.productionType ?? 'eggs'
+  const unit = getDefaultUnit(productionType)
   const [quantity, setQuantity] = useState(log ? String(log.quantity) : '')
-  const [unit, setUnit] = useState(log?.unit ?? getDefaultUnit('eggs'))
   const [date, setDate] = useState(log?.date ?? '')
   const [notes, setNotes] = useState(log?.notes ?? '')
   const [loading, setLoading] = useState(false)
-
-  useEffect(() => {
-    setUnit(getDefaultUnit(productionType))
-  }, [productionType])
 
   const selectedAnimal = animals.find(a => a.id === log?.animalId) ?? null
   const selectedGroup = log?.groupName
@@ -62,9 +58,9 @@ export function useEditProductionLogController(navigation: Navigation, route: Ro
 
   return {
     log,
-    productionType, setProductionType,
+    productionType,
     quantity, setQuantity,
-    unit, setUnit,
+    unit,
     date, setDate,
     selectedAnimal,
     selectedGroup,

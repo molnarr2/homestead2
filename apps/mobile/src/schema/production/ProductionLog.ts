@@ -1,6 +1,6 @@
 import AdminObject, { adminObject_default } from '../object/AdminObject'
 
-export type ProductionType = 'eggs' | 'milk' | 'fiber' | 'honey' | 'meat' | 'other'
+export type ProductionType = 'eggs' | 'milk' | 'fiber' | 'honey' | 'meat'
 
 export default interface ProductionLog {
   id: string

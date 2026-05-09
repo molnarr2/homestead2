@@ -9,7 +9,6 @@ const TYPES: { value: ProductionType | 'all'; label: string }[] = [
   { value: 'fiber', label: 'Fiber' },
   { value: 'honey', label: 'Honey' },
   { value: 'meat', label: 'Meat' },
-  { value: 'other', label: 'Other' },
 ]
 
 interface Props {

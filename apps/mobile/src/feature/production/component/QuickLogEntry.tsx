@@ -9,7 +9,6 @@ const QUICK_TYPES: { type: ProductionType; icon: string; label: string }[] = [
   { type: 'fiber', icon: 'sheep', label: 'Fiber' },
   { type: 'honey', icon: 'bee', label: 'Honey' },
   { type: 'meat', icon: 'food-steak', label: 'Meat' },
-  { type: 'other', icon: 'package-variant', label: 'Other' },
 ]
 
 interface Props {

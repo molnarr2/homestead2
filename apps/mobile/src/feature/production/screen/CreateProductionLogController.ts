@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Alert } from 'react-native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RouteProp } from '@react-navigation/native'
@@ -21,18 +21,14 @@ export function useCreateProductionLogController(navigation: Navigation, route: 
   const { groups } = useGroupStore()
   const homestead = useHomesteadStore(s => s.homestead)
 
-  const [productionType, setProductionType] = useState<ProductionType>(initialType ?? 'eggs')
+  const productionType: ProductionType = initialType ?? 'eggs'
+  const unit = getDefaultUnit(productionType)
   const [quantity, setQuantity] = useState('')
-  const [unit, setUnit] = useState(getDefaultUnit(initialType ?? 'eggs'))
-  const [date, setDate] = useState(todayIso().split('T')[0])
+  const [date, setDate] = useState(todayIso())
   const [selectedAnimalId, setSelectedAnimalId] = useState(routeGroupId ? '' : (routeAnimalId ?? ''))
   const [selectedGroupId, setSelectedGroupId] = useState(routeGroupId ?? '')
   const [notes, setNotes] = useState('')
   const [loading, setLoading] = useState(false)
-
-  useEffect(() => {
-    setUnit(getDefaultUnit(productionType))
-  }, [productionType])
 
   const handleSelectAnimal = (animalId: string) => {
     setSelectedAnimalId(animalId)
@@ -84,9 +80,9 @@ export function useCreateProductionLogController(navigation: Navigation, route: 
   const onBack = () => navigation.goBack()
 
   return {
-    productionType, setProductionType,
+    productionType,
     quantity, setQuantity,
-    unit, setUnit,
+    unit,
     date, setDate,
     selectedAnimalId, handleSelectAnimal,
     selectedGroupId, handleSelectGroup,
