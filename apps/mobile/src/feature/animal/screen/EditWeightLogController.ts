@@ -50,8 +50,10 @@ export function useEditWeightLogController(navigation: Navigation, route: Route)
 
   const onBack = () => navigation.goBack()
 
+  const selectedAnimal = animal ?? null
+
   return {
-    log, animal, date, setDate, weight, setWeight,
+    log, animal, selectedAnimal, date, setDate, weight, setWeight,
     weightUnit, setWeightUnit, bodyConditionScore, setBodyConditionScore,
     notes, setNotes, loading, submit, onBack,
   }

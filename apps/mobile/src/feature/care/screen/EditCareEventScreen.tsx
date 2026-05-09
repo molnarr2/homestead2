@@ -9,6 +9,7 @@ import ScreenContainer from '../../../components/layout/ScreenContainer'
 import TextInput from '../../../components/input/TextInput'
 import DatePickerInput from '../../../components/input/DatePickerInput'
 import PrimaryButton from '../../../components/button/PrimaryButton'
+import AnimalOrGroupField from '../../../components/input/AnimalOrGroupField'
 import Icon from '@react-native-vector-icons/material-design-icons'
 
 type Navigation = NativeStackNavigationProp<RootStackParamList, 'EditCareEvent'>
@@ -40,6 +41,15 @@ const EditCareEventScreen: React.FC = () => {
       </View>
 
       <ScrollView className="flex-1 px-4" showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
+        <AnimalOrGroupField
+          selectedAnimal={c.selectedAnimal}
+          selectedGroup={c.selectedGroup}
+          onPress={() => {}}
+          readOnly={true}
+          label="Animal or Group"
+          showGroups={true}
+        />
+
         <TextInput
           label="Event Name *"
           value={c.name}

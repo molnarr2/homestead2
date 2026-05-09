@@ -117,6 +117,7 @@ export function useCreateCareEventController(navigation: Navigation, route: Rout
 
   const onBack = () => navigation.goBack()
 
+  const isReadOnly = !!(routeAnimalId || routeGroupId)
   const selectedAnimal = animals.find(a => a.id === selectedAnimalId) ?? null
   const selectedGroup = groups.find(g => g.id === selectedGroupId) ?? null
 
@@ -125,6 +126,7 @@ export function useCreateCareEventController(navigation: Navigation, route: Rout
     selectedGroupId, setSelectedGroupId: handleSelectGroup,
     selectedAnimal,
     selectedGroup,
+    isReadOnly,
     name, setName,
     type, setType,
     cycle, setCycle,

@@ -68,8 +68,10 @@ export function useEditBreedingRecordController(navigation: Navigation, route: R
 
   const onBack = () => navigation.goBack()
 
+  const selectedAnimal = dam ?? null
+
   return {
-    record, dam, sireId, sireName, onSireSelect, onManualSireNameChange,
+    record, dam, selectedAnimal, sireId, sireName, onSireSelect, onManualSireNameChange,
     breedingDate, setBreedingDate,
     method, setMethod, notes, setNotes, gestationStatus, gestationDays,
     loading, submit, animals, onBack,

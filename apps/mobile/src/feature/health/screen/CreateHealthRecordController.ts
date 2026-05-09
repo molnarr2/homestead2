@@ -16,11 +16,12 @@ type Navigation = NativeStackNavigationProp<RootStackParamList, 'CreateHealthRec
 type Route = RouteProp<RootStackParamList, 'CreateHealthRecord'>
 
 export function useCreateHealthRecordController(navigation: Navigation, route: Route) {
-  const { animalId, recordType: initialType, groupId: routeGroupId } = route.params
+  const { animalId: routeAnimalId, recordType: initialType, groupId: routeGroupId } = route.params
 
   const homestead = useHomesteadStore(s => s.homestead)
   const { animals } = useAnimalStore()
   const { groups } = useGroupStore()
+  const [selectedAnimalId, setSelectedAnimalId] = useState(routeGroupId ? '' : (routeAnimalId ?? ''))
   const [selectedGroupId, setSelectedGroupId] = useState(routeGroupId ?? '')
 
   const [recordType, setRecordType] = useState<HealthRecordType>(initialType ?? 'vaccination')
@@ -61,8 +62,8 @@ export function useCreateHealthRecordController(navigation: Navigation, route: R
   const [loading, setLoading] = useState(false)
 
   const submit = async () => {
-    if (!name.trim()) {
-      Alert.alert('Required', 'Please enter a name.')
+    if (!name.trim() || (!selectedAnimalId && !selectedGroupId)) {
+      Alert.alert('Required', 'Please enter a name and select an animal or group.')
       return
     }
 
@@ -83,7 +84,7 @@ export function useCreateHealthRecordController(navigation: Navigation, route: R
 
     const record: HealthRecord = {
       ...healthRecord_default(),
-      animalId,
+      animalId: selectedAnimalId,
       recordType,
       name: name.trim(),
       date,
@@ -117,16 +118,19 @@ export function useCreateHealthRecordController(navigation: Navigation, route: R
     }
   }
 
-  const handleSelectGroup = (groupId: string) => {
-    setSelectedGroupId(groupId)
-  }
-
-  const clearGroupSelection = () => {
+  const handleSelectAnimal = (animalId: string) => {
+    setSelectedAnimalId(animalId)
     setSelectedGroupId('')
   }
 
+  const handleSelectGroup = (groupId: string) => {
+    setSelectedGroupId(groupId)
+    setSelectedAnimalId('')
+  }
+
+  const isReadOnly = !!(routeAnimalId || routeGroupId)
+  const selectedAnimal = animals.find(a => a.id === selectedAnimalId) ?? null
   const selectedGroup = groups.find(g => g.id === selectedGroupId) ?? null
-  const showGroupPicker = recordType === 'vaccination' || recordType === 'deworming'
 
   const onBack = () => navigation.goBack()
 
@@ -163,11 +167,13 @@ export function useCreateHealthRecordController(navigation: Navigation, route: R
     loading,
     submit,
     onBack,
+    selectedAnimalId,
+    handleSelectAnimal,
     selectedGroupId,
     handleSelectGroup,
-    clearGroupSelection,
+    isReadOnly,
+    selectedAnimal,
     selectedGroup,
-    showGroupPicker,
     animals,
   }
 }

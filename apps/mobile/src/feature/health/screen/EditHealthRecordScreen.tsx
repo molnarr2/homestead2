@@ -9,6 +9,7 @@ import ScreenContainer from '../../../components/layout/ScreenContainer'
 import TextInput from '../../../components/input/TextInput'
 import DatePickerInput from '../../../components/input/DatePickerInput'
 import PrimaryButton from '../../../components/button/PrimaryButton'
+import AnimalOrGroupField from '../../../components/input/AnimalOrGroupField'
 import HealthRecordTypeSelector from '../component/HealthRecordTypeSelector'
 import VaccinationFields from '../component/VaccinationFields'
 import MedicationFields from '../component/MedicationFields'
@@ -46,7 +47,16 @@ const EditHealthRecordScreen: React.FC = () => {
       </View>
 
       <ScrollView className="flex-1 px-4" showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
-        <Text className="text-sm font-medium text-text-primary mb-1 mt-4">Record Type</Text>
+        <AnimalOrGroupField
+          selectedAnimal={c.selectedAnimal}
+          selectedGroup={c.selectedGroup}
+          onPress={() => {}}
+          readOnly={true}
+          label="Animal or Group"
+          showGroups={true}
+        />
+
+        <Text className="text-sm font-medium text-text-primary mb-1">Record Type</Text>
         <HealthRecordTypeSelector selected={c.recordType} onSelect={c.setRecordType} />
 
         <TextInput

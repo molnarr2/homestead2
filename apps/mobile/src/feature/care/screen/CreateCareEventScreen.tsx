@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
-import TurboImage from 'react-native-turbo-image'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RouteProp } from '@react-navigation/native'
@@ -10,6 +9,7 @@ import ScreenContainer from '../../../components/layout/ScreenContainer'
 import TextInput from '../../../components/input/TextInput'
 import DatePickerInput from '../../../components/input/DatePickerInput'
 import PrimaryButton from '../../../components/button/PrimaryButton'
+import AnimalOrGroupField from '../../../components/input/AnimalOrGroupField'
 import AnimalPickerModal from '../component/AnimalPickerModal'
 import Icon from '@react-native-vector-icons/material-design-icons'
 
@@ -33,56 +33,14 @@ const CreateCareEventScreen: React.FC = () => {
       </View>
 
       <ScrollView className="flex-1 px-4" showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
-        <Text className="text-sm font-medium text-text-primary mb-1 mt-4">Animal or Group *</Text>
-        <TouchableOpacity
-          className="flex-row items-center border border-border-light rounded-lg px-3 py-3 mb-4 bg-surface"
+        <AnimalOrGroupField
+          selectedAnimal={controller.selectedAnimal}
+          selectedGroup={controller.selectedGroup}
           onPress={() => setPickerVisible(true)}
-          activeOpacity={0.7}
-        >
-          {controller.selectedAnimal ? (
-            <>
-              <View className="w-10 h-10 rounded-full bg-backgroundDark items-center justify-center mr-3 overflow-hidden">
-                {controller.selectedAnimal.photoUrl ? (
-                  <TurboImage
-                    source={{ uri: controller.selectedAnimal.photoUrl }}
-                    style={{ width: 40, height: 40, borderRadius: 20 }}
-                    cachePolicy="dataCache"
-                  />
-                ) : (
-                  <Text className="text-base font-semibold text-text-secondary">
-                    {controller.selectedAnimal.name.charAt(0)}
-                  </Text>
-                )}
-              </View>
-              <View className="flex-1">
-                <Text className="text-base font-medium text-text-primary">{controller.selectedAnimal.name}</Text>
-                <Text className="text-sm text-text-secondary capitalize">
-                  {controller.selectedAnimal.gender !== 'unknown' ? controller.selectedAnimal.gender : ''}{controller.selectedAnimal.gender !== 'unknown' && controller.selectedAnimal.register ? ' · ' : ''}{controller.selectedAnimal.register ? `#${controller.selectedAnimal.register}` : ''}
-                </Text>
-              </View>
-            </>
-          ) : controller.selectedGroup ? (
-            <>
-              <View className="w-10 h-10 rounded-full bg-backgroundDark items-center justify-center mr-3">
-                <Icon name="account-group" size={20} color="#4A6741" />
-              </View>
-              <View className="flex-1">
-                <Text className="text-base font-medium text-text-primary">{controller.selectedGroup.name}</Text>
-                <Text className="text-sm text-text-secondary">
-                  {controller.selectedGroup.animalIds.length} member{controller.selectedGroup.animalIds.length !== 1 ? 's' : ''}
-                </Text>
-              </View>
-            </>
-          ) : (
-            <>
-              <View className="w-10 h-10 rounded-full bg-backgroundDark items-center justify-center mr-3">
-                <Icon name="cow" size={20} color="#BDBDBD" />
-              </View>
-              <Text className="flex-1 text-base text-text-secondary">Select Animal or Group</Text>
-            </>
-          )}
-          <Icon name="chevron-right" size={20} color="#BDBDBD" />
-        </TouchableOpacity>
+          readOnly={controller.isReadOnly}
+          label="Animal or Group *"
+          showGroups={true}
+        />
 
         <TextInput
           label="Event Name *"
@@ -163,14 +121,16 @@ const CreateCareEventScreen: React.FC = () => {
         </View>
       </ScrollView>
 
-      <AnimalPickerModal
-        visible={pickerVisible}
-        onClose={() => setPickerVisible(false)}
-        animals={controller.animals}
-        onSelect={controller.setSelectedAnimalId}
-        onSelectGroup={controller.setSelectedGroupId}
-        showGroups={true}
-      />
+      {!controller.isReadOnly && (
+        <AnimalPickerModal
+          visible={pickerVisible}
+          onClose={() => setPickerVisible(false)}
+          animals={controller.animals}
+          onSelect={controller.setSelectedAnimalId}
+          onSelectGroup={controller.setSelectedGroupId}
+          showGroups={true}
+        />
+      )}
     </ScreenContainer>
   )
 }

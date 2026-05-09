@@ -6,6 +6,7 @@ import type { RootStackParamList } from '../../../navigation/RootNavigation'
 import { NoteTag } from '../../../schema/notes/Note'
 import { note_default } from '../../../schema/notes/Note'
 import { useHomesteadStore } from '../../../store/homesteadStore'
+import { useAnimalStore } from '../../../store/animalStore'
 import { effectiveSubscription } from '../../subscription/service/ISubscriptionService'
 import { bsNoteService } from '../../../Bootstrap'
 
@@ -15,6 +16,8 @@ type Route = RouteProp<RootStackParamList, 'CreateNote'>
 export function useCreateNoteController(navigation: Navigation, route: Route) {
   const { animalId } = route.params
   const homestead = useHomesteadStore(s => s.homestead)
+  const { animals } = useAnimalStore()
+  const selectedAnimal = animals.find(a => a.id === animalId) ?? null
 
   const [text, setText] = useState('')
   const [tags, setTags] = useState<NoteTag[]>([])
@@ -56,5 +59,5 @@ export function useCreateNoteController(navigation: Navigation, route: Route) {
 
   const onBack = () => navigation.goBack()
 
-  return { text, setText, tags, toggleTag, photoUri, setPhotoUri, loading, submit, onBack }
+  return { selectedAnimal, text, setText, tags, toggleTag, photoUri, setPhotoUri, loading, submit, onBack }
 }

@@ -9,6 +9,7 @@ import ScreenContainer from '../../../components/layout/ScreenContainer'
 import TextInput from '../../../components/input/TextInput'
 import DatePickerInput from '../../../components/input/DatePickerInput'
 import PrimaryButton from '../../../components/button/PrimaryButton'
+import AnimalOrGroupField from '../../../components/input/AnimalOrGroupField'
 import Icon from '@react-native-vector-icons/material-design-icons'
 
 type Navigation = NativeStackNavigationProp<RootStackParamList, 'CreateWeightLog'>
@@ -37,13 +38,14 @@ const CreateWeightLogScreen: React.FC = () => {
       </View>
 
       <ScrollView className="flex-1 px-4" showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
-        {c.animal && (
-          <View className="bg-surface rounded-xl p-4 border border-border-light mt-4">
-            <Text className="text-sm text-text-secondary">Animal</Text>
-            <Text className="text-lg font-bold text-text-primary">{c.animal.name}</Text>
-            <Text className="text-sm text-text-secondary">{c.animal.breed || c.animal.animalType}</Text>
-          </View>
-        )}
+        <AnimalOrGroupField
+          selectedAnimal={c.selectedAnimal}
+          selectedGroup={null}
+          onPress={() => {}}
+          readOnly={true}
+          label="Animal"
+          showGroups={false}
+        />
 
         <DatePickerInput
           label="Date *"

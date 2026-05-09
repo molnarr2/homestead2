@@ -4,6 +4,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RouteProp } from '@react-navigation/native'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
 import { useNoteStore } from '../../../store/noteStore'
+import { useAnimalStore } from '../../../store/animalStore'
 import { NoteTag } from '../../../schema/notes/Note'
 import { bsNoteService } from '../../../Bootstrap'
 
@@ -13,6 +14,8 @@ type Route = RouteProp<RootStackParamList, 'EditNote'>
 export function useEditNoteController(navigation: Navigation, route: Route) {
   const { noteId } = route.params
   const note = useNoteStore(s => s.notes.find(n => n.id === noteId))
+  const { animals } = useAnimalStore()
+  const selectedAnimal = animals.find(a => a.id === note?.animalId) ?? null
 
   const [text, setText] = useState(note?.text ?? '')
   const [tags, setTags] = useState<NoteTag[]>(note?.tags ?? [])
@@ -47,5 +50,5 @@ export function useEditNoteController(navigation: Navigation, route: Route) {
 
   const onBack = () => navigation.goBack()
 
-  return { note, text, setText, tags, toggleTag, photoUri, setPhotoUri, loading, submit, onBack }
+  return { note, selectedAnimal, text, setText, tags, toggleTag, photoUri, setPhotoUri, loading, submit, onBack }
 }

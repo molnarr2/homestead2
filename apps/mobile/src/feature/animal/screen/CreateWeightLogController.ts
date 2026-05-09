@@ -48,8 +48,10 @@ export function useCreateWeightLogController(navigation: Navigation, route: Rout
 
   const onBack = () => navigation.goBack()
 
+  const selectedAnimal = animal ?? null
+
   return {
-    animal, date, setDate, weight, setWeight,
+    animal, selectedAnimal, date, setDate, weight, setWeight,
     weightUnit, setWeightUnit, bodyConditionScore, setBodyConditionScore,
     notes, setNotes, loading, submit, onBack,
   }

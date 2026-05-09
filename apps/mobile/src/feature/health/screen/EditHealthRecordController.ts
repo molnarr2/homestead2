@@ -4,6 +4,8 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RouteProp } from '@react-navigation/native'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
 import { useHealthStore } from '../../../store/healthStore'
+import { useAnimalStore } from '../../../store/animalStore'
+import { useGroupStore } from '../../../store/groupStore'
 import { bsHealthService } from '../../../Bootstrap'
 import type HealthRecord from '../../../schema/health/HealthRecord'
 import { HealthRecordType, DosageUnit, MedicationRoute, WithdrawalType } from '../../../schema/health/HealthRecord'
@@ -14,6 +16,8 @@ type Route = RouteProp<RootStackParamList, 'EditHealthRecord'>
 export function useEditHealthRecordController(navigation: Navigation, route: Route) {
   const { recordId } = route.params
   const record = useHealthStore(s => s.healthRecords.find(r => r.id === recordId))
+  const { animals } = useAnimalStore()
+  const { groups, groupHealthRecords } = useGroupStore()
 
   const [recordType, setRecordType] = useState<HealthRecordType>(record?.recordType ?? 'vaccination')
   const [name, setName] = useState(record?.name ?? '')
@@ -94,8 +98,21 @@ export function useEditHealthRecordController(navigation: Navigation, route: Rou
 
   const onBack = () => navigation.goBack()
 
+  const selectedAnimal = animals.find(a => a.id === record?.animalId) ?? null
+  const selectedGroup = (() => {
+    if (!record) return null
+    for (const [groupId, records] of Object.entries(groupHealthRecords)) {
+      if (records.some(r => r.id === record.id)) {
+        return groups.find(g => g.id === groupId) ?? null
+      }
+    }
+    return null
+  })()
+
   return {
     record,
+    selectedAnimal,
+    selectedGroup,
     recordType, setRecordType,
     name, setName,
     date, setDate,

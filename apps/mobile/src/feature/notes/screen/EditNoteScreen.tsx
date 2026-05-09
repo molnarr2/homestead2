@@ -7,6 +7,7 @@ import type { RootStackParamList } from '../../../navigation/RootNavigation'
 import { useEditNoteController } from './EditNoteController'
 import ScreenContainer from '../../../components/layout/ScreenContainer'
 import PrimaryButton from '../../../components/button/PrimaryButton'
+import AnimalOrGroupField from '../../../components/input/AnimalOrGroupField'
 import Icon from '@react-native-vector-icons/material-design-icons'
 import { launchImageLibrary } from 'react-native-image-picker'
 import type { NoteTag } from '../../../schema/notes/Note'
@@ -58,6 +59,15 @@ const EditNoteScreen: React.FC = () => {
       </View>
 
       <ScrollView className="flex-1 px-4" showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
+        <AnimalOrGroupField
+          selectedAnimal={c.selectedAnimal}
+          selectedGroup={null}
+          onPress={() => {}}
+          readOnly={true}
+          label="Animal"
+          showGroups={false}
+        />
+
         <RNTextInput
           className="border border-border-light rounded-lg px-4 py-3 text-base text-text-primary bg-surface mt-4"
           value={c.text}

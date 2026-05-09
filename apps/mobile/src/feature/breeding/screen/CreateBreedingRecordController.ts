@@ -79,8 +79,10 @@ export function useCreateBreedingRecordController(navigation: Navigation, route:
 
   const onBack = () => navigation.goBack()
 
+  const selectedAnimal = dam ?? null
+
   return {
-    dam, sireId, sireName, onSireSelect, onManualSireNameChange,
+    dam, selectedAnimal, sireId, sireName, onSireSelect, onManualSireNameChange,
     breedingDate, setBreedingDate,
     method, setMethod, notes, setNotes, gestationStatus, gestationDays,
     loading, submit, animals, onBack,

@@ -9,6 +9,7 @@ import ScreenContainer from '../../../components/layout/ScreenContainer'
 import TextInput from '../../../components/input/TextInput'
 import DatePickerInput from '../../../components/input/DatePickerInput'
 import PrimaryButton from '../../../components/button/PrimaryButton'
+import AnimalOrGroupField from '../../../components/input/AnimalOrGroupField'
 import SireSelector from '../component/SireSelector'
 import Icon from '@react-native-vector-icons/material-design-icons'
 import { formatDate } from '../../../util/DateUtility'
@@ -49,15 +50,16 @@ const EditBreedingRecordScreen: React.FC = () => {
       </View>
 
       <ScrollView className="flex-1 px-4" showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
-        {c.dam && (
-          <View className="bg-surface rounded-xl p-4 border border-border-light mt-4">
-            <Text className="text-sm text-text-secondary">Dam</Text>
-            <Text className="text-lg font-bold text-text-primary">{c.dam.name}</Text>
-            <Text className="text-sm text-text-secondary">{c.dam.breed || c.dam.animalType}</Text>
-          </View>
-        )}
+        <AnimalOrGroupField
+          selectedAnimal={c.selectedAnimal}
+          selectedGroup={null}
+          onPress={() => {}}
+          readOnly={true}
+          label="Animal"
+          showGroups={false}
+        />
 
-        <View className="mt-4">
+        <View>
           <SireSelector
             animalTypeId={c.dam?.animalTypeId ?? ''}
             animals={c.animals}
