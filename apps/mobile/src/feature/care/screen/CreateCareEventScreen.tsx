@@ -11,6 +11,7 @@ import DatePickerInput from '../../../components/input/DatePickerInput'
 import PrimaryButton from '../../../components/button/PrimaryButton'
 import AnimalOrGroupField from '../../../components/input/AnimalOrGroupField'
 import AnimalPickerModal from '../component/AnimalPickerModal'
+import CareTemplateLookupModal from '../component/CareTemplateLookupModal'
 import Icon from '@react-native-vector-icons/material-design-icons'
 
 type Navigation = NativeStackNavigationProp<RootStackParamList, 'CreateCareEvent'>
@@ -21,6 +22,7 @@ const CreateCareEventScreen: React.FC = () => {
   const route = useRoute<Route>()
   const controller = useCreateCareEventController(navigation, route)
   const [pickerVisible, setPickerVisible] = useState(false)
+  const [templateModalVisible, setTemplateModalVisible] = useState(false)
 
   return (
     <ScreenContainer>
@@ -42,13 +44,24 @@ const CreateCareEventScreen: React.FC = () => {
           showGroups={true}
         />
 
-        <TextInput
-          label="Event Name *"
-          value={controller.name}
-          onChangeText={controller.setName}
-          placeholder="e.g. Hoof Trimming, Deworming"
-          autoCapitalize="words"
-        />
+        <View className="flex-row items-center gap-2">
+          <View className="flex-1">
+            <TextInput
+              label="Event Name *"
+              value={controller.name}
+              onChangeText={controller.setName}
+              placeholder="e.g. Hoof Trimming, Deworming"
+              autoCapitalize="words"
+            />
+          </View>
+          <TouchableOpacity
+            onPress={() => setTemplateModalVisible(true)}
+            activeOpacity={0.7}
+            className="mt-3"
+          >
+            <Icon name="text-box-search-outline" size={24} color="#4A6741" />
+          </TouchableOpacity>
+        </View>
 
         <Text className="text-sm font-medium text-text-primary mb-1">Type</Text>
         <View className="flex-row gap-2 mb-4">
@@ -131,6 +144,16 @@ const CreateCareEventScreen: React.FC = () => {
           showGroups={true}
         />
       )}
+
+      <CareTemplateLookupModal
+        visible={templateModalVisible}
+        onClose={() => setTemplateModalVisible(false)}
+        onSelect={controller.applyTemplate}
+        onGoToCustomization={() => {
+          setTemplateModalVisible(false)
+          navigation.navigate('Customization')
+        }}
+      />
     </ScreenContainer>
   )
 }

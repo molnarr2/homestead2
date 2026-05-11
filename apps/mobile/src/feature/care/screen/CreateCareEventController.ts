@@ -13,6 +13,7 @@ import { bsCareService, bsGroupService } from '../../../Bootstrap'
 import { CareEventType, careEvent_default } from '../../../schema/care/CareEvent'
 import { adminObject_default } from '../../../schema/object/AdminObject'
 import { dateToTstamp } from '../../../schema/type/Tstamp'
+import { AnimalTypeCareTemplate } from '../../../schema/animalType/AnimalType'
 
 type Navigation = NativeStackNavigationProp<RootStackParamList, 'CreateCareEvent'>
 type Route = RouteProp<RootStackParamList, 'CreateCareEvent'>
@@ -115,6 +116,14 @@ export function useCreateCareEventController(navigation: Navigation, route: Rout
     }
   }
 
+  const applyTemplate = (template: AnimalTypeCareTemplate) => {
+    setName(template.name)
+    setType(template.type)
+    setCycle(template.cycle)
+    setContactName(template.contactName)
+    setContactPhone(template.contactPhone)
+  }
+
   const onBack = () => navigation.goBack()
 
   const isReadOnly = !!(routeAnimalId || routeGroupId)
@@ -138,5 +147,6 @@ export function useCreateCareEventController(navigation: Navigation, route: Rout
     animals,
     submit,
     onBack,
+    applyTemplate,
   }
 }
