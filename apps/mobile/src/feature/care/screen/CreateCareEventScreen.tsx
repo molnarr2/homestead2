@@ -153,6 +153,7 @@ const CreateCareEventScreen: React.FC = () => {
           setTemplateModalVisible(false)
           navigation.navigate('Customization')
         }}
+        animalTypeIds={controller.templateFilterTypeIds}
       />
     </ScreenContainer>
   )

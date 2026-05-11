@@ -130,6 +130,19 @@ export function useCreateCareEventController(navigation: Navigation, route: Rout
   const selectedAnimal = animals.find(a => a.id === selectedAnimalId) ?? null
   const selectedGroup = groups.find(g => g.id === selectedGroupId) ?? null
 
+  const templateFilterTypeIds: string[] = (() => {
+    if (selectedAnimal) return [selectedAnimal.animalTypeId]
+    if (selectedGroup) {
+      const ids = new Set(
+        selectedGroup.animalIds
+          .map(id => animals.find(a => a.id === id)?.animalTypeId)
+          .filter((id): id is string => !!id)
+      )
+      return [...ids]
+    }
+    return []
+  })()
+
   return {
     selectedAnimalId, setSelectedAnimalId: handleSelectAnimal,
     selectedGroupId, setSelectedGroupId: handleSelectGroup,
@@ -148,5 +161,6 @@ export function useCreateCareEventController(navigation: Navigation, route: Rout
     submit,
     onBack,
     applyTemplate,
+    templateFilterTypeIds,
   }
 }

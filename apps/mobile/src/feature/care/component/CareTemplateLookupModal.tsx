@@ -10,11 +10,12 @@ interface Props {
   onClose: () => void
   onSelect: (template: AnimalTypeCareTemplate) => void
   onGoToCustomization: () => void
+  animalTypeIds?: string[]
 }
 
 type Section = { title: string; data: AnimalTypeCareTemplate[] }
 
-const CareTemplateLookupModal: React.FC<Props> = ({ visible, onClose, onSelect, onGoToCustomization }) => {
+const CareTemplateLookupModal: React.FC<Props> = ({ visible, onClose, onSelect, onGoToCustomization, animalTypeIds }) => {
   const [search, setSearch] = useState('')
   const { animalTypes } = useAnimalTypeStore()
 
@@ -27,7 +28,11 @@ const CareTemplateLookupModal: React.FC<Props> = ({ visible, onClose, onSelect, 
     onClose()
   }
 
-  const sections: Section[] = animalTypes
+  const filteredTypes = animalTypeIds && animalTypeIds.length > 0
+    ? animalTypes.filter(at => animalTypeIds.includes(at.id))
+    : animalTypes
+
+  const sections: Section[] = filteredTypes
     .map(at => ({
       title: at.name,
       data: at.careTemplates.filter(t =>
