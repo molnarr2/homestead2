@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, ScrollView, TouchableOpacity, Alert } from 'react-native'
+import { View, Text, ScrollView, TouchableOpacity, Alert, KeyboardAvoidingView, Platform } from 'react-native'
 import TurboImage from 'react-native-turbo-image'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
@@ -82,6 +82,7 @@ const EditAnimalScreen: React.FC = () => {
         </TouchableOpacity>
       </View>
 
+      <KeyboardAvoidingView className="flex-1" behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <ScrollView className="flex-1 px-4" showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
         <TouchableOpacity
           className="self-center mt-4 mb-6 w-24 h-24 rounded-full bg-backgroundDark items-center justify-center overflow-hidden border-2 border-border-light"
@@ -242,6 +243,7 @@ const EditAnimalScreen: React.FC = () => {
           />
         </View>
       </ScrollView>
+      </KeyboardAvoidingView>
     </ScreenContainer>
   )
 }

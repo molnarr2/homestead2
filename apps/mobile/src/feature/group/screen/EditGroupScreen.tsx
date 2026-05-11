@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, ScrollView, TouchableOpacity, Alert } from 'react-native'
+import { View, Text, ScrollView, TouchableOpacity, Alert, KeyboardAvoidingView, Platform } from 'react-native'
 import TurboImage from 'react-native-turbo-image'
 import Icon from '@react-native-vector-icons/material-design-icons'
 import { launchImageLibrary, launchCamera } from 'react-native-image-picker'
@@ -57,6 +57,7 @@ const EditGroupScreen: React.FC = () => {
         <View className="w-8" />
       </View>
 
+      <KeyboardAvoidingView className="flex-1" behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <ScrollView className="flex-1 px-4" showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
         <TouchableOpacity
           className="self-center mt-4 mb-6 w-24 h-24 rounded-full bg-backgroundDark items-center justify-center overflow-hidden border-2 border-border-light"
@@ -109,6 +110,7 @@ const EditGroupScreen: React.FC = () => {
           />
         </View>
       </ScrollView>
+      </KeyboardAvoidingView>
 
       <GroupMemberPicker
         visible={controller.memberPickerVisible}

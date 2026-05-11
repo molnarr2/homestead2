@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
+import { View, Text, ScrollView, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native'
 import type { NativeStackScreenProps } from '@react-navigation/native-stack'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
 import ScreenContainer from '../../../components/layout/ScreenContainer'
@@ -22,6 +22,7 @@ const SendFeedbackScreen: React.FC<Props> = ({ navigation }) => {
         <Text className="text-lg font-bold text-text-primary ml-3">Send Feedback</Text>
       </View>
 
+      <KeyboardAvoidingView className="flex-1" behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <ScrollView className="flex-1 px-4 pt-4">
         <Text className="text-sm font-medium text-text-primary mb-2">How would you rate your experience?</Text>
         <View className="flex-row justify-center mb-6">
@@ -59,6 +60,7 @@ const SendFeedbackScreen: React.FC<Props> = ({ navigation }) => {
           />
         </View>
       </ScrollView>
+      </KeyboardAvoidingView>
     </ScreenContainer>
   )
 }

@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
+import { View, Text, ScrollView, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RouteProp } from '@react-navigation/native'
@@ -39,6 +39,7 @@ const CreateBreedingRecordScreen: React.FC = () => {
         <View className="w-8" />
       </View>
 
+      <KeyboardAvoidingView className="flex-1" behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <ScrollView className="flex-1 px-4" showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
         <AnimalOrGroupField
           selectedAnimal={c.selectedAnimal}
@@ -114,6 +115,7 @@ const CreateBreedingRecordScreen: React.FC = () => {
           />
         </View>
       </ScrollView>
+      </KeyboardAvoidingView>
     </ScreenContainer>
   )
 }

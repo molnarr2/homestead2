@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
+import { View, Text, ScrollView, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native'
 import { launchImageLibrary } from 'react-native-image-picker'
 import type { NativeStackScreenProps } from '@react-navigation/native-stack'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
@@ -30,6 +30,7 @@ const EditProfileScreen: React.FC<Props> = ({ navigation }) => {
         <Text className="text-lg font-bold text-text-primary ml-3">Edit Profile</Text>
       </View>
 
+      <KeyboardAvoidingView className="flex-1" behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <ScrollView className="flex-1 px-4">
         <TouchableOpacity
           className="self-center mt-4 mb-6 w-24 h-24 rounded-full bg-primary items-center justify-center overflow-hidden border-2 border-border-light"
@@ -73,6 +74,7 @@ const EditProfileScreen: React.FC<Props> = ({ navigation }) => {
           <PrimaryButton title="Save" onPress={c.save} loading={c.loading} />
         </View>
       </ScrollView>
+      </KeyboardAvoidingView>
     </ScreenContainer>
   )
 }
