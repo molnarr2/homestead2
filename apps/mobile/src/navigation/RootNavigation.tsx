@@ -104,7 +104,6 @@ export type RootStackParamList = {
   EditAnimalType: { animalTypeId?: string }
   EditBreed: { animalTypeId: string; breedId?: string }
   EditCareTemplate: { animalTypeId: string; templateId?: string }
-  EditEventTemplate: { animalTypeId: string; templateId?: string }
   CustomizeBreeds: { animalTypeId: string }
   CustomizeCareTemplates: { animalTypeId: string }
   SendFeedback: undefined
@@ -166,7 +165,6 @@ const RootNavigation: React.FC = () => {
             <Stack.Screen name="EditAnimalType" component={EditAnimalTypeScreen} />
             <Stack.Screen name="EditBreed" component={EditBreedScreen} />
             <Stack.Screen name="EditCareTemplate" component={EditCareTemplateScreen} />
-            <Stack.Screen name="EditEventTemplate" component={PlaceholderScreen} />
             <Stack.Screen name="CustomizeBreeds" component={PlaceholderScreen} />
             <Stack.Screen name="CustomizeCareTemplates" component={PlaceholderScreen} />
             <Stack.Screen name="SendFeedback" component={SendFeedbackScreen} />

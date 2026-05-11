@@ -13,7 +13,6 @@ export function useAnimalTypeDetailController(navigation: Navigation, route: Rou
   const animalType = animalTypes.find(t => t.id === animalTypeId) ?? null
   const breeds = animalType?.breeds ?? []
   const careTemplates = animalType?.careTemplates ?? []
-  const eventTemplates = animalType?.eventTemplates ?? []
 
   const onEditType = () => navigation.navigate('EditAnimalType', { animalTypeId })
   const onAddBreed = () => navigation.navigate('EditBreed', { animalTypeId })
@@ -22,12 +21,11 @@ export function useAnimalTypeDetailController(navigation: Navigation, route: Rou
   const onAddCareTemplate = () => navigation.navigate('EditCareTemplate', { animalTypeId })
   const onEditCareTemplate = (templateId: string) =>
     navigation.navigate('EditCareTemplate', { animalTypeId, templateId })
-  const onAddEventTemplate = () => navigation.navigate('EditEventTemplate', { animalTypeId })
   const onBack = () => navigation.goBack()
 
   return {
-    animalType, breeds, careTemplates, eventTemplates, loading,
+    animalType, breeds, careTemplates, loading,
     onEditType, onAddBreed, onEditBreed, onAddCareTemplate, onEditCareTemplate,
-    onAddEventTemplate, onBack,
+    onBack,
   }
 }

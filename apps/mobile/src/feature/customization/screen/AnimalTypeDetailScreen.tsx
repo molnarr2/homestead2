@@ -9,7 +9,6 @@ import ScreenContainer from '../../../components/layout/ScreenContainer'
 import SectionHeader from '../../../components/layout/SectionHeader'
 import BreedList from '../component/BreedList'
 import CareTemplateList from '../component/CareTemplateList'
-import EventTemplateList from '../component/EventTemplateList'
 import Icon from '@react-native-vector-icons/material-design-icons'
 
 type Navigation = NativeStackNavigationProp<RootStackParamList, 'CustomizeAnimalType'>
@@ -66,11 +65,6 @@ const AnimalTypeDetailScreen: React.FC = () => {
           templates={controller.careTemplates}
           onAdd={controller.onAddCareTemplate}
           onEdit={controller.onEditCareTemplate}
-        />
-
-        <EventTemplateList
-          templates={controller.eventTemplates}
-          onAdd={controller.onAddEventTemplate}
         />
 
         <View className="h-8" />

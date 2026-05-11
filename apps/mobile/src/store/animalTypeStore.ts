@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { IResult } from '../util/Result'
-import AnimalType, { AnimalTypeBreed, AnimalTypeCareTemplate, AnimalTypeEventTemplate } from '../schema/animalType/AnimalType'
+import AnimalType, { AnimalTypeBreed, AnimalTypeCareTemplate } from '../schema/animalType/AnimalType'
 import { bsAuthService, bsAnimalTypeService } from '../Bootstrap'
 import { useHomesteadStore } from './homesteadStore'
 import { GESTATION_TABLE } from '../schema/type/GestationTable'
@@ -18,9 +18,6 @@ interface AnimalTypeState {
   addCareTemplate: (animalTypeId: string, template: Omit<AnimalTypeCareTemplate, 'id'>) => Promise<IResult>
   updateCareTemplate: (animalTypeId: string, template: AnimalTypeCareTemplate) => Promise<IResult>
   deleteCareTemplate: (animalTypeId: string, templateId: string) => Promise<IResult>
-  addEventTemplate: (animalTypeId: string, template: Omit<AnimalTypeEventTemplate, 'id'>) => Promise<IResult>
-  updateEventTemplate: (animalTypeId: string, template: AnimalTypeEventTemplate) => Promise<IResult>
-  deleteEventTemplate: (animalTypeId: string, templateId: string) => Promise<IResult>
   seedStarterPlaybooks: (species: string[]) => Promise<void>
   getGestationDays: (animalTypeId: string, breedId?: string) => number
   clear: () => void
@@ -57,10 +54,6 @@ export const useAnimalTypeStore = create<AnimalTypeState>((set, get) => ({
   addCareTemplate: (animalTypeId, template) => bsAnimalTypeService.addCareTemplate(animalTypeId, template),
   updateCareTemplate: (animalTypeId, template) => bsAnimalTypeService.updateCareTemplate(animalTypeId, template),
   deleteCareTemplate: (animalTypeId, templateId) => bsAnimalTypeService.deleteCareTemplate(animalTypeId, templateId),
-
-  addEventTemplate: (animalTypeId, template) => bsAnimalTypeService.addEventTemplate(animalTypeId, template),
-  updateEventTemplate: (animalTypeId, template) => bsAnimalTypeService.updateEventTemplate(animalTypeId, template),
-  deleteEventTemplate: (animalTypeId, templateId) => bsAnimalTypeService.deleteEventTemplate(animalTypeId, templateId),
 
   seedStarterPlaybooks: async (species: string[]) => {
     const homesteadId = useHomesteadStore.getState().homesteadId

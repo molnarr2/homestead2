@@ -1,5 +1,4 @@
 import AdminObject, { adminObject_default } from '../object/AdminObject'
-import EventExtraDataObject from '../object/EventExtraDataObject'
 
 export interface AnimalTypeBreed {
   id: string
@@ -16,12 +15,6 @@ export interface AnimalTypeCareTemplate {
   contactPhone: string
 }
 
-export interface AnimalTypeEventTemplate {
-  id: string
-  name: string
-  extraData: EventExtraDataObject[]
-}
-
 export default interface AnimalType {
   id: string
   admin: AdminObject
@@ -29,7 +22,6 @@ export default interface AnimalType {
   colors: string[]
   breeds: AnimalTypeBreed[]
   careTemplates: AnimalTypeCareTemplate[]
-  eventTemplates: AnimalTypeEventTemplate[]
 }
 
 export function animalType_default(): AnimalType {
@@ -40,6 +32,5 @@ export function animalType_default(): AnimalType {
     colors: [],
     breeds: [],
     careTemplates: [],
-    eventTemplates: [],
   }
 }
