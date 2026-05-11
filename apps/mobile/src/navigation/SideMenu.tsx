@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, Image } from 'react-native'
 import { DrawerContentScrollView, type DrawerContentComponentProps } from '@react-navigation/drawer'
 import { useNavigation } from '@react-navigation/native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
@@ -38,11 +38,17 @@ export function SideMenu(props: DrawerContentComponentProps) {
   return (
     <DrawerContentScrollView {...props} className="flex-1 bg-background">
       <View className="px-4 py-6">
-        <View className="w-16 h-16 rounded-full bg-primary items-center justify-center mb-3">
-          <Text className="text-2xl font-bold text-text-inverse">
-            {user?.firstName?.charAt(0)?.toUpperCase() ?? '?'}
-          </Text>
-        </View>
+        <TouchableOpacity onPress={() => navigateTo('Profile')} activeOpacity={0.7}>
+          {user?.avatarUrl ? (
+            <Image source={{ uri: user.avatarUrl }} className="w-16 h-16 rounded-full mb-3" />
+          ) : (
+            <View className="w-16 h-16 rounded-full bg-primary items-center justify-center mb-3">
+              <Text className="text-2xl font-bold text-text-inverse">
+                {user?.firstName?.charAt(0)?.toUpperCase() ?? '?'}
+              </Text>
+            </View>
+          )}
+        </TouchableOpacity>
         <Text className="text-lg font-bold text-text-primary">
           {user?.firstName ?? ''} {user?.lastName ?? ''}
         </Text>

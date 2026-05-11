@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "02_phase1_MVP/02_refinement_1/11_Production Screen Simplification.md",
+                "file": "02_phase1_MVP/09_production_logging.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "11_Production Screen Simplification"
+              "title": "09_production_logging"
             }
           }
         ]
@@ -185,18 +185,19 @@
   },
   "active": "02dd2e34ceb194af",
   "lastOpenFiles": [
-    "02_phase1_MVP/02_refinement_1/10_Animal or Group Field.md",
-    "02_phase1_MVP/02_refinement_1/11_Production Screen Simplification.md",
+    "02_phase1_MVP/02_refinement_1/work/Tech Spec for editing records.md",
     "02_phase1_MVP/02_refinement_1/work/06. Reworking the Log Production screen.md",
+    "02_phase1_MVP/09_production_logging.md",
+    "02_phase1_MVP/02_TODO.md",
+    "02_phase1_MVP/02_refinement_1/11_Production Screen Simplification.md",
+    "02_phase1_MVP/02_refinement_1/10_Animal or Group Field.md",
     "02_phase1_MVP/02_refinement_1/work/05. Creating or editing records for a specific animal.md",
     "02_phase1_MVP/02_refinement_1/09_Edit Records.md",
-    "02_phase1_MVP/02_refinement_1/work/Tech Spec for editing records.md",
     "02_phase1_MVP/02_refinement_1/00_Tasks.md",
     "00_ops/custom_metro_port_physical_device.md",
     "00_ops",
     "02_phase1_MVP/01_Accounts.md",
     "02_phase1_MVP/02_refinement_1/08_Onboarding Navigation Fix.md",
-    "02_phase1_MVP/09_production_logging.md",
     "00_research/01_homesteader-persona-research.md",
     "02_phase1_MVP/02_refinement_1/07_animal_groups.md",
     "02_phase1_MVP/02_refinement_1/work/04. Grouping animals as saved groups.md",
@@ -211,7 +212,6 @@
     "02_phase1_MVP/02_refinement_1/01_Create Weight Log.md",
     "02_phase1_MVP/02_refinement_1/04_Animal List Filter Modal.md",
     "02_phase1_MVP/01_research/03_outsider_feature_audit.md",
-    "02_phase1_MVP/02_TODO.md",
     "02_phase1_MVP/01_research/02_feature_audit.md",
     "02_phase1_MVP/02_refinement_1/work",
     "02_phase1_MVP/02_refinement_1",

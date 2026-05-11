@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
+import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native'
 import type { NativeStackScreenProps } from '@react-navigation/native-stack'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
 import ScreenContainer from '../../../components/layout/ScreenContainer'
@@ -45,11 +45,15 @@ const ProfileScreen: React.FC<Props> = ({ navigation }) => {
 
       <ScrollView className="flex-1">
         <View className="items-center py-6">
-          <View className="w-20 h-20 rounded-full bg-primary items-center justify-center mb-3">
-            <Text className="text-3xl font-bold text-text-inverse">
-              {c.user?.firstName?.charAt(0)?.toUpperCase() ?? '?'}
-            </Text>
-          </View>
+          {c.user?.avatarUrl ? (
+            <Image source={{ uri: c.user.avatarUrl }} className="w-20 h-20 rounded-full mb-3" />
+          ) : (
+            <View className="w-20 h-20 rounded-full bg-primary items-center justify-center mb-3">
+              <Text className="text-3xl font-bold text-text-inverse">
+                {c.user?.firstName?.charAt(0)?.toUpperCase() ?? '?'}
+              </Text>
+            </View>
+          )}
           <Text className="text-xl font-bold text-text-primary">{fullName || 'User'}</Text>
           <Text className="text-sm text-text-secondary mt-1">{c.user?.email ?? ''}</Text>
           <View className="mt-2 rounded-full bg-accent px-3 py-1">
