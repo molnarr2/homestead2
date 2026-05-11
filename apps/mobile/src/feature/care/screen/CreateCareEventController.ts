@@ -64,8 +64,8 @@ export function useCreateCareEventController(navigation: Navigation, route: Rout
   }
 
   const submit = async () => {
-    if (!name.trim() || (!selectedAnimalId && !selectedGroupId)) {
-      Alert.alert('Required', 'Please enter a name and select an animal or group.')
+    if (!name.trim() || (!selectedAnimalId && !selectedGroupId) || !dueDate) {
+      Alert.alert('Required', 'Please enter a name, select an animal or group, and set a due date.')
       return
     }
 

@@ -33,8 +33,8 @@ export function useEditCareEventController(navigation: Navigation, route: Route)
 
   const submit = async () => {
     if (!event) return
-    if (!name.trim()) {
-      Alert.alert('Required', 'Please enter an event name.')
+    if (!name.trim() || !dueDate) {
+      Alert.alert('Required', 'Please enter an event name and set a due date.')
       return
     }
 

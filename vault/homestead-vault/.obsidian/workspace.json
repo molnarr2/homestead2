@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "02_phase1_MVP/02_refinement_1/12_Care Template Lookup Modal.md",
+                "file": "02_phase1_MVP/02_TODO.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "12_Care Template Lookup Modal"
+              "title": "02_TODO"
             }
           }
         ]
@@ -185,8 +185,8 @@
   },
   "active": "02dd2e34ceb194af",
   "lastOpenFiles": [
-    "02_phase1_MVP/02_refinement_1/work/07. Care Template Better functionality.md",
     "02_phase1_MVP/02_refinement_1/12_Care Template Lookup Modal.md",
+    "02_phase1_MVP/02_refinement_1/work/07. Care Template Better functionality.md",
     "02_phase1_MVP/09_production_logging.md",
     "02_phase1_MVP/02_refinement_1/work/Tech Spec for editing records.md",
     "02_phase1_MVP/02_refinement_1/work/06. Reworking the Log Production screen.md",

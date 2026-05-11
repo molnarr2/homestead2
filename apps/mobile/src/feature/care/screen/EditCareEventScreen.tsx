@@ -89,7 +89,7 @@ const EditCareEventScreen: React.FC = () => {
         )}
 
         <DatePickerInput
-          label="Due Date"
+          label="Due Date *"
           value={c.dueDate}
           onChange={c.setDueDate}
         />
@@ -124,7 +124,7 @@ const EditCareEventScreen: React.FC = () => {
             title="Save Changes"
             onPress={c.submit}
             loading={c.loading}
-            disabled={!c.name.trim()}
+            disabled={!c.name.trim() || !c.dueDate}
           />
         </View>
       </ScrollView>

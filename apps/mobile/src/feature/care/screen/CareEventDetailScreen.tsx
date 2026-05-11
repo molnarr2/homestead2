@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
+import { View, Text, ScrollView, TouchableOpacity, Linking } from 'react-native'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RouteProp } from '@react-navigation/native'
@@ -95,7 +95,19 @@ const CareEventDetailScreen: React.FC = () => {
             <DetailRow label="Cycle" value={`Every ${event.cycle} days`} />
           )}
           {event.contactName ? <DetailRow label="Contact" value={event.contactName} /> : null}
-          {event.contactPhone ? <DetailRow label="Phone" value={event.contactPhone} /> : null}
+          {event.contactPhone ? (
+            <TouchableOpacity
+              onPress={() => Linking.openURL(`tel:${event.contactPhone}`)}
+              activeOpacity={0.7}
+              className="flex-row justify-between items-center py-2 border-b border-border-light"
+            >
+              <Text className="text-sm text-text-secondary">Phone</Text>
+              <View className="flex-row items-center gap-1">
+                <Icon name="phone" size={16} color="#4A6741" />
+                <Text className="text-sm font-medium text-primary">{event.contactPhone}</Text>
+              </View>
+            </TouchableOpacity>
+          ) : null}
         </View>
 
         {event.notes ? (
