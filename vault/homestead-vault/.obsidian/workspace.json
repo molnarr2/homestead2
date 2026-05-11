@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "02_phase1_MVP/09_production_logging.md",
+                "file": "02_phase1_MVP/02_refinement_1/12_Care Template Lookup Modal.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "09_production_logging"
+              "title": "12_Care Template Lookup Modal"
             }
           }
         ]
@@ -185,9 +185,11 @@
   },
   "active": "02dd2e34ceb194af",
   "lastOpenFiles": [
+    "02_phase1_MVP/02_refinement_1/work/07. Care Template Better functionality.md",
+    "02_phase1_MVP/02_refinement_1/12_Care Template Lookup Modal.md",
+    "02_phase1_MVP/09_production_logging.md",
     "02_phase1_MVP/02_refinement_1/work/Tech Spec for editing records.md",
     "02_phase1_MVP/02_refinement_1/work/06. Reworking the Log Production screen.md",
-    "02_phase1_MVP/09_production_logging.md",
     "02_phase1_MVP/02_TODO.md",
     "02_phase1_MVP/02_refinement_1/11_Production Screen Simplification.md",
     "02_phase1_MVP/02_refinement_1/10_Animal or Group Field.md",
@@ -211,8 +213,6 @@
     "02_phase1_MVP/02_refinement_1/02_Home Dashboard.md",
     "02_phase1_MVP/02_refinement_1/01_Create Weight Log.md",
     "02_phase1_MVP/02_refinement_1/04_Animal List Filter Modal.md",
-    "02_phase1_MVP/01_research/03_outsider_feature_audit.md",
-    "02_phase1_MVP/01_research/02_feature_audit.md",
     "02_phase1_MVP/02_refinement_1/work",
     "02_phase1_MVP/02_refinement_1",
     "02_phase1_MVP/01_research",
