@@ -5,7 +5,7 @@ import type { RouteProp } from '@react-navigation/native'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
 import { useAnimalStore } from '../../../store/animalStore'
 import { useAnimalTypeStore } from '../../../store/animalTypeStore'
-import { bsAnimalService } from '../../../Bootstrap'
+import { bsAnimalService, bsGroupService } from '../../../Bootstrap'
 import { AnimalGender, AnimalState } from '../../../schema/animal/Animal'
 import { adminObject_updateLastUpdated } from '../../../schema/object/AdminObject'
 
@@ -113,10 +113,12 @@ export function useEditAnimalController(navigation: Navigation, route: Route) {
           onPress: async () => {
             setLoading(true)
             const result = await bsAnimalService.deleteAnimal(animalId)
-            setLoading(false)
             if (result.success) {
-              navigation.goBack()
+              await bsGroupService.removeAnimalFromAllGroups(animalId)
+              setLoading(false)
+              navigation.pop(2)
             } else {
+              setLoading(false)
               Alert.alert('Error', result.error)
             }
           },

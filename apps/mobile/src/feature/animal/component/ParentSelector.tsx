@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { View, Text, TouchableOpacity, Modal, FlatList } from 'react-native'
+import TurboImage from 'react-native-turbo-image'
 import Icon from '@react-native-vector-icons/material-design-icons'
 import { useAnimalStore } from '../../../store/animalStore'
 import Animal, { AnimalGender } from '../../../schema/animal/Animal'
@@ -12,9 +13,10 @@ interface Props {
   selectedId: string
   onSelect: (animalId: string) => void
   excludeId?: string
+  onNavigateToAnimal?: (animalId: string) => void
 }
 
-const ParentSelector: React.FC<Props> = ({ label, animalTypeId, gender, selectedId, onSelect, excludeId }) => {
+const ParentSelector: React.FC<Props> = ({ label, animalTypeId, gender, selectedId, onSelect, excludeId, onNavigateToAnimal }) => {
   const { animals } = useAnimalStore()
   const [visible, setVisible] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
@@ -48,16 +50,35 @@ const ParentSelector: React.FC<Props> = ({ label, animalTypeId, gender, selected
   return (
     <View className="mb-4">
       <Text className="text-sm font-medium text-text-primary mb-1">{label}</Text>
-      <TouchableOpacity
-        className="border border-border-light rounded-lg px-4 py-3 bg-surface flex-row items-center justify-between"
-        onPress={() => setVisible(true)}
-        activeOpacity={0.7}
-      >
-        <Text className={selectedAnimal ? 'text-base text-text-primary' : 'text-base text-text-disabled'}>
-          {selectedAnimal ? selectedAnimal.name : `Select ${label.toLowerCase()}...`}
-        </Text>
-        <Icon name="chevron-down" size={20} color="#6B6B6B" />
-      </TouchableOpacity>
+      <View className="flex-row items-center gap-2">
+        <TouchableOpacity
+          className="flex-1 border border-border-light rounded-lg px-4 py-3 bg-surface flex-row items-center justify-between"
+          onPress={() => setVisible(true)}
+          activeOpacity={0.7}
+        >
+          <Text className={selectedAnimal ? 'text-base text-text-primary' : 'text-base text-text-disabled'}>
+            {selectedAnimal ? selectedAnimal.name : `Select ${label.toLowerCase()}...`}
+          </Text>
+          <Icon name="chevron-down" size={20} color="#6B6B6B" />
+        </TouchableOpacity>
+        {selectedAnimal ? (
+          <TouchableOpacity
+            className="w-11 h-11 rounded-full bg-backgroundDark items-center justify-center overflow-hidden border border-border-light"
+            onPress={() => onNavigateToAnimal?.(selectedAnimal.id)}
+            activeOpacity={0.7}
+          >
+            {selectedAnimal.photoUrl ? (
+              <TurboImage
+                source={{ uri: selectedAnimal.photoUrl }}
+                style={{ width: 44, height: 44, borderRadius: 22 }}
+                cachePolicy="dataCache"
+              />
+            ) : (
+              <Text className="text-base font-semibold text-text-secondary">{selectedAnimal.name.charAt(0)}</Text>
+            )}
+          </TouchableOpacity>
+        ) : null}
+      </View>
 
       <Modal visible={visible} animationType="slide" presentationStyle="pageSheet">
         <View className="flex-1 bg-background">

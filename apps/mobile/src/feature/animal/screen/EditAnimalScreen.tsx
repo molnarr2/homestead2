@@ -221,6 +221,7 @@ const EditAnimalScreen: React.FC = () => {
               selectedId={controller.sireId}
               onSelect={controller.setSireId}
               excludeId={controller.animal?.id}
+              onNavigateToAnimal={(id) => navigation.push('AnimalDetail', { animalId: id })}
             />
 
             <ParentSelector
@@ -230,6 +231,7 @@ const EditAnimalScreen: React.FC = () => {
               selectedId={controller.damId}
               onSelect={controller.setDamId}
               excludeId={controller.animal?.id}
+              onNavigateToAnimal={(id) => navigation.push('AnimalDetail', { animalId: id })}
             />
           </>
         ) : null}
