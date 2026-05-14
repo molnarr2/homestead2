@@ -80,6 +80,25 @@ export default class HealthService implements IHealthService {
         })
       }
 
+      if (record.recordType === 'vetVisit' && record.vetFollowUpDate) {
+        await this.careService.createCareEvent({
+          ...careEvent_default(),
+          animalId: record.animalId,
+          templateId: '',
+          name: `Vet Follow-Up: ${record.name}`,
+          type: 'careSingle',
+          cycle: 0,
+          dueDate: dateToTstamp(new Date(record.vetFollowUpDate)),
+          completedDate: null,
+          contactName: record.providerName ?? '',
+          contactPhone: record.providerPhone ?? '',
+          notes: 'Auto-created from vet visit record',
+          photoStorageRef: '',
+          photoUrl: '',
+          createdNextRecurringEvent: false,
+        })
+      }
+
       return SuccessResult
     } catch (error: any) {
       Log.error(TAG, 'createHealthRecord error: ' + error.message)

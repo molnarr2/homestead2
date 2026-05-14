@@ -33,11 +33,11 @@ export function calculateWithdrawal(
 export function getActiveWithdrawals(healthRecords: HealthRecord[]): WithdrawalResult[] {
   const results: WithdrawalResult[] = []
   for (const record of healthRecords) {
-    if (record.withdrawalPeriodDays > 0) {
+    if (record.medicationWithdrawalDays > 0) {
       const result = calculateWithdrawal(
         record.date,
-        record.withdrawalPeriodDays,
-        record.withdrawalType,
+        record.medicationWithdrawalDays,
+        record.medicationWithdrawalType,
         record.name
       )
       if (result.status === 'ACTIVE') results.push(result)

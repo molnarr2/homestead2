@@ -2,27 +2,17 @@ import React from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
 import Icon from '@react-native-vector-icons/material-design-icons'
 import type { HealthRecordType } from '../../../schema/health/HealthRecord'
-
-type IconName = React.ComponentProps<typeof Icon>['name']
+import { HEALTH_RECORD_TYPES } from '../constants/healthConstants'
 
 interface Props {
   selected: HealthRecordType
   onSelect: (type: HealthRecordType) => void
 }
 
-const TYPES: { type: HealthRecordType; label: string; icon: IconName }[] = [
-  { type: 'vaccination', label: 'Vaccination', icon: 'needle' },
-  { type: 'medication', label: 'Medication', icon: 'pill' },
-  { type: 'deworming', label: 'Deworming', icon: 'bug' },
-  { type: 'vetVisit', label: 'Vet Visit', icon: 'stethoscope' },
-  { type: 'illness', label: 'Illness', icon: 'thermometer' },
-  { type: 'injury', label: 'Injury', icon: 'bandage' },
-]
-
 const HealthRecordTypeSelector: React.FC<Props> = ({ selected, onSelect }) => {
   return (
     <View className="flex-row flex-wrap gap-2 mb-4">
-      {TYPES.map(({ type, label, icon }) => {
+      {HEALTH_RECORD_TYPES.map(({ type, label, icon }) => {
         const isSelected = selected === type
         return (
           <TouchableOpacity

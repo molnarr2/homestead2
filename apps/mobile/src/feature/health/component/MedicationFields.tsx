@@ -4,10 +4,7 @@ import Icon from '@react-native-vector-icons/material-design-icons'
 import TextInput from '../../../components/input/TextInput'
 import type { DosageUnit, MedicationRoute, WithdrawalType } from '../../../schema/health/HealthRecord'
 import { addDays, formatDate } from '../../../util/DateUtility'
-
-const DOSAGE_UNITS: DosageUnit[] = ['mL', 'mg', 'cc', 'tablets']
-const ROUTES: MedicationRoute[] = ['Oral', 'Injection', 'Topical', 'IV', 'Intranasal', 'Subcutaneous', 'Intramuscular']
-const WITHDRAWAL_TYPES: WithdrawalType[] = ['meat', 'milk', 'eggs', 'all']
+import { DOSAGE_UNITS, MEDICATION_ROUTES, WITHDRAWAL_TYPES } from '../constants/healthConstants'
 
 interface Props {
   date: string
@@ -19,10 +16,10 @@ interface Props {
   setMedicationRoute: (v: MedicationRoute) => void
   medicationFrequency: string
   setMedicationFrequency: (v: string) => void
-  withdrawalPeriodDays: number
-  setWithdrawalPeriodDays: (v: number) => void
-  withdrawalType: WithdrawalType
-  setWithdrawalType: (v: WithdrawalType) => void
+  medicationWithdrawalDays: number
+  setMedicationWithdrawalDays: (v: number) => void
+  medicationWithdrawalType: WithdrawalType
+  setMedicationWithdrawalType: (v: WithdrawalType) => void
 }
 
 const MedicationFields: React.FC<Props> = ({
@@ -31,8 +28,8 @@ const MedicationFields: React.FC<Props> = ({
   medicationDosageUnit, setMedicationDosageUnit,
   medicationRoute, setMedicationRoute,
   medicationFrequency, setMedicationFrequency,
-  withdrawalPeriodDays, setWithdrawalPeriodDays,
-  withdrawalType, setWithdrawalType,
+  medicationWithdrawalDays, setMedicationWithdrawalDays,
+  medicationWithdrawalType, setMedicationWithdrawalType,
 }) => {
   return (
     <View>
@@ -68,7 +65,7 @@ const MedicationFields: React.FC<Props> = ({
 
       <Text className="text-sm font-medium text-text-primary mb-1">Route</Text>
       <View className="flex-row flex-wrap gap-2 mb-4">
-        {ROUTES.map(r => {
+        {MEDICATION_ROUTES.map(r => {
           const isSelected = medicationRoute === r
           return (
             <TouchableOpacity
@@ -98,8 +95,8 @@ const MedicationFields: React.FC<Props> = ({
 
         <TextInput
           label="Withdrawal Days"
-          value={withdrawalPeriodDays > 0 ? String(withdrawalPeriodDays) : ''}
-          onChangeText={(text) => setWithdrawalPeriodDays(parseInt(text) || 0)}
+          value={medicationWithdrawalDays > 0 ? String(medicationWithdrawalDays) : ''}
+          onChangeText={(text) => setMedicationWithdrawalDays(parseInt(text) || 0)}
           placeholder="Number of days"
           keyboardType="number-pad"
         />
@@ -107,12 +104,12 @@ const MedicationFields: React.FC<Props> = ({
         <Text className="text-sm font-medium text-text-primary mb-1">Withdrawal Type</Text>
         <View className="flex-row flex-wrap gap-2 mb-2">
           {WITHDRAWAL_TYPES.map(t => {
-            const isSelected = withdrawalType === t
+            const isSelected = medicationWithdrawalType === t
             return (
               <TouchableOpacity
                 key={t}
                 className={`px-3 py-2 rounded-lg border ${isSelected ? 'bg-status-error border-status-error' : 'bg-surface border-border-light'}`}
-                onPress={() => setWithdrawalType(t)}
+                onPress={() => setMedicationWithdrawalType(t)}
                 activeOpacity={0.7}
               >
                 <Text className={`text-sm font-medium capitalize ${isSelected ? 'text-text-inverse' : 'text-text-primary'}`}>{t}</Text>
@@ -121,11 +118,11 @@ const MedicationFields: React.FC<Props> = ({
           })}
         </View>
 
-        {withdrawalPeriodDays > 0 && date ? (
+        {medicationWithdrawalDays > 0 && date ? (
           <View className="flex-row items-center mt-1">
             <Icon name="calendar-clock" size={14} color="#E53935" />
             <Text className="text-xs font-medium text-status-error ml-1">
-              Withdrawal ends: {formatDate(addDays(date, withdrawalPeriodDays))}
+              Withdrawal ends: {formatDate(addDays(date, medicationWithdrawalDays))}
             </Text>
           </View>
         ) : null}

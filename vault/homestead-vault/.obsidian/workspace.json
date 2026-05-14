@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "02_phase1_MVP/02_TODO.md",
+                "file": "02_phase1_MVP/03_issues/01_health_record_issues.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "02_TODO"
+              "title": "01_health_record_issues"
             }
           }
         ]
@@ -185,12 +185,20 @@
   },
   "active": "02dd2e34ceb194af",
   "lastOpenFiles": [
+    "02_phase1_MVP/01_research/05_health_record_scavenger_hunt.md",
+    "02_phase1_MVP/03_issues/01_health_record_issues.md",
+    "02_phase1_MVP/03_issues",
+    "02_phase1_MVP/01_research/04_health_record_custom_fields_audit.md",
+    "03_phase2/Ideas/Health Record Types.md",
+    "03_phase2/Ideas/Missing Features.md",
+    "03_phase2/Ideas",
+    "02_phase1_MVP/02_TODO.md",
+    "03_phase2",
     "02_phase1_MVP/02_refinement_1/12_Care Template Lookup Modal.md",
     "02_phase1_MVP/02_refinement_1/work/07. Care Template Better functionality.md",
     "02_phase1_MVP/09_production_logging.md",
     "02_phase1_MVP/02_refinement_1/work/Tech Spec for editing records.md",
     "02_phase1_MVP/02_refinement_1/work/06. Reworking the Log Production screen.md",
-    "02_phase1_MVP/02_TODO.md",
     "02_phase1_MVP/02_refinement_1/11_Production Screen Simplification.md",
     "02_phase1_MVP/02_refinement_1/10_Animal or Group Field.md",
     "02_phase1_MVP/02_refinement_1/work/05. Creating or editing records for a specific animal.md",
@@ -207,19 +215,11 @@
     "02_phase1_MVP/02_refinement_1/work/02. We need to change the subscription stuff.md",
     "02_phase1_MVP/02_refinement_1/work/01. Animal Listing Screen Cleanup.md",
     "02_phase1_MVP/02_refinement_1/06_animal_picker_modal.md",
-    "02_phase1_MVP/02_refinement_1/05_care_schedule_filter.md",
     "00_research",
-    "02_phase1_MVP/02_refinement_1/03_Inline AnimalType Subcollections.md",
-    "02_phase1_MVP/02_refinement_1/02_Home Dashboard.md",
-    "02_phase1_MVP/02_refinement_1/01_Create Weight Log.md",
-    "02_phase1_MVP/02_refinement_1/04_Animal List Filter Modal.md",
     "02_phase1_MVP/02_refinement_1/work",
     "02_phase1_MVP/02_refinement_1",
     "02_phase1_MVP/01_research",
     "02_phase1_MVP",
-    "00_operations",
-    "00_research/01_plan/00_gen/03. TDD/work",
-    "00_research/01_plan/00_gen/02. ERD/research",
-    "00_research/01_plan/00_gen/02. ERD/working"
+    "00_operations"
   ]
 }

@@ -6,6 +6,7 @@ import { WithdrawalResult } from '../../../util/WithdrawalUtility'
 import { formatDate } from '../../../util/DateUtility'
 import EmptyState from '../../../components/layout/EmptyState'
 import type { GroupHealthRecord } from '../screen/AnimalDetailController'
+import { HEALTH_RECORD_TYPE_ICONS } from '../../health/constants/healthConstants'
 
 interface Props {
   healthRecords: HealthRecord[]
@@ -14,15 +15,6 @@ interface Props {
   onAddHealth: () => void
   onGroupPress?: (groupId: string) => void
   onHealthRecordPress?: (recordId: string) => void
-}
-
-const RECORD_TYPE_ICONS: Record<string, React.ComponentProps<typeof Icon>['name']> = {
-  vaccination: 'needle',
-  medication: 'pill',
-  deworming: 'bug',
-  vetVisit: 'stethoscope',
-  illness: 'thermometer',
-  injury: 'bandage',
 }
 
 const AnimalHealthTab: React.FC<Props> = ({ healthRecords, groupHealthRecords, activeWithdrawals, onAddHealth, onGroupPress, onHealthRecordPress }) => {
@@ -66,7 +58,7 @@ const AnimalHealthTab: React.FC<Props> = ({ healthRecords, groupHealthRecords, a
             const content = (
               <View className="mx-4 mt-2 bg-surface rounded-lg p-3 border border-border-light">
                 <View className="flex-row items-center">
-                  <Icon name={RECORD_TYPE_ICONS[item.record.recordType] || 'medical-bag'} size={20} color="#4A6741" />
+                  <Icon name={HEALTH_RECORD_TYPE_ICONS[item.record.recordType] || 'medical-bag'} size={20} color="#4A6741" />
                   <View className="flex-1 ml-2">
                     <View className="flex-row items-center">
                       <Text className="text-sm font-semibold text-text-primary">{item.record.name}</Text>

@@ -88,10 +88,10 @@ const CreateHealthRecordScreen: React.FC = () => {
             setMedicationRoute={c.setMedicationRoute}
             medicationFrequency={c.medicationFrequency}
             setMedicationFrequency={c.setMedicationFrequency}
-            withdrawalPeriodDays={c.withdrawalPeriodDays}
-            setWithdrawalPeriodDays={c.setWithdrawalPeriodDays}
-            withdrawalType={c.withdrawalType}
-            setWithdrawalType={c.setWithdrawalType}
+            medicationWithdrawalDays={c.medicationWithdrawalDays}
+            setMedicationWithdrawalDays={c.setMedicationWithdrawalDays}
+            medicationWithdrawalType={c.medicationWithdrawalType}
+            setMedicationWithdrawalType={c.setMedicationWithdrawalType}
           />
         )}
 
@@ -102,6 +102,8 @@ const CreateHealthRecordScreen: React.FC = () => {
             setDewormingDosage={c.setDewormingDosage}
             dewormingDosageUnit={c.dewormingDosageUnit}
             setDewormingDosageUnit={c.setDewormingDosageUnit}
+            dewormingRoute={c.dewormingRoute}
+            setDewormingRoute={c.setDewormingRoute}
             dewormingWithdrawalDays={c.dewormingWithdrawalDays}
             setDewormingWithdrawalDays={c.setDewormingWithdrawalDays}
             dewormingWithdrawalType={c.dewormingWithdrawalType}

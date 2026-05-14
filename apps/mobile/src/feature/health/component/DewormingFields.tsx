@@ -2,11 +2,9 @@ import React from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
 import Icon from '@react-native-vector-icons/material-design-icons'
 import TextInput from '../../../components/input/TextInput'
-import type { DosageUnit, WithdrawalType } from '../../../schema/health/HealthRecord'
+import type { DosageUnit, DewormingRoute, WithdrawalType } from '../../../schema/health/HealthRecord'
 import { addDays, formatDate } from '../../../util/DateUtility'
-
-const DOSAGE_UNITS: DosageUnit[] = ['mL', 'mg', 'cc', 'tablets']
-const WITHDRAWAL_TYPES: WithdrawalType[] = ['meat', 'milk', 'eggs', 'all']
+import { DOSAGE_UNITS, DEWORMING_ROUTES, WITHDRAWAL_TYPES } from '../constants/healthConstants'
 
 interface Props {
   date: string
@@ -14,6 +12,8 @@ interface Props {
   setDewormingDosage: (v: number) => void
   dewormingDosageUnit: DosageUnit
   setDewormingDosageUnit: (v: DosageUnit) => void
+  dewormingRoute: DewormingRoute
+  setDewormingRoute: (v: DewormingRoute) => void
   dewormingWithdrawalDays: number
   setDewormingWithdrawalDays: (v: number) => void
   dewormingWithdrawalType: WithdrawalType
@@ -24,6 +24,7 @@ const DewormingFields: React.FC<Props> = ({
   date,
   dewormingDosage, setDewormingDosage,
   dewormingDosageUnit, setDewormingDosageUnit,
+  dewormingRoute, setDewormingRoute,
   dewormingWithdrawalDays, setDewormingWithdrawalDays,
   dewormingWithdrawalType, setDewormingWithdrawalType,
 }) => {
@@ -57,6 +58,23 @@ const DewormingFields: React.FC<Props> = ({
             })}
           </View>
         </View>
+      </View>
+
+      <Text className="text-sm font-medium text-text-primary mb-1">Route</Text>
+      <View className="flex-row flex-wrap gap-2 mb-4">
+        {DEWORMING_ROUTES.map(r => {
+          const isSelected = dewormingRoute === r
+          return (
+            <TouchableOpacity
+              key={r}
+              className={`px-3 py-2 rounded-lg border ${isSelected ? 'bg-primary border-primary' : 'bg-surface border-border-light'}`}
+              onPress={() => setDewormingRoute(r)}
+              activeOpacity={0.7}
+            >
+              <Text className={`text-xs font-medium ${isSelected ? 'text-text-inverse' : 'text-text-primary'}`}>{r}</Text>
+            </TouchableOpacity>
+          )
+        })}
       </View>
 
       <View className="bg-status-error/5 rounded-lg p-3 border border-status-error/20 mb-4">

@@ -3,6 +3,7 @@ import AdminObject, { adminObject_default } from '../object/AdminObject'
 export type HealthRecordType = 'vaccination' | 'medication' | 'deworming' | 'vetVisit' | 'illness' | 'injury'
 export type DosageUnit = 'mL' | 'mg' | 'cc' | 'tablets'
 export type MedicationRoute = 'Oral' | 'Injection' | 'Topical' | 'IV' | 'Intranasal' | 'Subcutaneous' | 'Intramuscular'
+export type DewormingRoute = 'Oral' | 'Injectable' | 'Pour-On' | 'Feed Additive'
 export type WithdrawalType = 'meat' | 'milk' | 'eggs' | 'all'
 
 export default interface HealthRecord {
@@ -25,10 +26,11 @@ export default interface HealthRecord {
   medicationDosageUnit: DosageUnit
   medicationRoute: MedicationRoute
   medicationFrequency: string
-  withdrawalPeriodDays: number
-  withdrawalType: WithdrawalType
+  medicationWithdrawalDays: number
+  medicationWithdrawalType: WithdrawalType
   dewormingDosage: number
   dewormingDosageUnit: DosageUnit
+  dewormingRoute: DewormingRoute
   dewormingWithdrawalDays: number
   dewormingWithdrawalType: WithdrawalType
   vetClinicName: string
@@ -62,10 +64,11 @@ export function healthRecord_default(): HealthRecord {
     medicationDosageUnit: 'mL',
     medicationRoute: 'Oral',
     medicationFrequency: '',
-    withdrawalPeriodDays: 0,
-    withdrawalType: 'all',
+    medicationWithdrawalDays: 0,
+    medicationWithdrawalType: 'all',
     dewormingDosage: 0,
     dewormingDosageUnit: 'mL',
+    dewormingRoute: 'Oral',
     dewormingWithdrawalDays: 0,
     dewormingWithdrawalType: 'all',
     vetClinicName: '',

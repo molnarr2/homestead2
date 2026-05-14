@@ -97,9 +97,9 @@ export function useHomeController(navigation: any) {
     const results: DashboardWithdrawalItem[] = []
     for (const record of healthRecords) {
       const animalName = animalMap.get(record.animalId)?.name ?? ''
-      if (record.withdrawalPeriodDays > 0) {
+      if (record.medicationWithdrawalDays > 0) {
         const result = calculateWithdrawal(
-          record.date, record.withdrawalPeriodDays, record.withdrawalType, record.name
+          record.date, record.medicationWithdrawalDays, record.medicationWithdrawalType, record.name
         )
         if (result.status === 'ACTIVE') {
           results.push({

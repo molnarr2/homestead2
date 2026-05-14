@@ -16,8 +16,8 @@ export function useHealthRecordDetailController(navigation: Navigation, route: R
   const animal = animals.find(a => a.id === record?.animalId)
 
   let withdrawalStatus: WithdrawalResult | null = null
-  if (record && record.withdrawalPeriodDays > 0) {
-    withdrawalStatus = calculateWithdrawal(record.date, record.withdrawalPeriodDays, record.withdrawalType, record.name)
+  if (record && record.medicationWithdrawalDays > 0) {
+    withdrawalStatus = calculateWithdrawal(record.date, record.medicationWithdrawalDays, record.medicationWithdrawalType, record.name)
   }
   if (record && record.dewormingWithdrawalDays > 0) {
     withdrawalStatus = calculateWithdrawal(record.date, record.dewormingWithdrawalDays, record.dewormingWithdrawalType, record.name)

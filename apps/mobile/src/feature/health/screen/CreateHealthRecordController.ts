@@ -9,7 +9,7 @@ import { useGroupStore } from '../../../store/groupStore'
 import { effectiveSubscription } from '../../subscription/service/ISubscriptionService'
 import { bsHealthService, bsGroupService } from '../../../Bootstrap'
 import type HealthRecord from '../../../schema/health/HealthRecord'
-import { healthRecord_default, HealthRecordType, DosageUnit, MedicationRoute, WithdrawalType } from '../../../schema/health/HealthRecord'
+import { healthRecord_default, HealthRecordType, DosageUnit, MedicationRoute, DewormingRoute, WithdrawalType } from '../../../schema/health/HealthRecord'
 import { todayIso } from '../../../util/DateUtility'
 
 type Navigation = NativeStackNavigationProp<RootStackParamList, 'CreateHealthRecord'>
@@ -41,11 +41,12 @@ export function useCreateHealthRecordController(navigation: Navigation, route: R
   const [medicationDosageUnit, setMedicationDosageUnit] = useState<DosageUnit>('mL')
   const [medicationRoute, setMedicationRoute] = useState<MedicationRoute>('Oral')
   const [medicationFrequency, setMedicationFrequency] = useState('')
-  const [withdrawalPeriodDays, setWithdrawalPeriodDays] = useState(0)
-  const [withdrawalType, setWithdrawalType] = useState<WithdrawalType>('meat')
+  const [medicationWithdrawalDays, setMedicationWithdrawalDays] = useState(0)
+  const [medicationWithdrawalType, setMedicationWithdrawalType] = useState<WithdrawalType>('meat')
 
   const [dewormingDosage, setDewormingDosage] = useState(0)
   const [dewormingDosageUnit, setDewormingDosageUnit] = useState<DosageUnit>('mL')
+  const [dewormingRoute, setDewormingRoute] = useState<DewormingRoute>('Oral')
   const [dewormingWithdrawalDays, setDewormingWithdrawalDays] = useState(0)
   const [dewormingWithdrawalType, setDewormingWithdrawalType] = useState<WithdrawalType>('meat')
 
@@ -61,9 +62,30 @@ export function useCreateHealthRecordController(navigation: Navigation, route: R
 
   const [loading, setLoading] = useState(false)
 
-  const submit = async () => {
+  const validate = (): string | null => {
     if (!name.trim() || (!selectedAnimalId && !selectedGroupId)) {
-      Alert.alert('Required', 'Please enter a name and select an animal or group.')
+      return 'Please enter a name and select an animal or group.'
+    }
+
+    if (recordType === 'medication') {
+      if (medicationDosage < 0) return 'Dosage cannot be negative.'
+      if (medicationWithdrawalDays < 0) return 'Withdrawal days cannot be negative.'
+    }
+
+    if (recordType === 'deworming') {
+      if (dewormingDosage < 0) return 'Dosage cannot be negative.'
+      if (dewormingWithdrawalDays < 0) return 'Withdrawal days cannot be negative.'
+    }
+
+    if (cost < 0) return 'Cost cannot be negative.'
+
+    return null
+  }
+
+  const submit = async () => {
+    const error = validate()
+    if (error) {
+      Alert.alert('Required', error)
       return
     }
 
@@ -95,10 +117,10 @@ export function useCreateHealthRecordController(navigation: Navigation, route: R
       ...(recordType === 'vaccination' && { vaccineLotNumber, vaccineNextDueDate, vaccineRoute }),
       ...(recordType === 'medication' && {
         medicationDosage, medicationDosageUnit, medicationRoute, medicationFrequency,
-        withdrawalPeriodDays, withdrawalType,
+        medicationWithdrawalDays, medicationWithdrawalType,
       }),
       ...(recordType === 'deworming' && {
-        dewormingDosage, dewormingDosageUnit, dewormingWithdrawalDays, dewormingWithdrawalType,
+        dewormingDosage, dewormingDosageUnit, dewormingRoute, dewormingWithdrawalDays, dewormingWithdrawalType,
       }),
       ...(recordType === 'vetVisit' && { vetClinicName, vetDiagnosis, vetTreatmentNotes, vetFollowUpDate }),
       ...((recordType === 'illness' || recordType === 'injury') && { symptoms, treatment, resolvedDate, outcome }),
@@ -150,10 +172,11 @@ export function useCreateHealthRecordController(navigation: Navigation, route: R
     medicationDosageUnit, setMedicationDosageUnit,
     medicationRoute, setMedicationRoute,
     medicationFrequency, setMedicationFrequency,
-    withdrawalPeriodDays, setWithdrawalPeriodDays,
-    withdrawalType, setWithdrawalType,
+    medicationWithdrawalDays, setMedicationWithdrawalDays,
+    medicationWithdrawalType, setMedicationWithdrawalType,
     dewormingDosage, setDewormingDosage,
     dewormingDosageUnit, setDewormingDosageUnit,
+    dewormingRoute, setDewormingRoute,
     dewormingWithdrawalDays, setDewormingWithdrawalDays,
     dewormingWithdrawalType, setDewormingWithdrawalType,
     vetClinicName, setVetClinicName,

@@ -9,20 +9,10 @@ import ScreenContainer from '../../../components/layout/ScreenContainer'
 import WithdrawalStatusCard from '../component/WithdrawalStatusCard'
 import Icon from '@react-native-vector-icons/material-design-icons'
 import { formatDate } from '../../../util/DateUtility'
+import { HEALTH_RECORD_TYPE_ICONS } from '../constants/healthConstants'
 
 type Navigation = NativeStackNavigationProp<RootStackParamList, 'HealthRecordDetail'>
 type Route = RouteProp<RootStackParamList, 'HealthRecordDetail'>
-
-type IconName = React.ComponentProps<typeof Icon>['name']
-
-const RECORD_TYPE_ICONS: Record<string, IconName> = {
-  vaccination: 'needle',
-  medication: 'pill',
-  deworming: 'bug',
-  vetVisit: 'stethoscope',
-  illness: 'thermometer',
-  injury: 'bandage',
-}
 
 interface DetailRowProps {
   label: string
@@ -71,7 +61,7 @@ const HealthRecordDetailScreen: React.FC = () => {
       <ScrollView className="flex-1 px-4" showsVerticalScrollIndicator={false}>
         <View className="flex-row items-center mt-4">
           <View className="bg-primary/10 rounded-full p-2 mr-3">
-            <Icon name={RECORD_TYPE_ICONS[record.recordType] || 'medical-bag'} size={24} color="#4A6741" />
+            <Icon name={HEALTH_RECORD_TYPE_ICONS[record.recordType] || 'medical-bag'} size={24} color="#4A6741" />
           </View>
           <View className="flex-1">
             <Text className="text-2xl font-bold text-text-primary">{record.name}</Text>
@@ -125,11 +115,12 @@ const HealthRecordDetailScreen: React.FC = () => {
               {record.dewormingDosage > 0 && (
                 <DetailRow label="Dosage" value={`${record.dewormingDosage} ${record.dewormingDosageUnit}`} />
               )}
+              {record.dewormingRoute && <DetailRow label="Route" value={record.dewormingRoute} />}
             </>
           )}
 
-          {record.recordType === 'medication' && record.withdrawalPeriodDays > 0 && (
-            <DetailRow label="Withdrawal Period" value={`${record.withdrawalPeriodDays} days (${record.withdrawalType})`} />
+          {record.recordType === 'medication' && record.medicationWithdrawalDays > 0 && (
+            <DetailRow label="Withdrawal Period" value={`${record.medicationWithdrawalDays} days (${record.medicationWithdrawalType})`} />
           )}
 
           {record.recordType === 'deworming' && record.dewormingWithdrawalDays > 0 && (

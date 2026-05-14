@@ -3,8 +3,7 @@ import { View, Text, TouchableOpacity } from 'react-native'
 import TextInput from '../../../components/input/TextInput'
 import DatePickerInput from '../../../components/input/DatePickerInput'
 import type { MedicationRoute } from '../../../schema/health/HealthRecord'
-
-const ROUTES: MedicationRoute[] = ['Injection', 'Oral', 'Topical', 'IV', 'Intranasal', 'Subcutaneous', 'Intramuscular']
+import { MEDICATION_ROUTES } from '../constants/healthConstants'
 
 interface Props {
   vaccineLotNumber: string
@@ -31,7 +30,7 @@ const VaccinationFields: React.FC<Props> = ({
 
       <Text className="text-sm font-medium text-text-primary mb-1">Route</Text>
       <View className="flex-row flex-wrap gap-2 mb-4">
-        {ROUTES.map(r => {
+        {MEDICATION_ROUTES.map(r => {
           const isSelected = vaccineRoute === r
           return (
             <TouchableOpacity
