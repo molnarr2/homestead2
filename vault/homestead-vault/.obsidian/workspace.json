@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "02_phase1_MVP/03_issues/01_health_record_issues.md",
+                "file": "02_phase1_MVP/02_refinement_1/work/08. Paywall Implementation.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "01_health_record_issues"
+              "title": "08. Paywall Implementation"
             }
           }
         ]
@@ -185,14 +185,19 @@
   },
   "active": "02dd2e34ceb194af",
   "lastOpenFiles": [
-    "02_phase1_MVP/01_research/05_health_record_scavenger_hunt.md",
+    "02_phase1_MVP/02_refinement_1/13_Paywall Integration.md",
+    "00_research/03_paywall_and_free_tier_strategy.md",
+    "02_phase1_MVP/02_TODO.md",
+    "00_research/01_homesteader-persona-research.md",
+    "00_research/02_testing_strategy.md",
+    "02_phase1_MVP/02_refinement_1/work/08. Paywall Implementation.md",
     "02_phase1_MVP/03_issues/01_health_record_issues.md",
+    "02_phase1_MVP/01_research/05_health_record_scavenger_hunt.md",
     "02_phase1_MVP/03_issues",
     "02_phase1_MVP/01_research/04_health_record_custom_fields_audit.md",
     "03_phase2/Ideas/Health Record Types.md",
     "03_phase2/Ideas/Missing Features.md",
     "03_phase2/Ideas",
-    "02_phase1_MVP/02_TODO.md",
     "03_phase2",
     "02_phase1_MVP/02_refinement_1/12_Care Template Lookup Modal.md",
     "02_phase1_MVP/02_refinement_1/work/07. Care Template Better functionality.md",
@@ -208,13 +213,8 @@
     "00_ops",
     "02_phase1_MVP/01_Accounts.md",
     "02_phase1_MVP/02_refinement_1/08_Onboarding Navigation Fix.md",
-    "00_research/01_homesteader-persona-research.md",
     "02_phase1_MVP/02_refinement_1/07_animal_groups.md",
     "02_phase1_MVP/02_refinement_1/work/04. Grouping animals as saved groups.md",
-    "02_phase1_MVP/02_refinement_1/work/03. Care Schedule Add Care.md",
-    "02_phase1_MVP/02_refinement_1/work/02. We need to change the subscription stuff.md",
-    "02_phase1_MVP/02_refinement_1/work/01. Animal Listing Screen Cleanup.md",
-    "02_phase1_MVP/02_refinement_1/06_animal_picker_modal.md",
     "00_research",
     "02_phase1_MVP/02_refinement_1/work",
     "02_phase1_MVP/02_refinement_1",
