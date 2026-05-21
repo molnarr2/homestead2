@@ -4,8 +4,14 @@ import type { RootStackParamList } from '../../../navigation/RootNavigation'
 import { useAnimalStore } from '../../../store/animalStore'
 import { useAnimalTypeStore } from '../../../store/animalTypeStore'
 import { useGroupStore } from '../../../store/groupStore'
+import { useHomesteadStore } from '../../../store/homesteadStore'
+import { usePaywallStore } from '../../../store/paywallStore'
+import { effectiveSubscription } from '../../subscription/service/ISubscriptionService'
 import Animal, { AnimalState } from '../../../schema/animal/Animal'
 import AnimalGroup from '../../../schema/animalGroup/AnimalGroup'
+
+const FREE_TIER_ANIMAL_LIMIT = 12
+const STANDARD_TIER_ANIMAL_LIMIT = 50
 
 type Navigation = NativeStackNavigationProp<RootStackParamList>
 
@@ -19,6 +25,7 @@ export function useAnimalListController(navigation: Navigation) {
   const { animals, loading } = useAnimalStore()
   const { animalTypes } = useAnimalTypeStore()
   const { groups } = useGroupStore()
+  const homestead = useHomesteadStore(s => s.homestead)
   const [searchQuery, setSearchQuery] = useState('')
   const [filterStates, setFilterStates] = useState<AnimalState[]>([])
   const [filterTypes, setFilterTypes] = useState<string[]>([])
@@ -71,7 +78,18 @@ export function useAnimalListController(navigation: Navigation) {
 
   const onAnimalPress = (animalId: string) => navigation.navigate('AnimalDetail', { animalId })
   const onGroupPress = (groupId: string) => navigation.navigate('GroupDetail', { groupId })
-  const onCreateAnimal = () => navigation.navigate('CreateAnimal', {})
+  const onCreateAnimal = () => {
+    const tier = effectiveSubscription(homestead)
+    const count = animals.length
+    if (
+      (tier === 'free' && count >= FREE_TIER_ANIMAL_LIMIT) ||
+      (tier === 'standard' && count >= STANDARD_TIER_ANIMAL_LIMIT)
+    ) {
+      usePaywallStore.getState().show()
+      return
+    }
+    navigation.navigate('CreateAnimal', {})
+  }
 
   return {
     sections,

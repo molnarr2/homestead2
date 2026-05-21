@@ -1,12 +1,9 @@
 import { useState } from 'react'
-import { Alert } from 'react-native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RouteProp } from '@react-navigation/native'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
 import { useAnimalStore } from '../../../store/animalStore'
 import { useAnimalTypeStore } from '../../../store/animalTypeStore'
-import { useHomesteadStore } from '../../../store/homesteadStore'
-import { effectiveSubscription } from '../../subscription/service/ISubscriptionService'
 import { bsBreedingService } from '../../../Bootstrap'
 import { breedingRecord_default, BreedingMethod } from '../../../schema/breeding/BreedingRecord'
 import { calculateGestation } from '../../../util/GestationUtility'
@@ -19,7 +16,6 @@ export function useCreateBreedingRecordController(navigation: Navigation, route:
   const { animalId } = route.params
   const { animals } = useAnimalStore()
   const { getGestationDays } = useAnimalTypeStore()
-  const homestead = useHomesteadStore(s => s.homestead)
 
   const dam = animals.find(a => a.id === animalId)
 
@@ -47,19 +43,6 @@ export function useCreateBreedingRecordController(navigation: Navigation, route:
   }
 
   const submit = async () => {
-    const tier = effectiveSubscription(homestead)
-    if (tier === 'free') {
-      Alert.alert(
-        'Pro Feature',
-        'Breeding records are available with a Pro or Farm subscription. Upgrade to track breedings, gestation countdowns, and offspring.',
-        [
-          { text: 'Cancel', style: 'cancel' },
-          { text: 'Upgrade', onPress: () => navigation.navigate('Subscription') },
-        ]
-      )
-      return
-    }
-
     setLoading(true)
     const record = {
       ...breedingRecord_default(),

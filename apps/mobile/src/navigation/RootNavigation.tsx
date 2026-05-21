@@ -11,6 +11,7 @@ import RegisterScreen from '../feature/auth/screen/RegisterScreen'
 import SpeciesSelectionScreen from '../feature/auth/screen/SpeciesSelectionScreen'
 import DebugScreen from '../feature/debug/DebugScreen'
 import PlaceholderScreen from './PlaceholderScreen'
+import PaywallModal from '../feature/subscription/component/PaywallModal'
 import CustomizationHomeScreen from '../feature/customization/screen/CustomizationHomeScreen'
 import AnimalTypeDetailScreen from '../feature/customization/screen/AnimalTypeDetailScreen'
 import EditAnimalTypeScreen from '../feature/customization/screen/EditAnimalTypeScreen'
@@ -98,7 +99,6 @@ export type RootStackParamList = {
   // Settings screens
   Profile: undefined
   EditProfile: undefined
-  Subscription: undefined
   Customization: undefined
   CustomizeAnimalType: { animalTypeId: string }
   EditAnimalType: { animalTypeId?: string }
@@ -120,60 +120,62 @@ const RootNavigation: React.FC = () => {
   const showLoading = isLoggedIn === null || (isLoggedIn === true && (homesteadId === '' || homestead === null))
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {showLoading ? (
-          <Stack.Screen name="Loading" component={LoadingScreen} />
-        ) : isLoggedIn === false ? (
-          <>
-            <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen name="Register" component={RegisterScreen} />
-          </>
-        ) : homestead?.onboardingComplete === false ? (
-          <Stack.Screen name="SpeciesSelection" component={SpeciesSelectionScreen} />
-        ) : (
-          <>
-            <Stack.Screen name="DrawerMain" component={DrawerNavigator} />
-            <Stack.Screen name="AnimalDetail" component={AnimalDetailScreen} />
-            <Stack.Screen name="CreateAnimal" component={CreateAnimalScreen} />
-            <Stack.Screen name="EditAnimal" component={EditAnimalScreen} />
-            <Stack.Screen name="CareEventDetail" component={CareEventDetailScreen} />
-            <Stack.Screen name="CreateCareEvent" component={CreateCareEventScreen} />
-            <Stack.Screen name="HealthRecordDetail" component={HealthRecordDetailScreen} />
-            <Stack.Screen name="CreateHealthRecord" component={CreateHealthRecordScreen} />
-            <Stack.Screen name="BreedingRecordDetail" component={BreedingRecordDetailScreen} />
-            <Stack.Screen name="CreateBreedingRecord" component={CreateBreedingRecordScreen} />
-            <Stack.Screen name="RecordBirthOutcome" component={RecordBirthOutcomeScreen} />
-            <Stack.Screen name="CreateProductionLog" component={CreateProductionLogScreen} />
-            <Stack.Screen name="CreateNote" component={CreateNoteScreen} />
-            <Stack.Screen name="NoteDetail" component={NoteDetailScreen} />
-            <Stack.Screen name="GroupDetail" component={GroupDetailScreen} />
-            <Stack.Screen name="EditGroup" component={EditGroupScreen} />
-            <Stack.Screen name="CreateWeightLog" component={CreateWeightLogScreen} />
-            <Stack.Screen name="WeightLogDetail" component={WeightLogDetailScreen} />
-            <Stack.Screen name="EditWeightLog" component={EditWeightLogScreen} />
-            <Stack.Screen name="EditHealthRecord" component={EditHealthRecordScreen} />
-            <Stack.Screen name="EditCareEvent" component={EditCareEventScreen} />
-            <Stack.Screen name="EditBreedingRecord" component={EditBreedingRecordScreen} />
-            <Stack.Screen name="EditNote" component={EditNoteScreen} />
-            <Stack.Screen name="EditProductionLog" component={EditProductionLogScreen} />
-            <Stack.Screen name="Profile" component={ProfileScreen} />
-            <Stack.Screen name="EditProfile" component={EditProfileScreen} />
-            <Stack.Screen name="Subscription" component={PlaceholderScreen} />
-            <Stack.Screen name="Customization" component={CustomizationHomeScreen} />
-            <Stack.Screen name="CustomizeAnimalType" component={AnimalTypeDetailScreen} />
-            <Stack.Screen name="EditAnimalType" component={EditAnimalTypeScreen} />
-            <Stack.Screen name="EditBreed" component={EditBreedScreen} />
-            <Stack.Screen name="EditCareTemplate" component={EditCareTemplateScreen} />
-            <Stack.Screen name="CustomizeBreeds" component={PlaceholderScreen} />
-            <Stack.Screen name="CustomizeCareTemplates" component={PlaceholderScreen} />
-            <Stack.Screen name="SendFeedback" component={SendFeedbackScreen} />
-            <Stack.Screen name="Settings" component={SettingsScreen} />
-            <Stack.Screen name="Debug" component={DebugScreen} options={{ headerShown: true, title: 'Debug Theme' }} />
-          </>
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
+    <>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          {showLoading ? (
+            <Stack.Screen name="Loading" component={LoadingScreen} />
+          ) : isLoggedIn === false ? (
+            <>
+              <Stack.Screen name="Login" component={LoginScreen} />
+              <Stack.Screen name="Register" component={RegisterScreen} />
+            </>
+          ) : homestead?.onboardingComplete === false ? (
+            <Stack.Screen name="SpeciesSelection" component={SpeciesSelectionScreen} />
+          ) : (
+            <>
+              <Stack.Screen name="DrawerMain" component={DrawerNavigator} />
+              <Stack.Screen name="AnimalDetail" component={AnimalDetailScreen} />
+              <Stack.Screen name="CreateAnimal" component={CreateAnimalScreen} />
+              <Stack.Screen name="EditAnimal" component={EditAnimalScreen} />
+              <Stack.Screen name="CareEventDetail" component={CareEventDetailScreen} />
+              <Stack.Screen name="CreateCareEvent" component={CreateCareEventScreen} />
+              <Stack.Screen name="HealthRecordDetail" component={HealthRecordDetailScreen} />
+              <Stack.Screen name="CreateHealthRecord" component={CreateHealthRecordScreen} />
+              <Stack.Screen name="BreedingRecordDetail" component={BreedingRecordDetailScreen} />
+              <Stack.Screen name="CreateBreedingRecord" component={CreateBreedingRecordScreen} />
+              <Stack.Screen name="RecordBirthOutcome" component={RecordBirthOutcomeScreen} />
+              <Stack.Screen name="CreateProductionLog" component={CreateProductionLogScreen} />
+              <Stack.Screen name="CreateNote" component={CreateNoteScreen} />
+              <Stack.Screen name="NoteDetail" component={NoteDetailScreen} />
+              <Stack.Screen name="GroupDetail" component={GroupDetailScreen} />
+              <Stack.Screen name="EditGroup" component={EditGroupScreen} />
+              <Stack.Screen name="CreateWeightLog" component={CreateWeightLogScreen} />
+              <Stack.Screen name="WeightLogDetail" component={WeightLogDetailScreen} />
+              <Stack.Screen name="EditWeightLog" component={EditWeightLogScreen} />
+              <Stack.Screen name="EditHealthRecord" component={EditHealthRecordScreen} />
+              <Stack.Screen name="EditCareEvent" component={EditCareEventScreen} />
+              <Stack.Screen name="EditBreedingRecord" component={EditBreedingRecordScreen} />
+              <Stack.Screen name="EditNote" component={EditNoteScreen} />
+              <Stack.Screen name="EditProductionLog" component={EditProductionLogScreen} />
+              <Stack.Screen name="Profile" component={ProfileScreen} />
+              <Stack.Screen name="EditProfile" component={EditProfileScreen} />
+              <Stack.Screen name="Customization" component={CustomizationHomeScreen} />
+              <Stack.Screen name="CustomizeAnimalType" component={AnimalTypeDetailScreen} />
+              <Stack.Screen name="EditAnimalType" component={EditAnimalTypeScreen} />
+              <Stack.Screen name="EditBreed" component={EditBreedScreen} />
+              <Stack.Screen name="EditCareTemplate" component={EditCareTemplateScreen} />
+              <Stack.Screen name="CustomizeBreeds" component={PlaceholderScreen} />
+              <Stack.Screen name="CustomizeCareTemplates" component={PlaceholderScreen} />
+              <Stack.Screen name="SendFeedback" component={SendFeedbackScreen} />
+              <Stack.Screen name="Settings" component={SettingsScreen} />
+              <Stack.Screen name="Debug" component={DebugScreen} options={{ headerShown: true, title: 'Debug Theme' }} />
+            </>
+          )}
+        </Stack.Navigator>
+      </NavigationContainer>
+      <PaywallModal />
+    </>
   )
 }
 

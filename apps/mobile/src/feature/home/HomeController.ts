@@ -5,6 +5,9 @@ import { useBreedingStore } from '../../store/breedingStore'
 import { useHealthStore } from '../../store/healthStore'
 import { useAnimalStore } from '../../store/animalStore'
 import { useProductionStore } from '../../store/productionStore'
+import { useHomesteadStore } from '../../store/homesteadStore'
+import { usePaywallStore } from '../../store/paywallStore'
+import { effectiveSubscription } from '../subscription/service/ISubscriptionService'
 import { getCareStatus, getDaysOverdue } from '../../util/CareUtility'
 import { calculateWithdrawal, WithdrawalResult } from '../../util/WithdrawalUtility'
 import { calculateGestation, GestationStatus } from '../../util/GestationUtility'
@@ -62,6 +65,7 @@ export function useHomeController(navigation: any) {
   const healthRecords = useHealthStore(s => s.healthRecords)
   const animals = useAnimalStore(s => s.animals)
   const productionLogs = useProductionStore(s => s.productionLogs)
+  const homestead = useHomesteadStore(s => s.homestead)
   const [refreshing, setRefreshing] = useState(false)
 
   const animalMap = useMemo(() => {
@@ -233,12 +237,22 @@ export function useHomeController(navigation: any) {
 
   const onQuickLogProduction = () =>
     navigation.navigate('CreateProductionLog', {})
-  const onQuickAddAnimal = () =>
+  const FREE_TIER_ANIMAL_LIMIT = 12
+  const STANDARD_TIER_ANIMAL_LIMIT = 50
+  const onQuickAddAnimal = () => {
+    const tier = effectiveSubscription(homestead)
+    const count = animals.length
+    if (
+      (tier === 'free' && count >= FREE_TIER_ANIMAL_LIMIT) ||
+      (tier === 'standard' && count >= STANDARD_TIER_ANIMAL_LIMIT)
+    ) {
+      usePaywallStore.getState().show()
+      return
+    }
     navigation.navigate('CreateAnimal', {})
+  }
   const onQuickRecordCare = () =>
     navigation.navigate('Care')
-  const onQuickAddWeight = () =>
-    navigation.navigate('Animals')
   const onAnimalTypePress = () =>
     navigation.navigate('Animals')
 
@@ -275,7 +289,6 @@ export function useHomeController(navigation: any) {
     onQuickLogProduction,
     onQuickAddAnimal,
     onQuickRecordCare,
-    onQuickAddWeight,
     onAnimalTypePress,
     onOpenDrawer,
   }

@@ -107,21 +107,6 @@ No Firestore schema changes needed. The `subscriptionRevenuecat` and `subscripti
 - `feature/profile/screen/ProfileScreen.tsx` — Update tier display to show new tier names.
 - `feature/profile/screen/ProfileController.ts` — Remove `onSubscription` navigation to placeholder screen, or change to `usePaywallStore.getState().show()`.
 
-## Data Migration
-
-**Lazy migration only.** Existing Firestore documents with `subscriptionRevenuecat: 'farm'` or `subscriptionOverride: 'farm'` need to map to `'pro'`. Handle this in `effectiveSubscription()` by treating `'farm'` as equivalent to `'pro'` in the tier ranking. No migration script needed.
-
-Add a fallback in `effectiveSubscription()`:
-
-- If the stored value is `'farm'`, treat it as rank 2 (same as `'pro'`).
-- The next time `syncSubscription()` runs for that homestead, it writes the new tier name, naturally replacing `'farm'`.
-
-For `subscriptionOverride: 'farm'` set manually in Firestore by an admin — these will persist until manually updated. The fallback handles them indefinitely at no cost.
-
 ## Risk
 
-**Existing `'farm'` values in Firestore.** If `effectiveSubscription()` doesn't handle the `'farm'` fallback, those users drop to free tier. Mitigated by the lazy mapping described above.
-
 **RevenueCat product ID mismatch.** The new product IDs (`homestead_standard_monthly`, `homestead_pro_monthly`) must be created in RevenueCat dashboard and App Store Connect / Google Play Console before deployment. If they don't exist, `getPrices()` returns null and purchases fail. The modal should handle the null-prices state gracefully (show "Unavailable" or hide price).
-
-**Removing feature gates.** Care, health, breeding, notes, production, and group limits are being removed for all tiers. This is intentional — animal count is the only gate. No data loss risk since gates only blocked creation, never deleted data.

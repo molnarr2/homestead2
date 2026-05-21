@@ -1,12 +1,9 @@
 import { useState } from 'react'
-import { Alert } from 'react-native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RouteProp } from '@react-navigation/native'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
 import { useAnimalStore } from '../../../store/animalStore'
 import { useGroupStore } from '../../../store/groupStore'
-import { useHomesteadStore } from '../../../store/homesteadStore'
-import { effectiveSubscription } from '../../subscription/service/ISubscriptionService'
 import { bsProductionService } from '../../../Bootstrap'
 import { productionLog_default, ProductionType } from '../../../schema/production/ProductionLog'
 import { getDefaultUnit } from '../../../util/ProductionUtility'
@@ -19,7 +16,6 @@ export function useCreateProductionLogController(navigation: Navigation, route: 
   const { animalId: routeAnimalId, groupId: routeGroupId, type: initialType } = route.params ?? {}
   const { animals } = useAnimalStore()
   const { groups } = useGroupStore()
-  const homestead = useHomesteadStore(s => s.homestead)
 
   const productionType: ProductionType = initialType ?? 'eggs'
   const unit = getDefaultUnit(productionType)
@@ -45,19 +41,6 @@ export function useCreateProductionLogController(navigation: Navigation, route: 
   const selectedGroup = groups.find(g => g.id === selectedGroupId) ?? null
 
   const submit = async () => {
-    const tier = effectiveSubscription(homestead)
-    if (tier === 'free') {
-      Alert.alert(
-        'Pro Feature',
-        'Production logging is available with a Pro or Farm subscription. Upgrade to track your daily production.',
-        [
-          { text: 'Cancel', style: 'cancel' },
-          { text: 'Upgrade', onPress: () => navigation.navigate('Subscription') },
-        ]
-      )
-      return
-    }
-
     const qty = parseFloat(quantity)
     if (!qty || qty <= 0) return
 

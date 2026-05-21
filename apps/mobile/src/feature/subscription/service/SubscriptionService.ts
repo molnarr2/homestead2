@@ -12,12 +12,10 @@ const TAG = 'SubscriptionService'
 
 function revenueCatTierToSubscription(tier: InAppSubscription): SubscriptionTier {
   switch (tier) {
-    case InAppSubscription.tier3:
-      return 'farm'
-    case InAppSubscription.tier2:
+    case InAppSubscription.pro:
       return 'pro'
-    case InAppSubscription.tier1:
-      return 'pro'
+    case InAppSubscription.standard:
+      return 'standard'
     default:
       return 'free'
   }
@@ -115,14 +113,13 @@ export default class SubscriptionService implements ISubscriptionService {
     }
   }
 
-  async getPrices(): Promise<{ tier1: string, tier2: string, tier3: string } | null> {
+  async getPrices(): Promise<{ standard: string, pro: string } | null> {
     try {
       const prices = await this.purchases.prices()
       if (!prices.success) return null
       return {
-        tier1: prices.priceTier1,
-        tier2: prices.priceTier2,
-        tier3: prices.priceTier3,
+        standard: prices.priceStandard,
+        pro: prices.pricePro,
       }
     } catch (error: any) {
       Log.error(TAG, `getPrices error: ${error.message}`)

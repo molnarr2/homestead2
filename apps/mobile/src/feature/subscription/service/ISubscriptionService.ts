@@ -1,14 +1,15 @@
 import { IResult } from '../../../util/Result'
 import Homestead from '../../../schema/homestead/Homestead'
 
-export type SubscriptionTier = 'free' | 'pro' | 'farm'
+export type SubscriptionTier = 'free' | 'standard' | 'pro'
+
+const tierRank: Record<string, number> = { free: 0, standard: 1, pro: 2, farm: 2 }
+const tiers: SubscriptionTier[] = ['free', 'standard', 'pro']
 
 export function effectiveSubscription(homestead: Homestead | null): SubscriptionTier {
   if (!homestead) return 'free'
-  const tierRank: Record<SubscriptionTier, number> = { free: 0, pro: 1, farm: 2 }
   const fromOverride = tierRank[homestead.subscriptionOverride] ?? 0
   const fromRevenueCat = tierRank[homestead.subscriptionRevenuecat] ?? 0
-  const tiers: SubscriptionTier[] = ['free', 'pro', 'farm']
   return tiers[Math.max(fromOverride, fromRevenueCat)]
 }
 
@@ -20,5 +21,5 @@ export default interface ISubscriptionService {
   syncSubscription(): Promise<void>
   purchase(productId: string): Promise<IResult>
   restorePurchases(): Promise<IResult>
-  getPrices(): Promise<{ tier1: string, tier2: string, tier3: string } | null>
+  getPrices(): Promise<{ standard: string, pro: string } | null>
 }

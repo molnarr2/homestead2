@@ -1,12 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Alert } from 'react-native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RouteProp } from '@react-navigation/native'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
-import { useAnimalStore } from '../../../store/animalStore'
 import { useAnimalTypeStore } from '../../../store/animalTypeStore'
-import { useHomesteadStore } from '../../../store/homesteadStore'
-import { effectiveSubscription } from '../../subscription/service/ISubscriptionService'
 import { bsAnimalService } from '../../../Bootstrap'
 import { animal_default, AnimalGender } from '../../../schema/animal/Animal'
 import { adminObject_default } from '../../../schema/object/AdminObject'
@@ -14,12 +11,8 @@ import { adminObject_default } from '../../../schema/object/AdminObject'
 type Navigation = NativeStackNavigationProp<RootStackParamList, 'CreateAnimal'>
 type Route = RouteProp<RootStackParamList, 'CreateAnimal'>
 
-const FREE_TIER_ANIMAL_LIMIT = 10
-
 export function useCreateAnimalController(navigation: Navigation, route: Route) {
-  const { animals } = useAnimalStore()
   const { animalTypes } = useAnimalTypeStore()
-  const homestead = useHomesteadStore(s => s.homestead)
 
   const [name, setName] = useState('')
   const [animalTypeId, setAnimalTypeId] = useState(route.params?.animalTypeId ?? '')
@@ -46,19 +39,6 @@ export function useCreateAnimalController(navigation: Navigation, route: Route) 
   const submit = async () => {
     if (!name.trim()) {
       Alert.alert('Required', 'Please enter a name for the animal.')
-      return
-    }
-
-    const tier = effectiveSubscription(homestead)
-    if (tier === 'free' && animals.length >= FREE_TIER_ANIMAL_LIMIT) {
-      Alert.alert(
-        'Animal Limit Reached',
-        `Free accounts can add up to ${FREE_TIER_ANIMAL_LIMIT} animals. Upgrade to Pro for unlimited animals.`,
-        [
-          { text: 'Cancel', style: 'cancel' },
-          { text: 'Upgrade', onPress: () => navigation.navigate('Subscription') },
-        ]
-      )
       return
     }
 

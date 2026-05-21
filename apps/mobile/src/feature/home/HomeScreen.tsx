@@ -9,7 +9,6 @@ import BreedingCountdownSection from './component/BreedingCountdownSection'
 import FarmSummarySection from './component/FarmSummarySection'
 import ProductionSnapshotSection from './component/ProductionSnapshotSection'
 import UpcomingEventsSection from './component/UpcomingEventsSection'
-import QuickActionsSection from './component/QuickActionsSection'
 import ScreenContainer from '../../components/layout/ScreenContainer'
 
 const HomeScreen: React.FC = () => {
@@ -88,13 +87,6 @@ const HomeScreen: React.FC = () => {
             items={controller.upcomingEvents}
             totalCount={controller.upcomingEventsTotal}
             onViewAll={controller.onQuickRecordCare}
-          />
-
-          <QuickActionsSection
-            onLogProduction={controller.onQuickLogProduction}
-            onAddWeight={controller.onQuickAddWeight}
-            onRecordCare={controller.onQuickRecordCare}
-            onAddAnimal={controller.onQuickAddAnimal}
           />
         </View>
       </ScrollView>

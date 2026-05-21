@@ -7,6 +7,7 @@ import type { RootStackParamList } from './RootNavigation'
 import { useSideMenuController } from './SideMenuController'
 import { useHomesteadStore } from '../store/homesteadStore'
 import { effectiveSubscription } from '../feature/subscription/service/ISubscriptionService'
+import { usePaywallStore } from '../store/paywallStore'
 import PrimaryButton from '../components/button/PrimaryButton'
 
 type RootNavigation = NativeStackNavigationProp<RootStackParamList>
@@ -63,7 +64,7 @@ export function SideMenu(props: DrawerContentComponentProps) {
       <Divider />
 
       <MenuItem label="Profile" onPress={() => navigateTo('Profile')} />
-      <MenuItem label="Subscription" onPress={() => navigateTo('Subscription')} />
+      <MenuItem label="Subscription" onPress={() => { props.navigation.closeDrawer(); usePaywallStore.getState().show() }} />
       <MenuItem label="Customization" onPress={() => navigateTo('Customization')} />
 
       <Divider />

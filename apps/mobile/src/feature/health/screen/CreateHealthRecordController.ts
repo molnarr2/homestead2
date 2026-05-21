@@ -3,10 +3,8 @@ import { Alert } from 'react-native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RouteProp } from '@react-navigation/native'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
-import { useHomesteadStore } from '../../../store/homesteadStore'
 import { useAnimalStore } from '../../../store/animalStore'
 import { useGroupStore } from '../../../store/groupStore'
-import { effectiveSubscription } from '../../subscription/service/ISubscriptionService'
 import { bsHealthService, bsGroupService } from '../../../Bootstrap'
 import type HealthRecord from '../../../schema/health/HealthRecord'
 import { healthRecord_default, HealthRecordType, DosageUnit, MedicationRoute, DewormingRoute, WithdrawalType } from '../../../schema/health/HealthRecord'
@@ -18,7 +16,6 @@ type Route = RouteProp<RootStackParamList, 'CreateHealthRecord'>
 export function useCreateHealthRecordController(navigation: Navigation, route: Route) {
   const { animalId: routeAnimalId, recordType: initialType, groupId: routeGroupId } = route.params
 
-  const homestead = useHomesteadStore(s => s.homestead)
   const { animals } = useAnimalStore()
   const { groups } = useGroupStore()
   const [selectedAnimalId, setSelectedAnimalId] = useState(routeGroupId ? '' : (routeAnimalId ?? ''))
@@ -86,19 +83,6 @@ export function useCreateHealthRecordController(navigation: Navigation, route: R
     const error = validate()
     if (error) {
       Alert.alert('Required', error)
-      return
-    }
-
-    const tier = effectiveSubscription(homestead)
-    if (tier === 'free') {
-      Alert.alert(
-        'Pro Feature',
-        'Health records are available with a Pro or Farm subscription. Upgrade to track vaccinations, medications, and withdrawal periods.',
-        [
-          { text: 'Cancel', style: 'cancel' },
-          { text: 'Upgrade', onPress: () => navigation.navigate('Subscription') },
-        ]
-      )
       return
     }
 

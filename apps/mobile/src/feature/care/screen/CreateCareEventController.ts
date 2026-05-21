@@ -4,11 +4,8 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RouteProp } from '@react-navigation/native'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
 import { useAnimalStore } from '../../../store/animalStore'
-import { useCareStore } from '../../../store/careStore'
 import { useAnimalTypeStore } from '../../../store/animalTypeStore'
-import { useHomesteadStore } from '../../../store/homesteadStore'
 import { useGroupStore } from '../../../store/groupStore'
-import { effectiveSubscription } from '../../subscription/service/ISubscriptionService'
 import { bsCareService, bsGroupService } from '../../../Bootstrap'
 import { CareEventType, careEvent_default } from '../../../schema/care/CareEvent'
 import { adminObject_default } from '../../../schema/object/AdminObject'
@@ -18,15 +15,11 @@ import { AnimalTypeCareTemplate } from '../../../schema/animalType/AnimalType'
 type Navigation = NativeStackNavigationProp<RootStackParamList, 'CreateCareEvent'>
 type Route = RouteProp<RootStackParamList, 'CreateCareEvent'>
 
-const FREE_TIER_CARE_LIMIT = 3
-
 export function useCreateCareEventController(navigation: Navigation, route: Route) {
   const { animalId: routeAnimalId, templateId, groupId: routeGroupId } = route.params
   const { animals } = useAnimalStore()
-  const { careEvents } = useCareStore()
   const { animalTypes } = useAnimalTypeStore()
   const { groups } = useGroupStore()
-  const homestead = useHomesteadStore(s => s.homestead)
 
   const [selectedAnimalId, setSelectedAnimalId] = useState(routeGroupId ? '' : (routeAnimalId ?? ''))
   const [selectedGroupId, setSelectedGroupId] = useState(routeGroupId ?? '')
@@ -67,23 +60,6 @@ export function useCreateCareEventController(navigation: Navigation, route: Rout
     if (!name.trim() || (!selectedAnimalId && !selectedGroupId) || !dueDate) {
       Alert.alert('Required', 'Please enter a name, select an animal or group, and set a due date.')
       return
-    }
-
-    const tier = effectiveSubscription(homestead)
-
-    if (selectedAnimalId) {
-      const eventsForAnimal = careEvents.filter(e => e.animalId === selectedAnimalId)
-      if (tier === 'free' && eventsForAnimal.length >= FREE_TIER_CARE_LIMIT) {
-        Alert.alert(
-          'Care Event Limit Reached',
-          `Free accounts can add up to ${FREE_TIER_CARE_LIMIT} care events per animal. Upgrade to Pro for unlimited care events.`,
-          [
-            { text: 'Cancel', style: 'cancel' },
-            { text: 'Upgrade', onPress: () => navigation.navigate('Subscription') },
-          ]
-        )
-        return
-      }
     }
 
     setLoading(true)

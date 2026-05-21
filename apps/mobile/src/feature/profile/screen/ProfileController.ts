@@ -5,6 +5,7 @@ import { bsAuthService } from '../../../Bootstrap'
 import { resetAllStores } from '../../../store/resetAllStores'
 import { useUserStore } from '../../../store/userStore'
 import { useAnimalStore } from '../../../store/animalStore'
+import { usePaywallStore } from '../../../store/paywallStore'
 
 type Navigation = NativeStackNavigationProp<RootStackParamList, 'Profile'>
 
@@ -18,7 +19,7 @@ export function useProfileController(navigation: Navigation) {
 
   const onEditProfile = () => navigation.navigate('EditProfile')
   const onSettings = () => navigation.navigate('Settings')
-  const onSubscription = () => navigation.navigate('Subscription')
+  const onSubscription = () => usePaywallStore.getState().show()
   const onSendFeedback = () => navigation.navigate('SendFeedback')
 
   const onLogoutPress = () => setShowLogoutDialog(true)

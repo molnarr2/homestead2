@@ -1,4 +1,5 @@
 import { Platform, NativeModules } from "react-native"
+import Config from "react-native-config"
 import IInAppPurchases, {
     CanceledPurchase,
     IPurchaseResult,
@@ -17,41 +18,31 @@ const getPurchases = (): typeof import("react-native-purchases").default | null 
     }
 }
 
-// TODO: set the RevenueCat API keys for each platform before using this class.
-const APPLE_API_KEY = ""
-const GOOGLE_API_KEY = ""
+const APPLE_API_KEY = Config.PUBLIC_APPLE_API_KEY ?? ""
+const GOOGLE_API_KEY = Config.PUBLIC_GOOGLE_API_KEY ?? ""
 
 export default class RevenueCatInAppPurchases implements IInAppPurchases {
 
-    productTier1 = "tier1"
-    productTier2 = "tier2"
-    productTier3 = "tier3"
+    productStandard = "homestead_standard_monthly"
+    productPro = "homestead_pro_monthly"
 
-    identifierTier1 = "tier1"
-    identifierTier2 = "tier2"
-    identifierTier3 = "tier3"
+    identifierStandard = "homestead_standard_monthly"
+    identifierPro = "homestead_pro_monthly"
 
-    entitlementTier1 = "tier1"
-    entitlementTier2 = "tier2"
-    entitlementTier3 = "tier3"
+    entitlementStandard = "standard_v2"
+    entitlementPro = "pro_v2"
+
+    private initialized = false
 
     constructor() {
         if (Platform.OS === 'android') {
-            this.productTier1 = "tier1"
-            this.productTier2 = "tier2"
-            this.productTier3 = "tier3"
-
-            this.identifierTier1 = "tier1:tier1"
-            this.identifierTier2 = "tier2:tier2"
-            this.identifierTier3 = "tier3:tier3"
-
-            this.entitlementTier1 = "tier1"
-            this.entitlementTier2 = "tier2"
-            this.entitlementTier3 = "tier3"
+            this.identifierStandard = "homestead_standard_monthly:homestead_standard_monthly"
+            this.identifierPro = "homestead_pro_monthly:homestead_pro_monthly"
         }
     }
 
     async initialize(): Promise<void> {
+        if (this.initialized) return
         const Purchases = getPurchases()
         if (!Purchases) return
         await Purchases.setLogLevel(Purchases.LOG_LEVEL.DEBUG)
@@ -61,6 +52,7 @@ export default class RevenueCatInAppPurchases implements IInAppPurchases {
         } else if (Platform.OS === 'android') {
             Purchases.configure({ apiKey: GOOGLE_API_KEY })
         }
+        this.initialized = true
     }
 
     async login(userId: string): Promise<void> {
@@ -78,43 +70,29 @@ export default class RevenueCatInAppPurchases implements IInAppPurchases {
     async getProducts(): Promise<void> {
         const Purchases = getPurchases()
         if (!Purchases) return
-        await Purchases.getProducts([this.productTier1, this.productTier2, this.productTier3])
+        await Purchases.getProducts([this.productStandard, this.productPro])
     }
 
     async purchaseProduct(productId: string): Promise<IPurchaseResult> {
-        let entitlementId = this.entitlementTier1
-        if (productId === this.productTier2) {
-            entitlementId = this.entitlementTier2
-        } else if (productId === this.productTier3) {
-            entitlementId = this.entitlementTier3
-        }
+        const entitlementId = productId === this.productPro
+            ? this.entitlementPro
+            : this.entitlementStandard
         return this.performPurchase(productId, entitlementId)
     }
 
     async prices(): Promise<InAppPrices> {
         const Purchases = getPurchases()
-        if (!Purchases) return { success: false, priceTier1: "", priceTier2: "", priceTier3: "" }
-        const products = await Purchases.getProducts([this.productTier1, this.productTier2, this.productTier3])
+        if (!Purchases) return { success: false, priceStandard: "", pricePro: "" }
+        const products = await Purchases.getProducts([this.productStandard, this.productPro])
 
-        const price1 = products.find((item) => item.identifier === this.identifierTier1)?.priceString
-        const price2 = products.find((item) => item.identifier === this.identifierTier2)?.priceString
-        const price3 = products.find((item) => item.identifier === this.identifierTier3)?.priceString
+        const priceStandard = products.find((item) => item.identifier === this.identifierStandard)?.priceString
+        const pricePro = products.find((item) => item.identifier === this.identifierPro)?.priceString
 
-        if (price1 === undefined || price2 === undefined || price3 === undefined) {
-            return {
-                success: false,
-                priceTier1: "",
-                priceTier2: "",
-                priceTier3: "",
-            }
+        if (priceStandard === undefined || pricePro === undefined) {
+            return { success: false, priceStandard: "", pricePro: "" }
         }
 
-        return {
-            success: true,
-            priceTier1: price1,
-            priceTier2: price2,
-            priceTier3: price3,
-        }
+        return { success: true, priceStandard, pricePro }
     }
 
     async restorePurchases(): Promise<IPurchaseResult> {
@@ -155,16 +133,13 @@ export default class RevenueCatInAppPurchases implements IInAppPurchases {
             const Purchases = getPurchases()
             if (!Purchases) return toSubscriptionResult(InAppSubscription.error, "RevenueCat not available")
             const customerInfo = await Purchases.getCustomerInfo()
-            const hasTier1 = typeof customerInfo.entitlements.active[this.entitlementTier1] !== "undefined"
-            const hasTier2 = typeof customerInfo.entitlements.active[this.entitlementTier2] !== "undefined"
-            const hasTier3 = typeof customerInfo.entitlements.active[this.entitlementTier3] !== "undefined"
+            const hasPro = typeof customerInfo.entitlements.active[this.entitlementPro] !== "undefined"
+            const hasStandard = typeof customerInfo.entitlements.active[this.entitlementStandard] !== "undefined"
 
-            if (hasTier3) {
-                return toSubscriptionResult(InAppSubscription.tier3)
-            } else if (hasTier2) {
-                return toSubscriptionResult(InAppSubscription.tier2)
-            } else if (hasTier1) {
-                return toSubscriptionResult(InAppSubscription.tier1)
+            if (hasPro) {
+                return toSubscriptionResult(InAppSubscription.pro)
+            } else if (hasStandard) {
+                return toSubscriptionResult(InAppSubscription.standard)
             }
 
             return toSubscriptionResult(InAppSubscription.free)
