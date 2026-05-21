@@ -6,7 +6,7 @@ I don't like how the home page is empty when all things are caught up.
 
 # Paywall
 
-- [ ] Needs to be implemented with RevenueCat 
+- [x] Needs to be implemented with RevenueCat 
 
 # Feedback
 
