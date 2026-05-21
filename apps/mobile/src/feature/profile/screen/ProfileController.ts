@@ -6,6 +6,7 @@ import { resetAllStores } from '../../../store/resetAllStores'
 import { useUserStore } from '../../../store/userStore'
 import { useAnimalStore } from '../../../store/animalStore'
 import { usePaywallStore } from '../../../store/paywallStore'
+import { useFeedbackStore } from '../../../store/feedbackStore'
 
 type Navigation = NativeStackNavigationProp<RootStackParamList, 'Profile'>
 
@@ -20,7 +21,7 @@ export function useProfileController(navigation: Navigation) {
   const onEditProfile = () => navigation.navigate('EditProfile')
   const onSettings = () => navigation.navigate('Settings')
   const onSubscription = () => usePaywallStore.getState().show()
-  const onSendFeedback = () => navigation.navigate('SendFeedback')
+  const onSendFeedback = () => useFeedbackStore.getState().show('menu')
 
   const onLogoutPress = () => setShowLogoutDialog(true)
   const onLogoutCancel = () => setShowLogoutDialog(false)

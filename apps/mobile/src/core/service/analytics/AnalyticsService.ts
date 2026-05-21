@@ -18,6 +18,17 @@ const KEY_ENGAGEMENT_LEVEL = `${KEY_PREFIX}engagement_level`
 const KEY_DAYS_ACTIVE = `${KEY_PREFIX}days_active`
 const KEY_VISIT_COUNT = `${KEY_PREFIX}visit_count`
 const KEY_FIRST_SEEN = `${KEY_PREFIX}first_seen`
+const KEY_TOTAL_CORE_EVENTS = `${KEY_PREFIX}total_core_events`
+const KEY_FEEDBACK_SHOWN = `${KEY_PREFIX}feedback_shown_thresholds`
+const KEY_REVIEW_SHOWN = `${KEY_PREFIX}review_shown_thresholds`
+
+function isFeedbackThreshold(count: number): boolean {
+  return count === 10 || count === 25 || count === 50 || (count >= 100 && count % 100 === 0)
+}
+
+function isReviewThreshold(count: number): boolean {
+  return count === 20 || count === 50 || (count >= 100 && count % 100 === 0)
+}
 
 const DAYS_ACTIVE_MILESTONES = [1, 2, 3, 5, 7, 10, 15, 20, 25, 50, 100]
 
@@ -30,6 +41,8 @@ function eventCountKey(event: AnalyticsEvent): string {
 export default class AnalyticsService implements IAnalyticsService {
   private platform: ICloudPlatformAnalytics
   private storage: MMKV
+  private feedbackCallback: (() => void) | null = null
+  private reviewCallback: (() => void) | null = null
 
   constructor(platform: ICloudPlatformAnalytics, firebaseAuth: IFirebaseAuth, storage: MMKV) {
     this.platform = platform
@@ -71,11 +84,24 @@ export default class AnalyticsService implements IAnalyticsService {
 
     this.appendActionLog(event)
     this.recalculateMetrics()
+    this.incrementAndCheckThresholds()
   }
 
   onboardingCompleted(): void {
     this.setUserStage('activated')
     this.platform.logEvent('activation')
+  }
+
+  onFeedbackTrigger(callback: () => void): void {
+    this.feedbackCallback = callback
+  }
+
+  onReviewTrigger(callback: () => void): void {
+    this.reviewCallback = callback
+  }
+
+  getTotalCoreEventCount(): number {
+    return this.storage.getNumber(KEY_TOTAL_CORE_EVENTS) ?? 0
   }
 
   clearAnalytics(): void {
@@ -233,5 +259,32 @@ export default class AnalyticsService implements IAnalyticsService {
     this.storage.set(KEY_ENGAGEMENT_LEVEL, level)
     this.platform.setUserProperty('engagement_level', level)
     this.platform.logEvent('engagement_level', { level })
+  }
+
+  private incrementAndCheckThresholds(): void {
+    const total = (this.storage.getNumber(KEY_TOTAL_CORE_EVENTS) ?? 0) + 1
+    this.storage.set(KEY_TOTAL_CORE_EVENTS, total)
+
+    if (isFeedbackThreshold(total)) {
+      const shownJson = this.storage.getString(KEY_FEEDBACK_SHOWN)
+      const shown: string[] = shownJson ? JSON.parse(shownJson) : []
+      const key = String(total)
+      if (!shown.includes(key)) {
+        shown.push(key)
+        this.storage.set(KEY_FEEDBACK_SHOWN, JSON.stringify(shown))
+        this.feedbackCallback?.()
+      }
+    }
+
+    if (isReviewThreshold(total)) {
+      const shownJson = this.storage.getString(KEY_REVIEW_SHOWN)
+      const shown: string[] = shownJson ? JSON.parse(shownJson) : []
+      const key = String(total)
+      if (!shown.includes(key)) {
+        shown.push(key)
+        this.storage.set(KEY_REVIEW_SHOWN, JSON.stringify(shown))
+        this.reviewCallback?.()
+      }
+    }
   }
 }

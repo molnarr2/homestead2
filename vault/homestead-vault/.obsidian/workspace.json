@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "02_phase1_MVP/02_refinement_1/work/11. Tech Spec for feedback system.md",
+                "file": "02_phase1_MVP/02_TODO.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "11. Tech Spec for feedback system"
+              "title": "02_TODO"
             }
           }
         ]
@@ -185,9 +185,9 @@
   },
   "active": "02dd2e34ceb194af",
   "lastOpenFiles": [
-    "02_phase1_MVP/02_TODO.md",
-    "02_phase1_MVP/02_refinement_1/work/11. Tech Spec for feedback system.md",
+    "02_phase1_MVP/02_refinement_1/15_feedback_system.md",
     "02_phase1_MVP/02_refinement_1/14_Analytics.md",
+    "02_phase1_MVP/02_TODO.md",
     "02_phase1_MVP/02_refinement_1/work/10. Tech spec for analytics.md",
     "02_phase1_MVP/02_refinement_1/work/09. Tech Spec for editing records.md",
     "03_phase2/Known Issues.md",

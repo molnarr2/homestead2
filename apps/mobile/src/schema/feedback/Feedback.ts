@@ -7,6 +7,9 @@ export default interface Feedback {
   email: string
   rating: number
   feedback: string
+  bestAreas: string[]
+  improvementAreas: string[]
+  source: 'auto' | 'menu'
   os: 'iOS' | 'Android'
   version: string
 }
@@ -19,6 +22,9 @@ export function feedback_default(): Feedback {
     email: '',
     rating: 0,
     feedback: '',
+    bestAreas: [],
+    improvementAreas: [],
+    source: 'menu',
     os: 'iOS',
     version: '',
   }

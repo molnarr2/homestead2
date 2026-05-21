@@ -32,6 +32,8 @@ import type ISubscriptionService from './feature/subscription/service/ISubscript
 import GroupService from './feature/group/service/GroupService'
 import type IGroupService from './feature/group/service/IGroupService'
 import RevenueCatInAppPurchases from './library/purchases/revenuecat/RevenueCatInAppPurchases'
+import InAppReview from 'react-native-in-app-review'
+import { useFeedbackStore } from './store/feedbackStore'
 
 const firebaseAuth = new FirebaseAuth()
 const firebaseAnalytics = new FirebaseAnalytics()
@@ -54,3 +56,13 @@ export const bsProfileService: IProfileService = new ProfileService()
 export const bsAnimalTypeService: IAnimalTypeService = new AnimalTypeService()
 export const bsGroupService: IGroupService = new GroupService()
 export const bsSubscriptionService: ISubscriptionService = new SubscriptionService(revenueCat, bsHomesteadService, bsAuthService)
+
+bsAnalyticsService.onFeedbackTrigger(() => {
+  useFeedbackStore.getState().show('auto')
+})
+
+bsAnalyticsService.onReviewTrigger(() => {
+  if (InAppReview.isAvailable()) {
+    InAppReview.RequestInAppReview()
+  }
+})

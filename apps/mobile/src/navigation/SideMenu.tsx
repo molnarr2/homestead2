@@ -8,6 +8,7 @@ import { useSideMenuController } from './SideMenuController'
 import { useHomesteadStore } from '../store/homesteadStore'
 import { effectiveSubscription } from '../feature/subscription/service/ISubscriptionService'
 import { usePaywallStore } from '../store/paywallStore'
+import { useFeedbackStore } from '../store/feedbackStore'
 import PrimaryButton from '../components/button/PrimaryButton'
 
 type RootNavigation = NativeStackNavigationProp<RootStackParamList>
@@ -70,7 +71,7 @@ export function SideMenu(props: DrawerContentComponentProps) {
       <Divider />
 
       <MenuItem label="Settings" onPress={() => navigateTo('Settings')} />
-      <MenuItem label="Send Feedback" onPress={() => navigateTo('SendFeedback')} />
+      <MenuItem label="Send Feedback" onPress={() => { props.navigation.closeDrawer(); useFeedbackStore.getState().show('menu') }} />
 
       <Divider />
 

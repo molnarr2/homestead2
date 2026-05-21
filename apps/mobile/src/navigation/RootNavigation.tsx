@@ -20,7 +20,7 @@ import EditCareTemplateScreen from '../feature/customization/screen/EditCareTemp
 import ProfileScreen from '../feature/profile/screen/ProfileScreen'
 import EditProfileScreen from '../feature/profile/screen/EditProfileScreen'
 import SettingsScreen from '../feature/profile/screen/SettingsScreen'
-import SendFeedbackScreen from '../feature/profile/screen/SendFeedbackScreen'
+import FeedbackModal from '../feature/profile/component/FeedbackModal'
 import AnimalDetailScreen from '../feature/animal/screen/AnimalDetailScreen'
 import CreateAnimalScreen from '../feature/animal/screen/CreateAnimalScreen'
 import EditAnimalScreen from '../feature/animal/screen/EditAnimalScreen'
@@ -106,7 +106,6 @@ export type RootStackParamList = {
   EditCareTemplate: { animalTypeId: string; templateId?: string }
   CustomizeBreeds: { animalTypeId: string }
   CustomizeCareTemplates: { animalTypeId: string }
-  SendFeedback: undefined
   Settings: undefined
   Debug: undefined
 }
@@ -167,7 +166,6 @@ const RootNavigation: React.FC = () => {
               <Stack.Screen name="EditCareTemplate" component={EditCareTemplateScreen} />
               <Stack.Screen name="CustomizeBreeds" component={PlaceholderScreen} />
               <Stack.Screen name="CustomizeCareTemplates" component={PlaceholderScreen} />
-              <Stack.Screen name="SendFeedback" component={SendFeedbackScreen} />
               <Stack.Screen name="Settings" component={SettingsScreen} />
               <Stack.Screen name="Debug" component={DebugScreen} options={{ headerShown: true, title: 'Debug Theme' }} />
             </>
@@ -175,6 +173,7 @@ const RootNavigation: React.FC = () => {
         </Stack.Navigator>
       </NavigationContainer>
       <PaywallModal />
+      <FeedbackModal />
     </>
   )
 }
