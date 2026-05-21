@@ -14,7 +14,7 @@ I don't like how the home page is empty when all things are caught up.
 
 # Analytics
 
-- [ ] Want to use the same system as Antioch
+- [x] Want to use the same system as Antioch
 
 # Testing
 

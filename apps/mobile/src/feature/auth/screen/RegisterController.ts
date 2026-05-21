@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { bsAuthService, bsUserService, bsHomesteadService } from '../../../Bootstrap'
+import { bsAuthService, bsUserService, bsHomesteadService, bsAnalyticsService } from '../../../Bootstrap'
 import { user_default } from '../../../schema/user/User'
 import { useHomesteadStore } from '../../../store/homesteadStore'
 
@@ -41,6 +41,7 @@ export function useRegisterController() {
     const homesteadId = await bsHomesteadService.createHomestead('My Homestead', userId, `${firstName} ${lastName}`, email)
     await bsUserService.setActiveHomestead(userId, homesteadId)
     useHomesteadStore.getState().setHomestead(homesteadId)
+    bsAnalyticsService.onboardingCompleted()
 
     setLoading(false)
   }

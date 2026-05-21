@@ -4,6 +4,8 @@ import { IResult, SuccessResult, ErrorResult } from '../../../util/Result'
 import { adminObject_default, adminObject_updateLastUpdated } from '../../../schema/object/AdminObject'
 import HealthRecord from '../../../schema/health/HealthRecord'
 import ICareService from '../../care/service/ICareService'
+import IAnalyticsService from '../../../core/service/analytics/IAnalyticsService'
+import AnalyticsEvent from '../../../core/service/analytics/AnalyticsEvent'
 import IHealthService from './IHealthService'
 import Log from '../../../library/log/Log'
 import { useHomesteadStore } from '../../../store/homesteadStore'
@@ -15,9 +17,11 @@ const TAG = 'HealthService'
 
 export default class HealthService implements IHealthService {
   private careService: ICareService
+  private analyticsService: IAnalyticsService
 
-  constructor(careService: ICareService) {
+  constructor(careService: ICareService, analyticsService: IAnalyticsService) {
     this.careService = careService
+    this.analyticsService = analyticsService
   }
 
   private get homesteadRef() {
@@ -99,6 +103,7 @@ export default class HealthService implements IHealthService {
         })
       }
 
+      this.analyticsService.logAction(AnalyticsEvent.add_health_record)
       return SuccessResult
     } catch (error: any) {
       Log.error(TAG, 'createHealthRecord error: ' + error.message)

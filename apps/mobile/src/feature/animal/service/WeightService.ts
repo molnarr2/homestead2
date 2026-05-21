@@ -5,11 +5,18 @@ import WeightLog from '../../../schema/weight/WeightLog'
 import Log from '../../../library/log/Log'
 import { useHomesteadStore } from '../../../store/homesteadStore'
 import IWeightService from './IWeightService'
+import IAnalyticsService from '../../../core/service/analytics/IAnalyticsService'
+import AnalyticsEvent from '../../../core/service/analytics/AnalyticsEvent'
 import { Col } from '@template/common'
 
 const TAG = 'WeightService'
 
 export default class WeightService implements IWeightService {
+  private analyticsService: IAnalyticsService
+
+  constructor(analyticsService: IAnalyticsService) {
+    this.analyticsService = analyticsService
+  }
 
   private get homesteadRef() {
     const homesteadId = useHomesteadStore.getState().homesteadId
@@ -40,6 +47,7 @@ export default class WeightService implements IWeightService {
       const ref = this.homesteadRef.collection(Col.weightLog).doc()
       log.id = ref.id
       await ref.set(log as any)
+      this.analyticsService.logAction(AnalyticsEvent.add_weight_log)
       return SuccessResult
     } catch (error: any) {
       Log.error(TAG, `createWeightLog error: ${error.message}`)

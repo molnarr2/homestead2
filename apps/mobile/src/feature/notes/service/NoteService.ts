@@ -6,11 +6,18 @@ import Note from '../../../schema/notes/Note'
 import Log from '../../../library/log/Log'
 import { useHomesteadStore } from '../../../store/homesteadStore'
 import INoteService from './INoteService'
+import IAnalyticsService from '../../../core/service/analytics/IAnalyticsService'
+import AnalyticsEvent from '../../../core/service/analytics/AnalyticsEvent'
 import { Col } from '@template/common'
 
 const TAG = 'NoteService'
 
 export default class NoteService implements INoteService {
+  private analyticsService: IAnalyticsService
+
+  constructor(analyticsService: IAnalyticsService) {
+    this.analyticsService = analyticsService
+  }
 
   private get homesteadRef() {
     const homesteadId = useHomesteadStore.getState().homesteadId
@@ -55,6 +62,7 @@ export default class NoteService implements INoteService {
       }
 
       await docRef.set(noteData as any)
+      this.analyticsService.logAction(AnalyticsEvent.add_note)
       return SuccessResult
     } catch (error: any) {
       Log.error(TAG, `createNote error: ${error.message}`)

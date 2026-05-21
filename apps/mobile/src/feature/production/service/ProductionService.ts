@@ -5,11 +5,27 @@ import ProductionLog from '../../../schema/production/ProductionLog'
 import Log from '../../../library/log/Log'
 import { useHomesteadStore } from '../../../store/homesteadStore'
 import IProductionService from './IProductionService'
+import IAnalyticsService from '../../../core/service/analytics/IAnalyticsService'
+import AnalyticsEvent from '../../../core/service/analytics/AnalyticsEvent'
+import { ProductionType } from '../../../schema/production/ProductionLog'
 import { Col } from '@template/common'
 
 const TAG = 'ProductionService'
 
+const productionTypeToEvent: Record<ProductionType, AnalyticsEvent> = {
+  eggs: AnalyticsEvent.add_production_eggs,
+  milk: AnalyticsEvent.add_production_milk,
+  fiber: AnalyticsEvent.add_production_fiber,
+  honey: AnalyticsEvent.add_production_honey,
+  meat: AnalyticsEvent.add_production_meat,
+}
+
 export default class ProductionService implements IProductionService {
+  private analyticsService: IAnalyticsService
+
+  constructor(analyticsService: IAnalyticsService) {
+    this.analyticsService = analyticsService
+  }
 
   private get homesteadRef() {
     const homesteadId = useHomesteadStore.getState().homesteadId
@@ -40,6 +56,7 @@ export default class ProductionService implements IProductionService {
       const ref = this.homesteadRef.collection(Col.productionLog).doc()
       log.id = ref.id
       await ref.set(log as any)
+      this.analyticsService.logAction(productionTypeToEvent[log.productionType])
       return SuccessResult
     } catch (error: any) {
       Log.error(TAG, `createProductionLog error: ${error.message}`)

@@ -6,11 +6,18 @@ import Animal from '../../../schema/animal/Animal'
 import Log from '../../../library/log/Log'
 import { useHomesteadStore } from '../../../store/homesteadStore'
 import IAnimalService from './IAnimalService'
+import IAnalyticsService from '../../../core/service/analytics/IAnalyticsService'
+import AnalyticsEvent from '../../../core/service/analytics/AnalyticsEvent'
 import { Col } from '@template/common'
 
 const TAG = 'AnimalService'
 
 export default class AnimalService implements IAnimalService {
+  private analyticsService: IAnalyticsService
+
+  constructor(analyticsService: IAnalyticsService) {
+    this.analyticsService = analyticsService
+  }
 
   private get homesteadRef() {
     const homesteadId = useHomesteadStore.getState().homesteadId
@@ -52,6 +59,7 @@ export default class AnimalService implements IAnimalService {
       const ref = this.homesteadRef.collection(Col.animal).doc()
       animal.id = ref.id
       await ref.set(animal as any)
+      this.analyticsService.logAction(AnalyticsEvent.add_animal)
       return SuccessResult
     } catch (error: any) {
       Log.error(TAG, `createAnimal error: ${error.message}`)

@@ -6,11 +6,18 @@ import Animal from '../../../schema/animal/Animal'
 import Log from '../../../library/log/Log'
 import { useHomesteadStore } from '../../../store/homesteadStore'
 import IBreedingService from './IBreedingService'
+import IAnalyticsService from '../../../core/service/analytics/IAnalyticsService'
+import AnalyticsEvent from '../../../core/service/analytics/AnalyticsEvent'
 import { Col } from '@template/common'
 
 const TAG = 'BreedingService'
 
 export default class BreedingService implements IBreedingService {
+  private analyticsService: IAnalyticsService
+
+  constructor(analyticsService: IAnalyticsService) {
+    this.analyticsService = analyticsService
+  }
 
   private get homesteadRef() {
     const homesteadId = useHomesteadStore.getState().homesteadId
@@ -59,6 +66,7 @@ export default class BreedingService implements IBreedingService {
       const ref = this.homesteadRef.collection(Col.breedingRecord).doc()
       record.id = ref.id
       await ref.set(record as any)
+      this.analyticsService.logAction(AnalyticsEvent.add_breeding_record)
       return SuccessResult
     } catch (error: any) {
       Log.error(TAG, `createBreedingRecord error: ${error.message}`)

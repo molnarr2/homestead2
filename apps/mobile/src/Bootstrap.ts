@@ -1,6 +1,10 @@
+import { createMMKV } from 'react-native-mmkv'
 import FirebaseAuth from './library/cloudplatform/firebase/FirebaseAuth'
+import FirebaseAnalytics from './library/cloudplatform/firebase/FirebaseAnalytics'
 import AuthService from './core/service/auth/AuthService'
 import type IAuthService from './core/service/auth/IAuthService'
+import AnalyticsService from './core/service/analytics/AnalyticsService'
+import type IAnalyticsService from './core/service/analytics/IAnalyticsService'
 import UserService from './feature/user/service/UserService'
 import type IUserService from './feature/user/service/IUserService'
 import HomesteadService from './feature/homestead/service/HomesteadService'
@@ -30,19 +34,22 @@ import type IGroupService from './feature/group/service/IGroupService'
 import RevenueCatInAppPurchases from './library/purchases/revenuecat/RevenueCatInAppPurchases'
 
 const firebaseAuth = new FirebaseAuth()
+const firebaseAnalytics = new FirebaseAnalytics()
+const analyticsStorage = createMMKV({ id: 'analytics' })
 const revenueCat = new RevenueCatInAppPurchases()
 
 export const bsFirebaseAuth = firebaseAuth
 export const bsAuthService: IAuthService = new AuthService(firebaseAuth)
+export const bsAnalyticsService: IAnalyticsService = new AnalyticsService(firebaseAnalytics, firebaseAuth, analyticsStorage)
 export const bsUserService: IUserService = new UserService()
 export const bsHomesteadService: IHomesteadService = new HomesteadService()
-export const bsAnimalService: IAnimalService = new AnimalService()
-export const bsCareService: ICareService = new CareService()
-export const bsHealthService: IHealthService = new HealthService(bsCareService)
-export const bsBreedingService: IBreedingService = new BreedingService()
-export const bsProductionService: IProductionService = new ProductionService()
-export const bsNoteService: INoteService = new NoteService()
-export const bsWeightService: IWeightService = new WeightService()
+export const bsAnimalService: IAnimalService = new AnimalService(bsAnalyticsService)
+export const bsCareService: ICareService = new CareService(bsAnalyticsService)
+export const bsHealthService: IHealthService = new HealthService(bsCareService, bsAnalyticsService)
+export const bsBreedingService: IBreedingService = new BreedingService(bsAnalyticsService)
+export const bsProductionService: IProductionService = new ProductionService(bsAnalyticsService)
+export const bsNoteService: INoteService = new NoteService(bsAnalyticsService)
+export const bsWeightService: IWeightService = new WeightService(bsAnalyticsService)
 export const bsProfileService: IProfileService = new ProfileService()
 export const bsAnimalTypeService: IAnimalTypeService = new AnimalTypeService()
 export const bsGroupService: IGroupService = new GroupService()

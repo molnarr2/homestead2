@@ -7,11 +7,18 @@ import { calculateNextDueDate } from '../../../util/CareUtility'
 import Log from '../../../library/log/Log'
 import { useHomesteadStore } from '../../../store/homesteadStore'
 import ICareService from './ICareService'
+import IAnalyticsService from '../../../core/service/analytics/IAnalyticsService'
+import AnalyticsEvent from '../../../core/service/analytics/AnalyticsEvent'
 import { Col } from '@template/common'
 
 const TAG = 'CareService'
 
 export default class CareService implements ICareService {
+  private analyticsService: IAnalyticsService
+
+  constructor(analyticsService: IAnalyticsService) {
+    this.analyticsService = analyticsService
+  }
 
   private get homesteadRef() {
     const homesteadId = useHomesteadStore.getState().homesteadId
@@ -53,6 +60,7 @@ export default class CareService implements ICareService {
       const ref = this.homesteadRef.collection(Col.careEvent).doc()
       event.id = ref.id
       await ref.set(event as any)
+      this.analyticsService.logAction(AnalyticsEvent.add_care_event)
       return SuccessResult
     } catch (error: any) {
       Log.error(TAG, `createCareEvent error: ${error.message}`)
@@ -107,6 +115,7 @@ export default class CareService implements ICareService {
       }
 
       await batch.commit()
+      this.analyticsService.logAction(AnalyticsEvent.care_event_complete)
       return SuccessResult
     } catch (error: any) {
       Log.error(TAG, `completeCareEvent error: ${error.message}`)
