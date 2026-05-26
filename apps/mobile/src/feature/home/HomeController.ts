@@ -4,19 +4,17 @@ import { useCareStore } from '../../store/careStore'
 import { useBreedingStore } from '../../store/breedingStore'
 import { useHealthStore } from '../../store/healthStore'
 import { useAnimalStore } from '../../store/animalStore'
-import { useProductionStore } from '../../store/productionStore'
 import { useHomesteadStore } from '../../store/homesteadStore'
 import { usePaywallStore } from '../../store/paywallStore'
 import { effectiveSubscription } from '../subscription/service/ISubscriptionService'
 import { getCareStatus, getDaysOverdue } from '../../util/CareUtility'
-import { calculateWithdrawal, WithdrawalResult } from '../../util/WithdrawalUtility'
+import { calculateWithdrawal } from '../../util/WithdrawalUtility'
 import { calculateGestation, GestationStatus } from '../../util/GestationUtility'
 import { formatDate } from '../../util/DateUtility'
 import { tstampToDateOrNow } from '../../schema/type/Tstamp'
-import { startOfDay, differenceInDays, subDays, isAfter, startOfToday, isToday as isTodayFn } from 'date-fns'
+import { startOfDay, differenceInDays, startOfToday } from 'date-fns'
 import CareEvent from '../../schema/care/CareEvent'
 import BreedingRecord from '../../schema/breeding/BreedingRecord'
-import { ProductionType } from '../../schema/production/ProductionLog'
 
 export interface DashboardCareItem {
   event: CareEvent
@@ -44,13 +42,6 @@ export interface FarmSummaryItem {
   count: number
 }
 
-export interface ProductionSnapshotItem {
-  productionType: ProductionType
-  unit: string
-  today: number
-  week: number
-}
-
 export interface UpcomingEventItem {
   label: string
   animalName: string
@@ -64,7 +55,6 @@ export function useHomeController(navigation: any) {
   const breedingRecords = useBreedingStore(s => s.breedingRecords)
   const healthRecords = useHealthStore(s => s.healthRecords)
   const animals = useAnimalStore(s => s.animals)
-  const productionLogs = useProductionStore(s => s.productionLogs)
   const homestead = useHomesteadStore(s => s.homestead)
   const [refreshing, setRefreshing] = useState(false)
 
@@ -160,32 +150,6 @@ export function useHomeController(navigation: any) {
       .sort((a, b) => b.count - a.count)
   }, [animals])
 
-  const productionSnapshot: ProductionSnapshotItem[] = useMemo(() => {
-    const today = startOfToday()
-    const weekAgo = subDays(today, 7)
-    const groups = new Map<ProductionType, { unit: string; today: number; week: number }>()
-
-    for (const log of productionLogs) {
-      if (!log.date) continue
-      const logDate = new Date(log.date)
-      if (!isAfter(logDate, weekAgo)) continue
-
-      const existing = groups.get(log.productionType) ?? { unit: log.unit, today: 0, week: 0 }
-      existing.week += log.quantity
-      if (isTodayFn(logDate)) {
-        existing.today += log.quantity
-      }
-      groups.set(log.productionType, existing)
-    }
-
-    return Array.from(groups.entries()).map(([productionType, data]) => ({
-      productionType,
-      unit: data.unit,
-      today: data.today,
-      week: data.week,
-    }))
-  }, [productionLogs])
-
   const allUpcomingEvents: UpcomingEventItem[] = useMemo(() => {
     const items: UpcomingEventItem[] = []
 
@@ -235,8 +199,6 @@ export function useHomeController(navigation: any) {
   const onBreedingPress = (recordId: string) =>
     navigation.navigate('BreedingRecordDetail', { recordId })
 
-  const onQuickLogProduction = () =>
-    navigation.navigate('CreateProductionLog', {})
   const FREE_TIER_ANIMAL_LIMIT = 12
   const STANDARD_TIER_ANIMAL_LIMIT = 50
   const onQuickAddAnimal = () => {
@@ -278,7 +240,6 @@ export function useHomeController(navigation: any) {
     activeWithdrawals,
     breedingCountdowns,
     farmSummary,
-    productionSnapshot,
     upcomingEvents,
     upcomingEventsTotal,
     refreshing,
@@ -286,7 +247,6 @@ export function useHomeController(navigation: any) {
     onCareEventPress,
     onAnimalPress,
     onBreedingPress,
-    onQuickLogProduction,
     onQuickAddAnimal,
     onQuickRecordCare,
     onAnimalTypePress,

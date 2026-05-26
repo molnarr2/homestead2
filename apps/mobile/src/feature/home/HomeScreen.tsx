@@ -7,7 +7,6 @@ import DueTodaySection from './component/DueTodaySection'
 import WithdrawalAlertSection from './component/WithdrawalAlertSection'
 import BreedingCountdownSection from './component/BreedingCountdownSection'
 import FarmSummarySection from './component/FarmSummarySection'
-import ProductionSnapshotSection from './component/ProductionSnapshotSection'
 import UpcomingEventsSection from './component/UpcomingEventsSection'
 import ScreenContainer from '../../components/layout/ScreenContainer'
 
@@ -44,6 +43,12 @@ const HomeScreen: React.FC = () => {
         </View>
 
         <View className="px-4 pb-4">
+          <FarmSummarySection
+            items={controller.farmSummary}
+            onAnimalTypePress={controller.onAnimalTypePress}
+            onAddAnimal={controller.onQuickAddAnimal}
+          />
+
           {controller.overdueEvents.length > 0 && (
             <OverdueCareSection
               items={controller.overdueEvents}
@@ -65,29 +70,18 @@ const HomeScreen: React.FC = () => {
             />
           )}
 
+          <UpcomingEventsSection
+            items={controller.upcomingEvents}
+            totalCount={controller.upcomingEventsTotal}
+            onViewAll={controller.onQuickRecordCare}
+          />
+
           {controller.breedingCountdowns.length > 0 && (
             <BreedingCountdownSection
               breedings={controller.breedingCountdowns}
               onBreedingPress={controller.onBreedingPress}
             />
           )}
-
-          <FarmSummarySection
-            items={controller.farmSummary}
-            onAnimalTypePress={controller.onAnimalTypePress}
-            onAddAnimal={controller.onQuickAddAnimal}
-          />
-
-          <ProductionSnapshotSection
-            items={controller.productionSnapshot}
-            onAddProduction={controller.onQuickLogProduction}
-          />
-
-          <UpcomingEventsSection
-            items={controller.upcomingEvents}
-            totalCount={controller.upcomingEventsTotal}
-            onViewAll={controller.onQuickRecordCare}
-          />
         </View>
       </ScrollView>
     </ScreenContainer>

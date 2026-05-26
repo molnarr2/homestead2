@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "02_phase1_MVP/02_TODO.md",
+                "file": "02_phase1_MVP/06_various_things/work/Export PDF.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "02_TODO"
+              "title": "Export PDF"
             }
           }
         ]
@@ -185,9 +185,23 @@
   },
   "active": "02dd2e34ceb194af",
   "lastOpenFiles": [
+    "02_phase1_MVP/05_home_screen/01_overdue_upcoming_sections.md",
+    "02_phase1_MVP/05_home_screen/work/home screen tap for more.md",
+    "02_phase1_MVP/06_various_things/work/Export PDF.md",
+    "02_phase1_MVP/06_various_things/work",
+    "02_phase1_MVP/06_various_things",
+    "02_phase1_MVP/04_health_care/work/health_care.md",
+    "02_phase1_MVP/04_health_care/01_testing_guide.md",
+    "02_phase1_MVP/05_home_screen/work",
+    "02_phase1_MVP/05_home_screen",
+    "03_phase2/Ideas/Automated Healthcare Testing.md",
+    "02_phase1_MVP/04_health_care/02_good_bad_ugly.md",
+    "02_phase1_MVP/04_health_care/work",
+    "02_phase1_MVP/02_TODO.md",
+    "02_phase1_MVP/04_health_care",
+    "02_phase1_MVP/03_issues/01_health_record_issues.md",
     "02_phase1_MVP/02_refinement_1/15_feedback_system.md",
     "02_phase1_MVP/02_refinement_1/14_Analytics.md",
-    "02_phase1_MVP/02_TODO.md",
     "02_phase1_MVP/02_refinement_1/work/10. Tech spec for analytics.md",
     "02_phase1_MVP/02_refinement_1/work/09. Tech Spec for editing records.md",
     "03_phase2/Known Issues.md",
@@ -203,23 +217,9 @@
     "01_phase0/01_plan/01. Generate a concise plan.md",
     "01_phase0/01_plan/00_gen/02. ERD/01. Project Setup & Dependencies.md",
     "01_phase0/01_plan/00_gen/02. ERD/00. Master Implementation Guide.md",
-    "00_template/03. Clean up the project already lol.md",
-    "00_template/02. Common Components screen.md",
-    "00_template/01. Common services.md",
-    "02_phase1_MVP/02_refinement_1/13_Paywall Integration.md",
-    "02_phase1_MVP/02_refinement_1/work/08. Paywall Implementation.md",
-    "00_research/03_paywall_and_free_tier_strategy.md",
-    "00_research/01_homesteader-persona-research.md",
-    "00_research/02_testing_strategy.md",
     "02_phase1_MVP/03_issues",
     "03_phase2/Ideas",
     "03_phase2",
-    "00_ops",
-    "00_research",
-    "02_phase1_MVP/02_refinement_1/work",
-    "02_phase1_MVP/02_refinement_1",
-    "02_phase1_MVP/01_research",
-    "02_phase1_MVP",
-    "00_operations"
+    "00_ops"
   ]
 }

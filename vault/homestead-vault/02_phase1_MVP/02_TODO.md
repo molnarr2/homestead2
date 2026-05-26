@@ -1,4 +1,4 @@
-I don't like how the home page is empty when all things are caught up.
+dI don't like how the home page is empty when all things are caught up.
 
 # Issues
 
@@ -10,7 +10,7 @@ I don't like how the home page is empty when all things are caught up.
 
 # Feedback
 
-- [ ] Need to implement
+- [x] Need to implement
 
 # Analytics
 

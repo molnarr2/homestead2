@@ -2,7 +2,14 @@ import React from 'react'
 import { View, Text, Pressable } from 'react-native'
 import Icon from '@react-native-vector-icons/material-design-icons'
 import SectionHeader from '../../../components/layout/SectionHeader'
-import { ProductionSnapshotItem } from '../HomeController'
+import { ProductionType } from '../../../schema/production/ProductionLog'
+
+interface ProductionSnapshotItem {
+  productionType: ProductionType
+  unit: string
+  today: number
+  week: number
+}
 
 interface Props {
   items: ProductionSnapshotItem[]
