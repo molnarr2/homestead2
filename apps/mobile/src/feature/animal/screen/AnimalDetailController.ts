@@ -43,6 +43,7 @@ export function useAnimalDetailController(navigation: Navigation, route: Route) 
   const { groups, groupCareEvents, groupHealthRecords } = useGroupStore()
 
   const [activeTab, setActiveTab] = useState<AnimalTab>('timeline')
+  const [exportModalVisible, setExportModalVisible] = useState(false)
 
   const animalCareEvents = careEvents.filter(e => e.animalId === animalId)
   const healthRecords = useMemo(() => allHealthRecords.filter(r => r.animalId === animalId), [allHealthRecords, animalId])
@@ -79,6 +80,8 @@ export function useAnimalDetailController(navigation: Navigation, route: Route) 
 
   const onBack = () => navigation.goBack()
   const onEdit = () => navigation.navigate('EditAnimal', { animalId })
+  const onExport = () => setExportModalVisible(true)
+  const onDismissExport = () => setExportModalVisible(false)
   const onAddCare = () => navigation.navigate('CreateCareEvent', { animalId })
   const onAddHealth = () => navigation.navigate('CreateHealthRecord', { animalId })
   const onAddBreeding = () => navigation.navigate('CreateBreedingRecord', { animalId })
@@ -126,8 +129,11 @@ export function useAnimalDetailController(navigation: Navigation, route: Route) 
     weightLogs,
     groupCareEvents: groupCareEventsForAnimal,
     groupHealthRecords: groupHealthRecordsForAnimal,
+    exportModalVisible,
     onBack,
     onEdit,
+    onExport,
+    onDismissExport,
     onAddCare,
     onAddHealth,
     onAddBreeding,

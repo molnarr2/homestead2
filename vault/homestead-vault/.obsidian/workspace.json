@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "02_phase1_MVP/06_various_things/03_group_tap_to_edit.md",
+                "file": "02_phase1_MVP/06_various_things/01_animal_export_pdf.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "03_group_tap_to_edit"
+              "title": "01_animal_export_pdf"
             }
           }
         ]
@@ -185,8 +185,8 @@
   },
   "active": "02dd2e34ceb194af",
   "lastOpenFiles": [
-    "02_phase1_MVP/06_various_things/02_cascade_soft_delete_animal.md",
     "02_phase1_MVP/06_various_things/03_group_tap_to_edit.md",
+    "02_phase1_MVP/06_various_things/02_cascade_soft_delete_animal.md",
     "02_phase1_MVP/02_TODO.md",
     "02_phase1_MVP/06_various_things/01_animal_export_pdf.md",
     "02_phase1_MVP/05_home_screen/01_overdue_upcoming_sections.md",

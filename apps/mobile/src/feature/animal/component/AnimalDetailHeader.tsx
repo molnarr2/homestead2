@@ -10,6 +10,7 @@ interface Props {
   age: AnimalAge
   onEdit: () => void
   onBack: () => void
+  onExport: () => void
 }
 
 const STATE_BADGE_COLORS: Record<string, string> = {
@@ -19,7 +20,7 @@ const STATE_BADGE_COLORS: Record<string, string> = {
   processed: 'bg-status-warning',
 }
 
-const AnimalDetailHeader: React.FC<Props> = ({ animal, age, onEdit, onBack }) => {
+const AnimalDetailHeader: React.FC<Props> = ({ animal, age, onEdit, onBack, onExport }) => {
   const hasPhoto = !!animal.photoUrl
 
   return (
@@ -35,9 +36,14 @@ const AnimalDetailHeader: React.FC<Props> = ({ animal, age, onEdit, onBack }) =>
             <TouchableOpacity onPress={onBack} activeOpacity={0.7} className="p-1" style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.9, shadowRadius: 3, elevation: 5 }}>
               <Icon name="arrow-left" size={26} color="#FFFFFF" />
             </TouchableOpacity>
-            <TouchableOpacity onPress={onEdit} activeOpacity={0.7} className="p-1" style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.9, shadowRadius: 3, elevation: 5 }}>
-              <Icon name="pencil" size={24} color="#FFFFFF" />
-            </TouchableOpacity>
+            <View className="flex-row items-center gap-3">
+              <TouchableOpacity onPress={onExport} activeOpacity={0.7} className="p-1" style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.9, shadowRadius: 3, elevation: 5 }}>
+                <Icon name="file-export-outline" size={24} color="#FFFFFF" />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={onEdit} activeOpacity={0.7} className="p-1" style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.9, shadowRadius: 3, elevation: 5 }}>
+                <Icon name="pencil" size={24} color="#FFFFFF" />
+              </TouchableOpacity>
+            </View>
           </View>
           <View className="absolute bottom-0 left-0 right-0 px-4 pb-3 pt-10" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
             <View className="flex-row items-center justify-between">
@@ -74,9 +80,14 @@ const AnimalDetailHeader: React.FC<Props> = ({ animal, age, onEdit, onBack }) =>
             <TouchableOpacity onPress={onBack} activeOpacity={0.7} className="p-1">
               <Icon name="arrow-left" size={24} color="#1A1A1A" />
             </TouchableOpacity>
-            <TouchableOpacity onPress={onEdit} activeOpacity={0.7} className="p-1">
-              <Icon name="pencil" size={24} color="#4A6741" />
-            </TouchableOpacity>
+            <View className="flex-row items-center gap-3">
+              <TouchableOpacity onPress={onExport} activeOpacity={0.7} className="p-1">
+                <Icon name="file-export-outline" size={24} color="#4A6741" />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={onEdit} activeOpacity={0.7} className="p-1">
+                <Icon name="pencil" size={24} color="#4A6741" />
+              </TouchableOpacity>
+            </View>
           </View>
           <View className="self-center w-24 h-24 rounded-full bg-backgroundDark items-center justify-center mb-3">
             <Text className="text-3xl font-bold text-text-secondary">{animal.name.charAt(0)}</Text>

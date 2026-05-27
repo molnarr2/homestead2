@@ -16,6 +16,7 @@ import AnimalNotesTab from '../component/AnimalNotesTab'
 import AnimalWeightTab from '../component/AnimalWeightTab'
 import Icon from '@react-native-vector-icons/material-design-icons'
 import WithdrawalBanner from '../../health/component/WithdrawalBanner'
+import ExportAnimalModal from '../component/ExportAnimalModal'
 
 type Navigation = NativeStackNavigationProp<RootStackParamList, 'AnimalDetail'>
 type Route = RouteProp<RootStackParamList, 'AnimalDetail'>
@@ -102,6 +103,7 @@ const AnimalDetailScreen: React.FC = () => {
         age={controller.age}
         onEdit={controller.onEdit}
         onBack={controller.onBack}
+        onExport={controller.onExport}
       />
 
       <WithdrawalBanner
@@ -118,6 +120,12 @@ const AnimalDetailScreen: React.FC = () => {
       <View className="flex-1">
         {renderActiveTab()}
       </View>
+
+      <ExportAnimalModal
+        visible={controller.exportModalVisible}
+        onDismiss={controller.onDismissExport}
+        animal={controller.animal}
+      />
     </ScreenContainer>
   )
 }
