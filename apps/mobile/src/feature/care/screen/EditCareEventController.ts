@@ -6,7 +6,7 @@ import type { RootStackParamList } from '../../../navigation/RootNavigation'
 import { useCareStore } from '../../../store/careStore'
 import { useAnimalStore } from '../../../store/animalStore'
 import { useGroupStore } from '../../../store/groupStore'
-import { bsCareService } from '../../../Bootstrap'
+import { bsCareService, bsGroupService } from '../../../Bootstrap'
 import { CareEventType } from '../../../schema/care/CareEvent'
 import { dateToTstamp, tstampToDateOrNow } from '../../../schema/type/Tstamp'
 import { format } from 'date-fns'
@@ -15,10 +15,13 @@ type Navigation = NativeStackNavigationProp<RootStackParamList, 'EditCareEvent'>
 type Route = RouteProp<RootStackParamList, 'EditCareEvent'>
 
 export function useEditCareEventController(navigation: Navigation, route: Route) {
-  const { eventId } = route.params
-  const event = useCareStore(s => s.careEvents.find(e => e.id === eventId))
+  const { eventId, groupId } = route.params
+  const { groupCareEvents, groups } = useGroupStore()
+  const animalCareEvent = useCareStore(s => s.careEvents.find(e => e.id === eventId))
+  const event = groupId
+    ? (groupCareEvents[groupId] ?? []).find(e => e.id === eventId)
+    : animalCareEvent
   const { animals } = useAnimalStore()
-  const { groups, groupCareEvents } = useGroupStore()
 
   const dueDateStr = event ? format(tstampToDateOrNow(event.dueDate), 'yyyy-MM-dd') : ''
 
@@ -50,7 +53,9 @@ export function useEditCareEventController(navigation: Navigation, route: Route)
       notes,
     }
 
-    const result = await bsCareService.updateCareEvent(updated)
+    const result = groupId
+      ? await bsGroupService.updateGroupCareEvent(groupId, updated)
+      : await bsCareService.updateCareEvent(updated)
     setLoading(false)
     if (result.success) {
       navigation.goBack()
@@ -62,15 +67,17 @@ export function useEditCareEventController(navigation: Navigation, route: Route)
   const onBack = () => navigation.goBack()
 
   const selectedAnimal = animals.find(a => a.id === event?.animalId) ?? null
-  const selectedGroup = (() => {
-    if (!event) return null
-    for (const [groupId, events] of Object.entries(groupCareEvents)) {
-      if (events.some(e => e.id === event.id)) {
-        return groups.find(g => g.id === groupId) ?? null
-      }
-    }
-    return null
-  })()
+  const selectedGroup = groupId
+    ? groups.find(g => g.id === groupId) ?? null
+    : (() => {
+        if (!event) return null
+        for (const [gId, events] of Object.entries(groupCareEvents)) {
+          if (events.some(e => e.id === event.id)) {
+            return groups.find(g => g.id === gId) ?? null
+          }
+        }
+        return null
+      })()
 
   return {
     event,

@@ -62,11 +62,11 @@ export type RootStackParamList = {
   EditAnimal: { animalId: string }
 
   // Care screens
-  CareEventDetail: { eventId: string }
+  CareEventDetail: { eventId: string; groupId?: string }
   CreateCareEvent: { animalId: string; templateId?: string; groupId?: string }
 
   // Health screens
-  HealthRecordDetail: { recordId: string }
+  HealthRecordDetail: { recordId: string; groupId?: string }
   CreateHealthRecord: { animalId: string; recordType?: HealthRecordType; groupId?: string }
 
   // Breeding screens
@@ -91,8 +91,8 @@ export type RootStackParamList = {
   EditWeightLog: { logId: string; animalId: string }
 
   // Edit screens
-  EditHealthRecord: { recordId: string }
-  EditCareEvent: { eventId: string }
+  EditHealthRecord: { recordId: string; groupId?: string }
+  EditCareEvent: { eventId: string; groupId?: string }
   EditBreedingRecord: { recordId: string }
   EditNote: { noteId: string; animalId: string }
   EditProductionLog: { logId: string }

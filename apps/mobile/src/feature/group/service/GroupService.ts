@@ -2,6 +2,8 @@ import firestore from '@react-native-firebase/firestore'
 import storage from '@react-native-firebase/storage'
 import { IResult, SuccessResult, ErrorResult } from '../../../util/Result'
 import { adminObject_default, adminObject_updateLastUpdated } from '../../../schema/object/AdminObject'
+import { dateToTstamp } from '../../../schema/type/Tstamp'
+import { calculateNextDueDate } from '../../../util/CareUtility'
 import AnimalGroup from '../../../schema/animalGroup/AnimalGroup'
 import CareEvent from '../../../schema/care/CareEvent'
 import HealthRecord from '../../../schema/health/HealthRecord'
@@ -154,6 +156,66 @@ export default class GroupService implements IGroupService {
     }
   }
 
+  async updateGroupCareEvent(groupId: string, event: CareEvent): Promise<IResult> {
+    try {
+      adminObject_updateLastUpdated(event.admin)
+      await this.homesteadRef
+        .collection(Col.animalGroup)
+        .doc(groupId)
+        .collection(Col.careEvent)
+        .doc(event.id)
+        .update(event as any)
+      return SuccessResult
+    } catch (error: any) {
+      Log.error(TAG, `updateGroupCareEvent error: ${error.message}`)
+      return ErrorResult(error.message)
+    }
+  }
+
+  async completeGroupCareEvent(groupId: string, event: CareEvent): Promise<IResult> {
+    try {
+      const batch = firestore().batch()
+      const completedDate = dateToTstamp(new Date())
+
+      const groupRef = this.homesteadRef.collection(Col.animalGroup).doc(groupId)
+      const eventRef = groupRef.collection(Col.careEvent).doc(event.id)
+      batch.update(eventRef, {
+        completedDate,
+        createdNextRecurringEvent: event.type === 'careRecurring',
+        'admin.updated_at': firestore.FieldValue.serverTimestamp(),
+      })
+
+      if (event.type === 'careRecurring' && !event.createdNextRecurringEvent) {
+        const nextDueDate = calculateNextDueDate(completedDate, event.cycle)
+        const nextEventRef = groupRef.collection(Col.careEvent).doc()
+        const nextEvent: CareEvent = {
+          id: nextEventRef.id,
+          animalId: '',
+          templateId: event.templateId,
+          name: event.name,
+          type: event.type,
+          cycle: event.cycle,
+          dueDate: dateToTstamp(nextDueDate),
+          completedDate: null,
+          contactName: event.contactName,
+          contactPhone: event.contactPhone,
+          notes: event.notes,
+          photoStorageRef: '',
+          photoUrl: '',
+          createdNextRecurringEvent: false,
+          admin: adminObject_default(),
+        }
+        batch.set(nextEventRef, nextEvent as any)
+      }
+
+      await batch.commit()
+      return SuccessResult
+    } catch (error: any) {
+      Log.error(TAG, `completeGroupCareEvent error: ${error.message}`)
+      return ErrorResult(error.message)
+    }
+  }
+
   async createGroupHealthRecord(groupId: string, record: HealthRecord, photoUri?: string): Promise<IResult> {
     try {
       const ref = this.homesteadRef
@@ -178,6 +240,32 @@ export default class GroupService implements IGroupService {
       return SuccessResult
     } catch (error: any) {
       Log.error(TAG, `createGroupHealthRecord error: ${error.message}`)
+      return ErrorResult(error.message)
+    }
+  }
+
+  async updateGroupHealthRecord(groupId: string, record: HealthRecord, photoUri?: string): Promise<IResult> {
+    try {
+      adminObject_updateLastUpdated(record.admin)
+
+      if (photoUri) {
+        const homesteadId = this.homesteadRef.id
+        const storagePath = `homestead/${homesteadId}/animalGroup/${groupId}/healthRecord/${record.id}/photo.jpg`
+        await storage().ref(storagePath).putFile(photoUri)
+        const downloadUrl = await storage().ref(storagePath).getDownloadURL()
+        record.photoStorageRef = storagePath
+        record.photoUrl = downloadUrl
+      }
+
+      await this.homesteadRef
+        .collection(Col.animalGroup)
+        .doc(groupId)
+        .collection(Col.healthRecord)
+        .doc(record.id)
+        .update(record as any)
+      return SuccessResult
+    } catch (error: any) {
+      Log.error(TAG, `updateGroupHealthRecord error: ${error.message}`)
       return ErrorResult(error.message)
     }
   }

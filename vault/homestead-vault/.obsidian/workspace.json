@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "02_phase1_MVP/02_TODO.md",
+                "file": "02_phase1_MVP/06_various_things/03_group_tap_to_edit.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "02_TODO"
+              "title": "03_group_tap_to_edit"
             }
           }
         ]
@@ -183,9 +183,11 @@
       "bases:Create new base": false
     }
   },
-  "active": "10a27489f83c15d7",
+  "active": "02dd2e34ceb194af",
   "lastOpenFiles": [
     "02_phase1_MVP/06_various_things/02_cascade_soft_delete_animal.md",
+    "02_phase1_MVP/06_various_things/03_group_tap_to_edit.md",
+    "02_phase1_MVP/02_TODO.md",
     "02_phase1_MVP/06_various_things/01_animal_export_pdf.md",
     "02_phase1_MVP/05_home_screen/01_overdue_upcoming_sections.md",
     "02_phase1_MVP/06_various_things/work/Export PDF.md",
@@ -199,7 +201,6 @@
     "03_phase2/Ideas/Automated Healthcare Testing.md",
     "02_phase1_MVP/04_health_care/02_good_bad_ugly.md",
     "02_phase1_MVP/04_health_care/work",
-    "02_phase1_MVP/02_TODO.md",
     "02_phase1_MVP/04_health_care",
     "02_phase1_MVP/03_issues/01_health_record_issues.md",
     "02_phase1_MVP/02_refinement_1/15_feedback_system.md",
@@ -216,7 +217,6 @@
     "01_phase0/01_plan/00_gen/03. TDD/00. Master Implementation Guide.md",
     "01_phase0/01_plan/00_gen/03. TDD/work/Build TDD.md",
     "01_phase0/01_plan/00_gen/02. ERD/working/Build ERD.md",
-    "01_phase0/01_plan/01. Generate a concise plan.md",
     "02_phase1_MVP/03_issues",
     "03_phase2/Ideas",
     "03_phase2",

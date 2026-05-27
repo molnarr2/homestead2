@@ -56,9 +56,9 @@ const GroupDetailScreen: React.FC = () => {
           </View>
         )
       case 'care':
-        return <AnimalCareTab careEvents={controller.careEvents} onAddCare={controller.onAddCare} />
+        return <AnimalCareTab careEvents={controller.careEvents} onAddCare={controller.onAddCare} onCareEventPress={controller.onCareEventPress} />
       case 'health':
-        return <AnimalHealthTab healthRecords={controller.healthRecords} activeWithdrawals={[]} onAddHealth={controller.onAddHealth} />
+        return <AnimalHealthTab healthRecords={controller.healthRecords} activeWithdrawals={[]} onAddHealth={controller.onAddHealth} onHealthRecordPress={controller.onHealthRecordPress} />
     }
   }
 

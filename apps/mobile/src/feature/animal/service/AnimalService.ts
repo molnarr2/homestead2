@@ -80,10 +80,70 @@ export default class AnimalService implements IAnimalService {
 
   async deleteAnimal(id: string): Promise<IResult> {
     try {
-      await this.homesteadRef.collection(Col.animal).doc(id).update({
+      const homesteadRef = this.homesteadRef
+      const softDelete = {
         'admin.deleted': true,
         'admin.updated_at': firestore.FieldValue.serverTimestamp(),
-      })
+      }
+
+      const relatedCollections = [
+        Col.careEvent,
+        Col.healthRecord,
+        Col.breedingRecord,
+        Col.note,
+        Col.weightLog,
+        Col.productionLog,
+      ]
+
+      const [relatedSnapshots, groupSnapshot] = await Promise.all([
+        Promise.all(
+          relatedCollections.map(col =>
+            homesteadRef.collection(col).where('animalId', '==', id).get()
+          )
+        ),
+        homesteadRef
+          .collection(Col.animalGroup)
+          .where('admin.deleted', '==', false)
+          .get(),
+      ])
+
+      const groupDocs = groupSnapshot.docs.filter(doc =>
+        doc.data().animalIds?.includes(id)
+      )
+
+      const softDeleteRefs = [
+        homesteadRef.collection(Col.animal).doc(id),
+        ...relatedSnapshots.flatMap(snapshot => snapshot.docs.map(doc => doc.ref)),
+      ]
+
+      const BATCH_LIMIT = 500
+      let batch = firestore().batch()
+      let count = 0
+
+      for (const ref of softDeleteRefs) {
+        if (count === BATCH_LIMIT) {
+          await batch.commit()
+          batch = firestore().batch()
+          count = 0
+        }
+        batch.update(ref, softDelete)
+        count++
+      }
+
+      for (const doc of groupDocs) {
+        if (count === BATCH_LIMIT) {
+          await batch.commit()
+          batch = firestore().batch()
+          count = 0
+        }
+        batch.update(doc.ref, {
+          animalIds: firestore.FieldValue.arrayRemove(id),
+          'admin.updated_at': firestore.FieldValue.serverTimestamp(),
+        })
+        count++
+      }
+
+      await batch.commit()
       return SuccessResult
     } catch (error: any) {
       Log.error(TAG, `deleteAnimal error: ${error.message}`)
