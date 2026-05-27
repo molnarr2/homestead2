@@ -66,7 +66,7 @@ export function useHomeController(navigation: any) {
 
   const overdueEvents: DashboardCareItem[] = useMemo(() => {
     return careEvents
-      .filter(e => getCareStatus(e.dueDate).status === 'OVERDUE')
+      .filter(e => e.completedDate === null && getCareStatus(e.dueDate).status === 'OVERDUE')
       .map(event => ({
         event,
         animalName: animalMap.get(event.animalId)?.name ?? '',
@@ -77,7 +77,7 @@ export function useHomeController(navigation: any) {
 
   const dueTodayEvents: DashboardCareItem[] = useMemo(() => {
     return careEvents
-      .filter(e => getCareStatus(e.dueDate).status === 'DUE_TODAY')
+      .filter(e => e.completedDate === null && getCareStatus(e.dueDate).status === 'DUE_TODAY')
       .map(event => ({
         event,
         animalName: animalMap.get(event.animalId)?.name ?? '',
