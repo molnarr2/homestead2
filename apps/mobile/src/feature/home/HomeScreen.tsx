@@ -1,5 +1,5 @@
 import React from 'react'
-import { ScrollView, View, Text, Image, TouchableOpacity, RefreshControl } from 'react-native'
+import { ScrollView, View, Text, Image, TouchableOpacity } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { useHomeController } from './HomeController'
 import OverdueCareSection from './component/OverdueCareSection'
@@ -16,12 +16,7 @@ const HomeScreen: React.FC = () => {
 
   return (
     <ScreenContainer>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl refreshing={controller.refreshing} onRefresh={controller.onRefresh} />
-        }
-      >
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View className="px-4 pt-4 pb-2 flex-row items-center">
           <TouchableOpacity onPress={controller.onOpenDrawer} className="mr-3">
             {controller.user?.avatarUrl ? (

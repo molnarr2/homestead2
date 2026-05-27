@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, FlatList, ActivityIndicator, RefreshControl, TouchableOpacity } from 'react-native'
+import { View, Text, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
@@ -76,9 +76,6 @@ const ProductionListScreen: React.FC = () => {
           renderItem={({ item }) => (
             <ProductionCard log={item} onPress={() => navigation.navigate('EditProductionLog', { logId: item.id })} />
           )}
-          refreshControl={
-            <RefreshControl refreshing={c.refreshing} onRefresh={c.onRefresh} tintColor="#4A6741" />
-          }
           contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 80 }}
           ListHeaderComponent={
             <View>

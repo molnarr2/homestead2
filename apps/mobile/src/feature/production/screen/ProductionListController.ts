@@ -11,7 +11,6 @@ type Navigation = NativeStackNavigationProp<RootStackParamList>
 export function useProductionListController(navigation: Navigation) {
   const { productionLogs, loading } = useProductionStore()
   const [selectedType, setSelectedType] = useState<ProductionType | 'all'>('all')
-  const [refreshing, setRefreshing] = useState(false)
   const today = todayIso()
 
   const filteredLogs = useMemo(
@@ -36,11 +35,6 @@ export function useProductionListController(navigation: Navigation) {
   const onCreateLog = (type?: ProductionType) =>
     navigation.navigate('CreateProductionLog', { type })
 
-  const onRefresh = async () => {
-    setRefreshing(true)
-    setRefreshing(false)
-  }
-
   return {
     productionLogs,
     filteredLogs,
@@ -49,8 +43,6 @@ export function useProductionListController(navigation: Navigation) {
     selectedType,
     setSelectedType,
     loading,
-    refreshing,
-    onRefresh,
     onCreateLog,
     today,
   }

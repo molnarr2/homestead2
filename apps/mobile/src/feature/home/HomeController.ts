@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useMemo } from 'react'
 import { useUserStore } from '../../store/userStore'
 import { useCareStore } from '../../store/careStore'
 import { useBreedingStore } from '../../store/breedingStore'
@@ -56,8 +56,6 @@ export function useHomeController(navigation: any) {
   const healthRecords = useHealthStore(s => s.healthRecords)
   const animals = useAnimalStore(s => s.animals)
   const homestead = useHomesteadStore(s => s.homestead)
-  const [refreshing, setRefreshing] = useState(false)
-
   const animalMap = useMemo(() => {
     const map = new Map<string, { name: string; animalType: string }>()
     for (const animal of animals) {
@@ -199,11 +197,6 @@ export function useHomeController(navigation: any) {
   const upcomingEvents = useMemo(() => allUpcomingEvents.slice(0, 5), [allUpcomingEvents])
   const upcomingEventsTotal = allUpcomingEvents.length
 
-  const onRefresh = async () => {
-    setRefreshing(true)
-    setRefreshing(false)
-  }
-
   const onCareEventPress = (eventId: string) =>
     navigation.navigate('CareEventDetail', { eventId })
   const onAnimalPress = (animalId: string) =>
@@ -269,8 +262,6 @@ export function useHomeController(navigation: any) {
     farmSummary,
     upcomingEvents,
     upcomingEventsTotal,
-    refreshing,
-    onRefresh,
     onCareEventPress,
     onAnimalPress,
     onBreedingPress,
