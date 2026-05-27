@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "02_phase1_MVP/06_various_things/01_animal_export_pdf.md",
+                "file": "02_phase1_MVP/02_TODO.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "01_animal_export_pdf"
+              "title": "02_TODO"
             }
           }
         ]
@@ -185,8 +185,8 @@
   },
   "active": "02dd2e34ceb194af",
   "lastOpenFiles": [
-    "02_phase1_MVP/05_home_screen/01_overdue_upcoming_sections.md",
     "02_phase1_MVP/06_various_things/01_animal_export_pdf.md",
+    "02_phase1_MVP/05_home_screen/01_overdue_upcoming_sections.md",
     "02_phase1_MVP/06_various_things/work/Export PDF.md",
     "02_phase1_MVP/05_home_screen/work/home screen tap for more.md",
     "02_phase1_MVP/06_various_things/work",

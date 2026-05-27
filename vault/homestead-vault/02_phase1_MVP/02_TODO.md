@@ -3,6 +3,8 @@ dI don't like how the home page is empty when all things are caught up.
 # Issues
 
 - [x] care event - phone number callable
+- [ ] Home screen when tapping on due today - Mark as completed it doesn't refresh the home screen.
+- [ ] Home screen - tap on an animal type doesn't take you to that specific animal group within the animals view
 
 # Paywall
 
@@ -34,9 +36,10 @@ dI don't like how the home page is empty when all things are caught up.
 
 ### Medium
 
-- [ ] Overdue should be limit to 5 and then have a tap for more which would get to another screen and list all of them.
-- [ ] Limit to 5 items: then tap to show more... That is probably for ALL of the items on the home-dashboard
-- [ ] Quick Actions delete it.
+- [x] Overdue should be limit to 5 and then have a tap for more which would get to another screen and list all of them.
+- [x] Limit to 5 items: then tap to show more... That is probably for ALL of the items on the home-dashboard
+- [x] Quick Actions delete it.
+- [ ] 
 
 # Misc
 

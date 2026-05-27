@@ -190,6 +190,12 @@ export function useHomeController(navigation: any) {
   const dueTodayEventsDisplay = useMemo(() => dueTodayEvents.slice(0, 5), [dueTodayEvents])
   const dueTodayEventsTotal = dueTodayEvents.length
 
+  const activeWithdrawalsDisplay = useMemo(() => activeWithdrawals.slice(0, 5), [activeWithdrawals])
+  const activeWithdrawalsTotal = activeWithdrawals.length
+
+  const breedingCountdownsDisplay = useMemo(() => breedingCountdowns.slice(0, 5), [breedingCountdowns])
+  const breedingCountdownsTotal = breedingCountdowns.length
+
   const upcomingEvents = useMemo(() => allUpcomingEvents.slice(0, 5), [allUpcomingEvents])
   const upcomingEventsTotal = allUpcomingEvents.length
 
@@ -230,6 +236,10 @@ export function useHomeController(navigation: any) {
     navigation.navigate('HomeFullList', { listType: 'dueToday' as const })
   const onViewUpcoming = () =>
     navigation.navigate('HomeFullList', { listType: 'upcoming' as const })
+  const onViewBreeding = () =>
+    navigation.navigate('HomeFullList', { listType: 'breeding' as const })
+  const onViewWithdrawals = () =>
+    navigation.navigate('HomeFullList', { listType: 'withdrawals' as const })
 
   const onOpenDrawer = () => {
     const parent = navigation.getParent()
@@ -252,8 +262,10 @@ export function useHomeController(navigation: any) {
     overdueEventsTotal,
     dueTodayEvents: dueTodayEventsDisplay,
     dueTodayEventsTotal,
-    activeWithdrawals,
-    breedingCountdowns,
+    activeWithdrawals: activeWithdrawalsDisplay,
+    activeWithdrawalsTotal,
+    breedingCountdowns: breedingCountdownsDisplay,
+    breedingCountdownsTotal,
     farmSummary,
     upcomingEvents,
     upcomingEventsTotal,
@@ -269,5 +281,7 @@ export function useHomeController(navigation: any) {
     onViewOverdue,
     onViewDueToday,
     onViewUpcoming,
+    onViewBreeding,
+    onViewWithdrawals,
   }
 }

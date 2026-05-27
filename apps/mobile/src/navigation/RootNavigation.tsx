@@ -98,7 +98,7 @@ export type RootStackParamList = {
   EditProductionLog: { logId: string }
 
   // Home screens
-  HomeFullList: { listType: 'overdue' | 'dueToday' | 'upcoming' }
+  HomeFullList: { listType: 'overdue' | 'dueToday' | 'upcoming' | 'breeding' | 'withdrawals' }
 
   // Settings screens
   Profile: undefined

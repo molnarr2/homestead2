@@ -67,10 +67,12 @@ const HomeScreen: React.FC = () => {
             />
           )}
 
-          {controller.activeWithdrawals.length > 0 && (
+          {controller.activeWithdrawalsTotal > 0 && (
             <WithdrawalAlertSection
               withdrawals={controller.activeWithdrawals}
+              totalCount={controller.activeWithdrawalsTotal}
               onAnimalPress={controller.onAnimalPress}
+              onViewMore={controller.onViewWithdrawals}
             />
           )}
 
@@ -80,10 +82,12 @@ const HomeScreen: React.FC = () => {
             onViewMore={controller.onViewUpcoming}
           />
 
-          {controller.breedingCountdowns.length > 0 && (
+          {controller.breedingCountdownsTotal > 0 && (
             <BreedingCountdownSection
               breedings={controller.breedingCountdowns}
+              totalCount={controller.breedingCountdownsTotal}
               onBreedingPress={controller.onBreedingPress}
+              onViewMore={controller.onViewBreeding}
             />
           )}
         </View>
