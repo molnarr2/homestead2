@@ -1,19 +1,26 @@
 import React from 'react'
-import { View, Text, Pressable } from 'react-native'
+import { View, Text, TouchableOpacity } from 'react-native'
 import Icon from '@react-native-vector-icons/material-design-icons'
 import SectionHeader from '../../../components/layout/SectionHeader'
+import UpcomingEventRow from './UpcomingEventRow'
 import { UpcomingEventItem } from '../HomeController'
 
 interface Props {
   items: UpcomingEventItem[]
   totalCount: number
-  onViewAll: () => void
+  onViewMore: () => void
 }
 
-const UpcomingEventsSection: React.FC<Props> = ({ items, totalCount, onViewAll }) => {
+const UpcomingEventsSection: React.FC<Props> = ({ items, totalCount, onViewMore }) => {
+  const remaining = totalCount - items.length
+
   return (
     <View>
-      <SectionHeader title="Upcoming (Next 7 Days)" />
+      <SectionHeader
+        title="Upcoming (Next 7 Days)"
+        count={totalCount}
+        onCountPress={totalCount > 0 ? onViewMore : undefined}
+      />
       {items.length === 0 ? (
         <View className="bg-surface rounded-xl p-4 items-center">
           <Text className="text-sm text-text-secondary">Nothing scheduled this week</Text>
@@ -21,28 +28,25 @@ const UpcomingEventsSection: React.FC<Props> = ({ items, totalCount, onViewAll }
       ) : (
         <View className="bg-surface rounded-xl p-3">
           {items.map((item, index) => (
-            <View
+            <UpcomingEventRow
               key={`${item.type}-${item.label}-${item.animalName}-${index}`}
-              className={`flex-row items-center py-2 ${index < items.length - 1 ? 'border-b border-border' : ''}`}
-            >
-              <Icon
-                name={item.type === 'care' ? 'medical-bag' : 'baby-carriage'}
-                size={18}
-                color="#6B6B6B"
-              />
-              <View className="flex-1 ml-2">
-                <Text className="text-sm font-medium text-text-primary">{item.label}</Text>
-                <Text className="text-xs text-text-secondary">{item.animalName}</Text>
-              </View>
-              <Text className="text-xs text-text-secondary">
-                {item.daysUntil === 0 ? 'Today' : item.daysUntil === 1 ? '1 day' : `${item.daysUntil} days`}
-              </Text>
-            </View>
+              item={item}
+              showBorder={index < items.length - 1}
+            />
           ))}
-          {totalCount > 5 && (
-            <Pressable className="pt-2 items-center" onPress={onViewAll}>
-              <Text className="text-sm font-medium text-primary">View all</Text>
-            </Pressable>
+          {remaining > 0 && (
+            <TouchableOpacity
+              onPress={onViewMore}
+              activeOpacity={0.7}
+              className="flex-row items-center py-2 border-t border-border"
+            >
+              <Icon name="calendar-clock" size={18} color="#6B6B6B" />
+              <View className="flex-1 ml-2">
+                <Text className="text-sm font-medium text-primary">View all</Text>
+                <Text className="text-xs text-text-secondary">{remaining} more not shown</Text>
+              </View>
+              <Icon name="chevron-right" size={18} color="#9CA3AF" />
+            </TouchableOpacity>
           )}
         </View>
       )}

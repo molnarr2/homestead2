@@ -44,6 +44,7 @@ import EditNoteScreen from '../feature/notes/screen/EditNoteScreen'
 import EditProductionLogScreen from '../feature/production/screen/EditProductionLogScreen'
 import GroupDetailScreen from '../feature/group/screen/GroupDetailScreen'
 import EditGroupScreen from '../feature/group/screen/EditGroupScreen'
+import HomeFullListScreen from '../feature/home/screen/HomeFullListScreen'
 
 export type RootStackParamList = {
   // Auth
@@ -95,6 +96,9 @@ export type RootStackParamList = {
   EditBreedingRecord: { recordId: string }
   EditNote: { noteId: string; animalId: string }
   EditProductionLog: { logId: string }
+
+  // Home screens
+  HomeFullList: { listType: 'overdue' | 'dueToday' | 'upcoming' }
 
   // Settings screens
   Profile: undefined
@@ -157,6 +161,7 @@ const RootNavigation: React.FC = () => {
               <Stack.Screen name="EditBreedingRecord" component={EditBreedingRecordScreen} />
               <Stack.Screen name="EditNote" component={EditNoteScreen} />
               <Stack.Screen name="EditProductionLog" component={EditProductionLogScreen} />
+              <Stack.Screen name="HomeFullList" component={HomeFullListScreen} />
               <Stack.Screen name="Profile" component={ProfileScreen} />
               <Stack.Screen name="EditProfile" component={EditProfileScreen} />
               <Stack.Screen name="Customization" component={CustomizationHomeScreen} />

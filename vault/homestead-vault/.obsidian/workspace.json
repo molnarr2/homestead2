@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "02_phase1_MVP/06_various_things/work/Export PDF.md",
+                "file": "02_phase1_MVP/06_various_things/01_animal_export_pdf.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Export PDF"
+              "title": "01_animal_export_pdf"
             }
           }
         ]
@@ -186,8 +186,9 @@
   "active": "02dd2e34ceb194af",
   "lastOpenFiles": [
     "02_phase1_MVP/05_home_screen/01_overdue_upcoming_sections.md",
-    "02_phase1_MVP/05_home_screen/work/home screen tap for more.md",
+    "02_phase1_MVP/06_various_things/01_animal_export_pdf.md",
     "02_phase1_MVP/06_various_things/work/Export PDF.md",
+    "02_phase1_MVP/05_home_screen/work/home screen tap for more.md",
     "02_phase1_MVP/06_various_things/work",
     "02_phase1_MVP/06_various_things",
     "02_phase1_MVP/04_health_care/work/health_care.md",
@@ -216,7 +217,6 @@
     "01_phase0/01_plan/00_gen/02. ERD/working/Build ERD.md",
     "01_phase0/01_plan/01. Generate a concise plan.md",
     "01_phase0/01_plan/00_gen/02. ERD/01. Project Setup & Dependencies.md",
-    "01_phase0/01_plan/00_gen/02. ERD/00. Master Implementation Guide.md",
     "02_phase1_MVP/03_issues",
     "03_phase2/Ideas",
     "03_phase2",

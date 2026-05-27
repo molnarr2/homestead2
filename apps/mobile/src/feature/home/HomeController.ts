@@ -184,6 +184,12 @@ export function useHomeController(navigation: any) {
     return items.sort((a, b) => a.daysUntil - b.daysUntil)
   }, [careEvents, breedingRecords, animalMap])
 
+  const overdueEventsDisplay = useMemo(() => overdueEvents.slice(0, 5), [overdueEvents])
+  const overdueEventsTotal = overdueEvents.length
+
+  const dueTodayEventsDisplay = useMemo(() => dueTodayEvents.slice(0, 5), [dueTodayEvents])
+  const dueTodayEventsTotal = dueTodayEvents.length
+
   const upcomingEvents = useMemo(() => allUpcomingEvents.slice(0, 5), [allUpcomingEvents])
   const upcomingEventsTotal = allUpcomingEvents.length
 
@@ -218,6 +224,13 @@ export function useHomeController(navigation: any) {
   const onAnimalTypePress = () =>
     navigation.navigate('Animals')
 
+  const onViewOverdue = () =>
+    navigation.navigate('HomeFullList', { listType: 'overdue' as const })
+  const onViewDueToday = () =>
+    navigation.navigate('HomeFullList', { listType: 'dueToday' as const })
+  const onViewUpcoming = () =>
+    navigation.navigate('HomeFullList', { listType: 'upcoming' as const })
+
   const onOpenDrawer = () => {
     const parent = navigation.getParent()
     if (parent && 'openDrawer' in parent) {
@@ -235,8 +248,10 @@ export function useHomeController(navigation: any) {
   return {
     user,
     greeting: getGreeting(),
-    overdueEvents,
-    dueTodayEvents,
+    overdueEvents: overdueEventsDisplay,
+    overdueEventsTotal,
+    dueTodayEvents: dueTodayEventsDisplay,
+    dueTodayEventsTotal,
     activeWithdrawals,
     breedingCountdowns,
     farmSummary,
@@ -251,5 +266,8 @@ export function useHomeController(navigation: any) {
     onQuickRecordCare,
     onAnimalTypePress,
     onOpenDrawer,
+    onViewOverdue,
+    onViewDueToday,
+    onViewUpcoming,
   }
 }

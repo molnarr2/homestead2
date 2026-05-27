@@ -49,17 +49,21 @@ const HomeScreen: React.FC = () => {
             onAddAnimal={controller.onQuickAddAnimal}
           />
 
-          {controller.overdueEvents.length > 0 && (
+          {controller.overdueEventsTotal > 0 && (
             <OverdueCareSection
               items={controller.overdueEvents}
+              totalCount={controller.overdueEventsTotal}
               onEventPress={controller.onCareEventPress}
+              onViewMore={controller.onViewOverdue}
             />
           )}
 
-          {controller.dueTodayEvents.length > 0 && (
+          {controller.dueTodayEventsTotal > 0 && (
             <DueTodaySection
               items={controller.dueTodayEvents}
+              totalCount={controller.dueTodayEventsTotal}
               onEventPress={controller.onCareEventPress}
+              onViewMore={controller.onViewDueToday}
             />
           )}
 
@@ -73,7 +77,7 @@ const HomeScreen: React.FC = () => {
           <UpcomingEventsSection
             items={controller.upcomingEvents}
             totalCount={controller.upcomingEventsTotal}
-            onViewAll={controller.onQuickRecordCare}
+            onViewMore={controller.onViewUpcoming}
           />
 
           {controller.breedingCountdowns.length > 0 && (
