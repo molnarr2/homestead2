@@ -10,6 +10,7 @@ import PrimaryButton from '../../../components/button/PrimaryButton'
 import Icon from '@react-native-vector-icons/material-design-icons'
 import { tstampToDateOrNow } from '../../../schema/type/Tstamp'
 import { format } from 'date-fns'
+import { HEALTH_RECORD_TYPES } from '../../health/constants/healthConstants'
 
 type Navigation = NativeStackNavigationProp<RootStackParamList, 'CareEventDetail'>
 type Route = RouteProp<RootStackParamList, 'CareEventDetail'>
@@ -55,8 +56,11 @@ const CareEventDetailScreen: React.FC = () => {
     )
   }
 
-  const { event, animal, status, isComplete } = controller
+  const { event, animal, status, isComplete, isMedical } = controller
   const dueDate = tstampToDateOrNow(event.dueDate)
+  const healthRecordTypeLabel = event.healthRecordType
+    ? HEALTH_RECORD_TYPES.find(t => t.type === event.healthRecordType)?.label
+    : null
 
   return (
     <ScreenContainer>
@@ -82,11 +86,18 @@ const CareEventDetailScreen: React.FC = () => {
           </TouchableOpacity>
         )}
 
-        {status && !isComplete && (
-          <View className={`self-start mt-3 px-3 py-1 rounded-full ${STATUS_COLORS[status.status] ?? 'bg-text-secondary'}`}>
-            <Text className="text-xs font-bold text-text-inverse">{STATUS_LABELS[status.status]}</Text>
-          </View>
-        )}
+        <View className="flex-row items-center gap-2 mt-3">
+          {status && !isComplete && (
+            <View className={`self-start px-3 py-1 rounded-full ${STATUS_COLORS[status.status] ?? 'bg-text-secondary'}`}>
+              <Text className="text-xs font-bold text-text-inverse">{STATUS_LABELS[status.status]}</Text>
+            </View>
+          )}
+          {healthRecordTypeLabel && (
+            <View className="self-start px-3 py-1 rounded-full bg-primary/10">
+              <Text className="text-xs font-bold text-primary">{healthRecordTypeLabel}</Text>
+            </View>
+          )}
+        </View>
 
         <View className="mt-4 bg-surface rounded-xl p-4 border border-border-light">
           <DetailRow label="Due Date" value={format(dueDate, 'MMM d, yyyy')} />
@@ -127,7 +138,10 @@ const CareEventDetailScreen: React.FC = () => {
 
         {!isComplete && (
           <View className="mt-6 mb-8">
-            <PrimaryButton title="Mark Complete" onPress={controller.onComplete} />
+            <PrimaryButton
+              title={isMedical ? 'Complete & Record' : 'Mark Complete'}
+              onPress={controller.onComplete}
+            />
           </View>
         )}
       </ScrollView>

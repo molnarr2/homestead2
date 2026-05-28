@@ -6,6 +6,8 @@ import { useGroupStore } from '../../../store/groupStore'
 import { useAnimalStore } from '../../../store/animalStore'
 import { getCareStatus } from '../../../util/CareUtility'
 import { bsCareService, bsGroupService } from '../../../Bootstrap'
+import type { HealthRecordType } from '../../../schema/health/HealthRecord'
+import { todayIso } from '../../../util/DateUtility'
 
 type Navigation = NativeStackNavigationProp<RootStackParamList, 'CareEventDetail'>
 type Route = RouteProp<RootStackParamList, 'CareEventDetail'>
@@ -24,9 +26,26 @@ export function useCareEventDetailController(navigation: Navigation, route: Rout
 
   const status = event ? getCareStatus(event.dueDate) : null
   const isComplete = !!event?.completedDate
+  const isMedical = !!(event?.healthRecordType)
 
   const onComplete = async () => {
     if (!event) return
+
+    if (event.healthRecordType) {
+      navigation.navigate('CreateHealthRecord', {
+        animalId: event.animalId,
+        recordType: event.healthRecordType as HealthRecordType,
+        groupId: groupId || undefined,
+        name: event.name,
+        date: todayIso(),
+        providerName: event.contactName,
+        providerPhone: event.contactPhone,
+        careEventId: event.id,
+        careEventGroupId: groupId || undefined,
+      })
+      return
+    }
+
     if (groupId) {
       await bsGroupService.completeGroupCareEvent(groupId, event)
     } else {
@@ -38,5 +57,5 @@ export function useCareEventDetailController(navigation: Navigation, route: Rout
   const onBack = () => navigation.goBack()
   const onEdit = () => navigation.navigate('EditCareEvent', { eventId, groupId })
 
-  return { event, animal, status, isComplete, onComplete, onBack, onEdit }
+  return { event, animal, status, isComplete, isMedical, onComplete, onBack, onEdit }
 }

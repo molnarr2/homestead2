@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native'
+import { View, Text, ScrollView, TouchableOpacity, Image, Linking } from 'react-native'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RouteProp } from '@react-navigation/native'
@@ -146,7 +146,19 @@ const HealthRecordDetailScreen: React.FC = () => {
           )}
 
           {record.providerName && <DetailRow label="Provider" value={record.providerName} />}
-          {record.providerPhone && <DetailRow label="Phone" value={record.providerPhone} />}
+          {record.providerPhone ? (
+            <TouchableOpacity
+              onPress={() => Linking.openURL(`tel:${record.providerPhone}`)}
+              activeOpacity={0.7}
+              className="flex-row justify-between items-center py-2 border-b border-border-light"
+            >
+              <Text className="text-sm text-text-secondary">Phone</Text>
+              <View className="flex-row items-center gap-1">
+                <Text className="text-sm font-medium text-primary">{record.providerPhone}</Text>
+                <Icon name="phone" size={16} color="#4A6741" />
+              </View>
+            </TouchableOpacity>
+          ) : null}
           {record.cost > 0 && <DetailRow label="Cost" value={`$${record.cost.toFixed(2)}`} />}
         </View>
 

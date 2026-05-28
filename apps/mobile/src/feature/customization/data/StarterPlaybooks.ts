@@ -17,9 +17,9 @@ export const STARTER_PLAYBOOKS: Record<string, StarterPlaybook> = {
       { name: 'Australorp' },
     ],
     careTemplates: [
-      { name: 'Deworming', type: 'careRecurring', cycle: 90 },
-      { name: 'Coop Cleaning', type: 'careRecurring', cycle: 7 },
-      { name: 'Mite/Lice Check', type: 'careRecurring', cycle: 30 },
+      { name: 'Deworming', type: 'careRecurring', cycle: 90, healthRecordType: 'deworming' },
+      { name: 'Coop Cleaning', type: 'careRecurring', cycle: 7, healthRecordType: '' },
+      { name: 'Mite/Lice Check', type: 'careRecurring', cycle: 30, healthRecordType: '' },
     ],
   },
   'Goat': {
@@ -32,10 +32,10 @@ export const STARTER_PLAYBOOKS: Record<string, StarterPlaybook> = {
       { name: 'LaMancha', gestationDays: 150 },
     ],
     careTemplates: [
-      { name: 'Hoof Trim', type: 'careRecurring', cycle: 42 },
-      { name: 'Deworming', type: 'careRecurring', cycle: 90 },
-      { name: 'CDT Vaccination', type: 'careRecurring', cycle: 365 },
-      { name: 'Selenium/Vitamin E', type: 'careRecurring', cycle: 90 },
+      { name: 'Hoof Trim', type: 'careRecurring', cycle: 42, healthRecordType: '' },
+      { name: 'Deworming', type: 'careRecurring', cycle: 90, healthRecordType: 'deworming' },
+      { name: 'CDT Vaccination', type: 'careRecurring', cycle: 365, healthRecordType: 'vaccination' },
+      { name: 'Selenium/Vitamin E', type: 'careRecurring', cycle: 90, healthRecordType: 'medication' },
     ],
   },
   'Cattle': {
@@ -48,9 +48,9 @@ export const STARTER_PLAYBOOKS: Record<string, StarterPlaybook> = {
       { name: 'Highland', gestationDays: 283 },
     ],
     careTemplates: [
-      { name: 'Hoof Trim', type: 'careRecurring', cycle: 60 },
-      { name: 'Deworming', type: 'careRecurring', cycle: 120 },
-      { name: 'Vaccination (5-way)', type: 'careRecurring', cycle: 365 },
+      { name: 'Hoof Trim', type: 'careRecurring', cycle: 60, healthRecordType: '' },
+      { name: 'Deworming', type: 'careRecurring', cycle: 120, healthRecordType: 'deworming' },
+      { name: 'Vaccination (5-way)', type: 'careRecurring', cycle: 365, healthRecordType: 'vaccination' },
     ],
   },
   'Sheep': {
@@ -62,10 +62,10 @@ export const STARTER_PLAYBOOKS: Record<string, StarterPlaybook> = {
       { name: 'Katahdin', gestationDays: 147 },
     ],
     careTemplates: [
-      { name: 'Hoof Trim', type: 'careRecurring', cycle: 42 },
-      { name: 'Shearing', type: 'careRecurring', cycle: 180 },
-      { name: 'Deworming', type: 'careRecurring', cycle: 90 },
-      { name: 'CDT Vaccination', type: 'careRecurring', cycle: 365 },
+      { name: 'Hoof Trim', type: 'careRecurring', cycle: 42, healthRecordType: '' },
+      { name: 'Shearing', type: 'careRecurring', cycle: 180, healthRecordType: '' },
+      { name: 'Deworming', type: 'careRecurring', cycle: 90, healthRecordType: 'deworming' },
+      { name: 'CDT Vaccination', type: 'careRecurring', cycle: 365, healthRecordType: 'vaccination' },
     ],
   },
   'Pig': {
@@ -78,8 +78,8 @@ export const STARTER_PLAYBOOKS: Record<string, StarterPlaybook> = {
       { name: 'Kunekune', gestationDays: 116 },
     ],
     careTemplates: [
-      { name: 'Deworming', type: 'careRecurring', cycle: 90 },
-      { name: 'Iron Shot (piglets)', type: 'careSingle', cycle: 0 },
+      { name: 'Deworming', type: 'careRecurring', cycle: 90, healthRecordType: 'deworming' },
+      { name: 'Iron Shot (piglets)', type: 'careSingle', cycle: 0, healthRecordType: 'medication' },
     ],
   },
   'Rabbit': {
@@ -91,8 +91,8 @@ export const STARTER_PLAYBOOKS: Record<string, StarterPlaybook> = {
       { name: 'Flemish Giant', gestationDays: 32 },
     ],
     careTemplates: [
-      { name: 'Nail Trim', type: 'careRecurring', cycle: 30 },
-      { name: 'Cage Cleaning', type: 'careRecurring', cycle: 7 },
+      { name: 'Nail Trim', type: 'careRecurring', cycle: 30, healthRecordType: '' },
+      { name: 'Cage Cleaning', type: 'careRecurring', cycle: 7, healthRecordType: '' },
     ],
   },
   'Horse': {
@@ -104,10 +104,10 @@ export const STARTER_PLAYBOOKS: Record<string, StarterPlaybook> = {
       { name: 'Morgan', gestationDays: 340 },
     ],
     careTemplates: [
-      { name: 'Farrier Visit', type: 'careRecurring', cycle: 42 },
-      { name: 'Deworming', type: 'careRecurring', cycle: 60 },
-      { name: 'Dental Float', type: 'careRecurring', cycle: 365 },
-      { name: 'Vaccination (4-way)', type: 'careRecurring', cycle: 365 },
+      { name: 'Farrier Visit', type: 'careRecurring', cycle: 42, healthRecordType: '' },
+      { name: 'Deworming', type: 'careRecurring', cycle: 60, healthRecordType: 'deworming' },
+      { name: 'Dental Float', type: 'careRecurring', cycle: 365, healthRecordType: 'vetVisit' },
+      { name: 'Vaccination (4-way)', type: 'careRecurring', cycle: 365, healthRecordType: 'vaccination' },
     ],
   },
   'Duck': {
@@ -119,8 +119,8 @@ export const STARTER_PLAYBOOKS: Record<string, StarterPlaybook> = {
       { name: 'Runner' },
     ],
     careTemplates: [
-      { name: 'Pool Cleaning', type: 'careRecurring', cycle: 3 },
-      { name: 'Deworming', type: 'careRecurring', cycle: 90 },
+      { name: 'Pool Cleaning', type: 'careRecurring', cycle: 3, healthRecordType: '' },
+      { name: 'Deworming', type: 'careRecurring', cycle: 90, healthRecordType: 'deworming' },
     ],
   },
 }

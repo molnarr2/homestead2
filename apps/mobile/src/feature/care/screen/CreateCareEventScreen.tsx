@@ -12,6 +12,7 @@ import PrimaryButton from '../../../components/button/PrimaryButton'
 import AnimalOrGroupField from '../../../components/input/AnimalOrGroupField'
 import AnimalPickerModal from '../component/AnimalPickerModal'
 import CareTemplateLookupModal from '../component/CareTemplateLookupModal'
+import HealthRecordTypePicker from '../../health/component/HealthRecordTypePicker'
 import Icon from '@react-native-vector-icons/material-design-icons'
 
 type Navigation = NativeStackNavigationProp<RootStackParamList, 'CreateCareEvent'>
@@ -98,6 +99,11 @@ const CreateCareEventScreen: React.FC = () => {
           label="Due Date *"
           value={controller.dueDate}
           onChange={controller.setDueDate}
+        />
+
+        <HealthRecordTypePicker
+          selected={controller.healthRecordType}
+          onSelect={controller.setHealthRecordType}
         />
 
         <TextInput

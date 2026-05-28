@@ -1,5 +1,6 @@
 import AdminObject, { adminObject_default } from '../object/AdminObject'
 import { Tstamp, tstampServerTime } from '../type/Tstamp'
+import type { HealthRecordType } from '../health/HealthRecord'
 
 export type CareEventType = 'careRecurring' | 'careSingle'
 
@@ -19,6 +20,7 @@ export default interface CareEvent {
   photoStorageRef: string
   photoUrl: string
   createdNextRecurringEvent: boolean
+  healthRecordType: HealthRecordType | ''
 }
 
 export function careEvent_default(): CareEvent {
@@ -38,5 +40,6 @@ export function careEvent_default(): CareEvent {
     photoStorageRef: '',
     photoUrl: '',
     createdNextRecurringEvent: false,
+    healthRecordType: '',
   }
 }

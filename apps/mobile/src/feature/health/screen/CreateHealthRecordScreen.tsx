@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, ScrollView, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native'
+import { View, Text, ScrollView, TouchableOpacity, KeyboardAvoidingView, Platform, Modal } from 'react-native'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RouteProp } from '@react-navigation/native'
@@ -191,6 +191,66 @@ const CreateHealthRecordScreen: React.FC = () => {
           showGroups={true}
         />
       )}
+
+      <Modal visible={c.futureDateModalVisible} transparent animationType="fade">
+        <View className="flex-1 bg-black/50 justify-center items-center px-6">
+          <View className="bg-background rounded-2xl p-6 w-full max-w-sm">
+            <View className="flex-row justify-between items-center mb-4">
+              <Text className="text-lg font-bold text-text-primary">Future Date</Text>
+              <TouchableOpacity onPress={c.onFutureDateClose} activeOpacity={0.7}>
+                <Icon name="close" size={24} color="#1A1A1A" />
+              </TouchableOpacity>
+            </View>
+            <Text className="text-sm text-text-secondary mb-6">
+              The date you selected is in the future. Would you like to create a care reminder instead?
+            </Text>
+            <TouchableOpacity
+              className="bg-primary py-3 rounded-lg items-center mb-3"
+              onPress={c.onFutureDateCreateReminder}
+              activeOpacity={0.7}
+            >
+              <Text className="text-sm font-semibold text-text-inverse">Create Care Reminder</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              className="bg-surface border border-border-light py-3 rounded-lg items-center"
+              onPress={c.onFutureDateSaveAnyway}
+              activeOpacity={0.7}
+            >
+              <Text className="text-sm font-semibold text-text-primary">Save Anyway</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal visible={c.scheduleNextModalVisible} transparent animationType="fade">
+        <View className="flex-1 bg-black/50 justify-center items-center px-6">
+          <View className="bg-background rounded-2xl p-6 w-full max-w-sm">
+            <Text className="text-lg font-bold text-text-primary mb-2">Schedule Next?</Text>
+            <Text className="text-sm text-text-secondary mb-4">
+              Would you like to schedule a reminder for the next {c.recordType === 'vetVisit' ? 'vet visit' : c.recordType}?
+            </Text>
+            <DatePickerInput
+              label="Reminder Date"
+              value={c.scheduleNextDate}
+              onChange={c.setScheduleNextDate}
+            />
+            <TouchableOpacity
+              className="bg-primary py-3 rounded-lg items-center mb-3 mt-2"
+              onPress={c.onScheduleNextReminder}
+              activeOpacity={0.7}
+            >
+              <Text className="text-sm font-semibold text-text-inverse">Schedule Reminder</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              className="py-3 rounded-lg items-center"
+              onPress={c.onScheduleNextSkip}
+              activeOpacity={0.7}
+            >
+              <Text className="text-sm font-semibold text-text-secondary">Skip</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </ScreenContainer>
   )
 }

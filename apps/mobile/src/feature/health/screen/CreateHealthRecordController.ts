@@ -5,27 +5,45 @@ import type { RouteProp } from '@react-navigation/native'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
 import { useAnimalStore } from '../../../store/animalStore'
 import { useGroupStore } from '../../../store/groupStore'
-import { bsHealthService, bsGroupService } from '../../../Bootstrap'
+import { useCareStore } from '../../../store/careStore'
+import { bsHealthService, bsGroupService, bsCareService } from '../../../Bootstrap'
 import type HealthRecord from '../../../schema/health/HealthRecord'
 import { healthRecord_default, HealthRecordType, DosageUnit, MedicationRoute, DewormingRoute, WithdrawalType } from '../../../schema/health/HealthRecord'
 import { todayIso } from '../../../util/DateUtility'
+import { careEvent_default } from '../../../schema/care/CareEvent'
+import { dateToTstamp } from '../../../schema/type/Tstamp'
+import { adminObject_default } from '../../../schema/object/AdminObject'
+import { format } from 'date-fns'
 
 type Navigation = NativeStackNavigationProp<RootStackParamList, 'CreateHealthRecord'>
 type Route = RouteProp<RootStackParamList, 'CreateHealthRecord'>
 
+const SCHEDULE_NEXT_TYPES: HealthRecordType[] = ['vaccination', 'deworming', 'medication', 'vetVisit']
+
 export function useCreateHealthRecordController(navigation: Navigation, route: Route) {
-  const { animalId: routeAnimalId, recordType: initialType, groupId: routeGroupId } = route.params
+  const {
+    animalId: routeAnimalId,
+    recordType: initialType,
+    groupId: routeGroupId,
+    name: routeName,
+    providerName: routeProviderName,
+    providerPhone: routeProviderPhone,
+    date: routeDate,
+    careEventId: routeCareEventId,
+    careEventGroupId: routeCareEventGroupId,
+  } = route.params
 
   const { animals } = useAnimalStore()
-  const { groups } = useGroupStore()
+  const { groups, groupCareEvents } = useGroupStore()
+  const { careEvents } = useCareStore()
   const [selectedAnimalId, setSelectedAnimalId] = useState(routeGroupId ? '' : (routeAnimalId ?? ''))
   const [selectedGroupId, setSelectedGroupId] = useState(routeGroupId ?? '')
 
   const [recordType, setRecordType] = useState<HealthRecordType>(initialType ?? 'vaccination')
-  const [name, setName] = useState('')
-  const [date, setDate] = useState(todayIso())
-  const [providerName, setProviderName] = useState('')
-  const [providerPhone, setProviderPhone] = useState('')
+  const [name, setName] = useState(routeName ?? '')
+  const [date, setDate] = useState(routeDate ?? todayIso())
+  const [providerName, setProviderName] = useState(routeProviderName ?? '')
+  const [providerPhone, setProviderPhone] = useState(routeProviderPhone ?? '')
   const [notes, setNotes] = useState('')
   const [cost, setCost] = useState(0)
   const [photoUri, setPhotoUri] = useState('')
@@ -58,6 +76,9 @@ export function useCreateHealthRecordController(navigation: Navigation, route: R
   const [outcome, setOutcome] = useState('')
 
   const [loading, setLoading] = useState(false)
+  const [futureDateModalVisible, setFutureDateModalVisible] = useState(false)
+  const [scheduleNextModalVisible, setScheduleNextModalVisible] = useState(false)
+  const [scheduleNextDate, setScheduleNextDate] = useState('')
 
   const validate = (): string | null => {
     if (!name.trim() || (!selectedAnimalId && !selectedGroupId)) {
@@ -79,6 +100,33 @@ export function useCreateHealthRecordController(navigation: Navigation, route: R
     return null
   }
 
+  const isFutureDate = (): boolean => {
+    const today = format(new Date(), 'yyyy-MM-dd')
+    return date.slice(0, 10) > today
+  }
+
+  const buildRecord = (): HealthRecord => ({
+    ...healthRecord_default(),
+    animalId: selectedAnimalId,
+    recordType,
+    name: name.trim(),
+    date,
+    providerName,
+    providerPhone,
+    notes,
+    cost,
+    ...(recordType === 'vaccination' && { vaccineLotNumber, vaccineNextDueDate, vaccineRoute }),
+    ...(recordType === 'medication' && {
+      medicationDosage, medicationDosageUnit, medicationRoute, medicationFrequency,
+      medicationWithdrawalDays, medicationWithdrawalType,
+    }),
+    ...(recordType === 'deworming' && {
+      dewormingDosage, dewormingDosageUnit, dewormingRoute, dewormingWithdrawalDays, dewormingWithdrawalType,
+    }),
+    ...(recordType === 'vetVisit' && { vetClinicName, vetDiagnosis, vetTreatmentNotes, vetFollowUpDate }),
+    ...((recordType === 'illness' || recordType === 'injury') && { symptoms, treatment, resolvedDate, outcome }),
+  })
+
   const submit = async () => {
     const error = validate()
     if (error) {
@@ -86,29 +134,17 @@ export function useCreateHealthRecordController(navigation: Navigation, route: R
       return
     }
 
-    setLoading(true)
-
-    const record: HealthRecord = {
-      ...healthRecord_default(),
-      animalId: selectedAnimalId,
-      recordType,
-      name: name.trim(),
-      date,
-      providerName,
-      providerPhone,
-      notes,
-      cost,
-      ...(recordType === 'vaccination' && { vaccineLotNumber, vaccineNextDueDate, vaccineRoute }),
-      ...(recordType === 'medication' && {
-        medicationDosage, medicationDosageUnit, medicationRoute, medicationFrequency,
-        medicationWithdrawalDays, medicationWithdrawalType,
-      }),
-      ...(recordType === 'deworming' && {
-        dewormingDosage, dewormingDosageUnit, dewormingRoute, dewormingWithdrawalDays, dewormingWithdrawalType,
-      }),
-      ...(recordType === 'vetVisit' && { vetClinicName, vetDiagnosis, vetTreatmentNotes, vetFollowUpDate }),
-      ...((recordType === 'illness' || recordType === 'injury') && { symptoms, treatment, resolvedDate, outcome }),
+    if (isFutureDate()) {
+      setFutureDateModalVisible(true)
+      return
     }
+
+    await saveRecord()
+  }
+
+  const saveRecord = async () => {
+    setLoading(true)
+    const record = buildRecord()
 
     let result
     if (selectedGroupId) {
@@ -117,11 +153,97 @@ export function useCreateHealthRecordController(navigation: Navigation, route: R
       result = await bsHealthService.createHealthRecord(record, photoUri || undefined)
     }
     setLoading(false)
+
     if (result.success) {
-      navigation.goBack()
+      if (routeCareEventId) {
+        await completeCareEvent()
+      }
+
+      const fromCareEvent = !!routeCareEventId
+      const isScheduleNextType = SCHEDULE_NEXT_TYPES.includes(recordType)
+      if (!fromCareEvent && isScheduleNextType) {
+        setScheduleNextModalVisible(true)
+      } else {
+        navigation.goBack()
+      }
     } else {
       Alert.alert('Error', result.error)
     }
+  }
+
+  const completeCareEvent = async () => {
+    if (!routeCareEventId) return
+    const groupId = routeCareEventGroupId
+    if (groupId) {
+      const event = (groupCareEvents[groupId] ?? []).find(e => e.id === routeCareEventId)
+      if (event) {
+        await bsGroupService.completeGroupCareEvent(groupId, event)
+      }
+    } else {
+      const event = careEvents.find(e => e.id === routeCareEventId)
+      if (event) {
+        await bsCareService.completeCareEvent(event)
+      }
+    }
+  }
+
+  const onFutureDateCreateReminder = () => {
+    setFutureDateModalVisible(false)
+    const animalId = selectedAnimalId || routeAnimalId
+    navigation.replace('CreateCareEvent', {
+      animalId: animalId ?? '',
+      groupId: selectedGroupId || undefined,
+      name: name.trim(),
+      dueDate: date,
+      contactName: providerName,
+      contactPhone: providerPhone,
+      healthRecordType: recordType,
+    })
+  }
+
+  const onFutureDateSaveAnyway = async () => {
+    setFutureDateModalVisible(false)
+    await saveRecord()
+  }
+
+  const onFutureDateClose = () => {
+    setFutureDateModalVisible(false)
+  }
+
+  const onScheduleNextReminder = async () => {
+    if (!scheduleNextDate) {
+      Alert.alert('Required', 'Please select a date for the reminder.')
+      return
+    }
+
+    setLoading(true)
+    const event = {
+      ...careEvent_default(),
+      animalId: selectedAnimalId,
+      name: name.trim(),
+      type: 'careSingle' as const,
+      cycle: 0,
+      dueDate: dateToTstamp(new Date(scheduleNextDate)),
+      contactName: providerName,
+      contactPhone: providerPhone,
+      healthRecordType: recordType,
+      admin: adminObject_default(),
+    }
+
+    if (selectedGroupId) {
+      await bsGroupService.createGroupCareEvent(selectedGroupId, event)
+    } else {
+      await bsCareService.createCareEvent(event)
+    }
+
+    setLoading(false)
+    setScheduleNextModalVisible(false)
+    navigation.goBack()
+  }
+
+  const onScheduleNextSkip = () => {
+    setScheduleNextModalVisible(false)
+    navigation.goBack()
   }
 
   const handleSelectAnimal = (animalId: string) => {
@@ -182,5 +304,13 @@ export function useCreateHealthRecordController(navigation: Navigation, route: R
     selectedAnimal,
     selectedGroup,
     animals,
+    futureDateModalVisible,
+    onFutureDateCreateReminder,
+    onFutureDateSaveAnyway,
+    onFutureDateClose,
+    scheduleNextModalVisible,
+    scheduleNextDate, setScheduleNextDate,
+    onScheduleNextReminder,
+    onScheduleNextSkip,
   }
 }

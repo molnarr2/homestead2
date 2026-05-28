@@ -8,6 +8,7 @@ import { useEditCareTemplateController } from './EditCareTemplateController'
 import ScreenContainer from '../../../components/layout/ScreenContainer'
 import TextInput from '../../../components/input/TextInput'
 import PrimaryButton from '../../../components/button/PrimaryButton'
+import HealthRecordTypePicker from '../../health/component/HealthRecordTypePicker'
 import Icon from '@react-native-vector-icons/material-design-icons'
 
 type Navigation = NativeStackNavigationProp<RootStackParamList, 'EditCareTemplate'>
@@ -79,6 +80,11 @@ const EditCareTemplateScreen: React.FC = () => {
             keyboardType="number-pad"
           />
         )}
+
+        <HealthRecordTypePicker
+          selected={controller.healthRecordType}
+          onSelect={controller.setHealthRecordType}
+        />
 
         <TextInput
           label="Contact Name"

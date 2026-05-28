@@ -4,6 +4,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RouteProp } from '@react-navigation/native'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
 import { useAnimalTypeStore } from '../../../store/animalTypeStore'
+import type { HealthRecordType } from '../../../schema/health/HealthRecord'
 
 type Navigation = NativeStackNavigationProp<RootStackParamList, 'EditCareTemplate'>
 type Route = RouteProp<RootStackParamList, 'EditCareTemplate'>
@@ -21,6 +22,7 @@ export function useEditCareTemplateController(navigation: Navigation, route: Rou
   const [cycle, setCycle] = useState(String(existingTemplate?.cycle ?? 0))
   const [contactName, setContactName] = useState(existingTemplate?.contactName ?? '')
   const [contactPhone, setContactPhone] = useState(existingTemplate?.contactPhone ?? '')
+  const [healthRecordType, setHealthRecordType] = useState<HealthRecordType | ''>(existingTemplate?.healthRecordType ?? '')
   const [loading, setLoading] = useState(false)
 
   const save = async () => {
@@ -38,6 +40,7 @@ export function useEditCareTemplateController(navigation: Navigation, route: Rou
         cycle: cycleDays,
         contactName: contactName.trim(),
         contactPhone: contactPhone.trim(),
+        healthRecordType,
       })
       if (!result.success) Alert.alert('Error', result.error)
     } else {
@@ -47,6 +50,7 @@ export function useEditCareTemplateController(navigation: Navigation, route: Rou
         cycle: cycleDays,
         contactName: contactName.trim(),
         contactPhone: contactPhone.trim(),
+        healthRecordType,
       })
       if (!result.success) Alert.alert('Error', result.error)
     }
@@ -77,5 +81,5 @@ export function useEditCareTemplateController(navigation: Navigation, route: Rou
 
   const onBack = () => navigation.goBack()
 
-  return { name, setName, type, setType, cycle, setCycle, contactName, setContactName, contactPhone, setContactPhone, loading, save, isEditing, onDelete, onBack }
+  return { name, setName, type, setType, cycle, setCycle, contactName, setContactName, contactPhone, setContactPhone, healthRecordType, setHealthRecordType, loading, save, isEditing, onDelete, onBack }
 }

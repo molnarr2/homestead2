@@ -10,6 +10,7 @@ import { bsCareService, bsGroupService } from '../../../Bootstrap'
 import { CareEventType } from '../../../schema/care/CareEvent'
 import { dateToTstamp, tstampToDateOrNow } from '../../../schema/type/Tstamp'
 import { format } from 'date-fns'
+import type { HealthRecordType } from '../../../schema/health/HealthRecord'
 
 type Navigation = NativeStackNavigationProp<RootStackParamList, 'EditCareEvent'>
 type Route = RouteProp<RootStackParamList, 'EditCareEvent'>
@@ -32,6 +33,7 @@ export function useEditCareEventController(navigation: Navigation, route: Route)
   const [contactName, setContactName] = useState(event?.contactName ?? '')
   const [contactPhone, setContactPhone] = useState(event?.contactPhone ?? '')
   const [notes, setNotes] = useState(event?.notes ?? '')
+  const [healthRecordType, setHealthRecordType] = useState<HealthRecordType | ''>(event?.healthRecordType ?? '')
   const [loading, setLoading] = useState(false)
 
   const submit = async () => {
@@ -51,6 +53,7 @@ export function useEditCareEventController(navigation: Navigation, route: Route)
       contactName,
       contactPhone,
       notes,
+      healthRecordType,
     }
 
     const result = groupId
@@ -90,6 +93,7 @@ export function useEditCareEventController(navigation: Navigation, route: Route)
     contactName, setContactName,
     contactPhone, setContactPhone,
     notes, setNotes,
+    healthRecordType, setHealthRecordType,
     loading,
     submit,
     onBack,

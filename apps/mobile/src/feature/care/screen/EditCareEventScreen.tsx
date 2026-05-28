@@ -10,6 +10,7 @@ import TextInput from '../../../components/input/TextInput'
 import DatePickerInput from '../../../components/input/DatePickerInput'
 import PrimaryButton from '../../../components/button/PrimaryButton'
 import AnimalOrGroupField from '../../../components/input/AnimalOrGroupField'
+import HealthRecordTypePicker from '../../health/component/HealthRecordTypePicker'
 import Icon from '@react-native-vector-icons/material-design-icons'
 
 type Navigation = NativeStackNavigationProp<RootStackParamList, 'EditCareEvent'>
@@ -93,6 +94,11 @@ const EditCareEventScreen: React.FC = () => {
           label="Due Date *"
           value={c.dueDate}
           onChange={c.setDueDate}
+        />
+
+        <HealthRecordTypePicker
+          selected={c.healthRecordType}
+          onSelect={c.setHealthRecordType}
         />
 
         <TextInput

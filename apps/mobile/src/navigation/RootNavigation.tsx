@@ -63,11 +63,11 @@ export type RootStackParamList = {
 
   // Care screens
   CareEventDetail: { eventId: string; groupId?: string }
-  CreateCareEvent: { animalId: string; templateId?: string; groupId?: string }
+  CreateCareEvent: { animalId: string; templateId?: string; groupId?: string; name?: string; dueDate?: string; contactName?: string; contactPhone?: string; healthRecordType?: HealthRecordType | '' }
 
   // Health screens
   HealthRecordDetail: { recordId: string; groupId?: string }
-  CreateHealthRecord: { animalId: string; recordType?: HealthRecordType; groupId?: string }
+  CreateHealthRecord: { animalId: string; recordType?: HealthRecordType; groupId?: string; name?: string; providerName?: string; providerPhone?: string; date?: string; careEventId?: string; careEventGroupId?: string }
 
   // Breeding screens
   BreedingRecordDetail: { recordId: string }

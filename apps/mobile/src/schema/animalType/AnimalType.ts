@@ -1,4 +1,5 @@
 import AdminObject, { adminObject_default } from '../object/AdminObject'
+import type { HealthRecordType } from '../health/HealthRecord'
 
 export interface AnimalTypeBreed {
   id: string
@@ -13,6 +14,7 @@ export interface AnimalTypeCareTemplate {
   cycle: number
   contactName: string
   contactPhone: string
+  healthRecordType: HealthRecordType | ''
 }
 
 export default interface AnimalType {

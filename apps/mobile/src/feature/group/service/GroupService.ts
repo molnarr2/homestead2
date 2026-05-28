@@ -203,6 +203,7 @@ export default class GroupService implements IGroupService {
           photoStorageRef: '',
           photoUrl: '',
           createdNextRecurringEvent: false,
+          healthRecordType: event.healthRecordType ?? '',
           admin: adminObject_default(),
         }
         batch.set(nextEventRef, nextEvent as any)

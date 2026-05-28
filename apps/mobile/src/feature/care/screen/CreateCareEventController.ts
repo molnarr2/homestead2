@@ -11,25 +11,36 @@ import { CareEventType, careEvent_default } from '../../../schema/care/CareEvent
 import { adminObject_default } from '../../../schema/object/AdminObject'
 import { dateToTstamp } from '../../../schema/type/Tstamp'
 import { AnimalTypeCareTemplate } from '../../../schema/animalType/AnimalType'
+import type { HealthRecordType } from '../../../schema/health/HealthRecord'
 
 type Navigation = NativeStackNavigationProp<RootStackParamList, 'CreateCareEvent'>
 type Route = RouteProp<RootStackParamList, 'CreateCareEvent'>
 
 export function useCreateCareEventController(navigation: Navigation, route: Route) {
-  const { animalId: routeAnimalId, templateId, groupId: routeGroupId } = route.params
+  const {
+    animalId: routeAnimalId,
+    templateId,
+    groupId: routeGroupId,
+    name: routeName,
+    dueDate: routeDueDate,
+    contactName: routeContactName,
+    contactPhone: routeContactPhone,
+    healthRecordType: routeHealthRecordType,
+  } = route.params
   const { animals } = useAnimalStore()
   const { animalTypes } = useAnimalTypeStore()
   const { groups } = useGroupStore()
 
   const [selectedAnimalId, setSelectedAnimalId] = useState(routeGroupId ? '' : (routeAnimalId ?? ''))
   const [selectedGroupId, setSelectedGroupId] = useState(routeGroupId ?? '')
-  const [name, setName] = useState('')
+  const [name, setName] = useState(routeName ?? '')
   const [type, setType] = useState<CareEventType>('careSingle')
   const [cycle, setCycle] = useState(0)
-  const [dueDate, setDueDate] = useState('')
-  const [contactName, setContactName] = useState('')
-  const [contactPhone, setContactPhone] = useState('')
+  const [dueDate, setDueDate] = useState(routeDueDate ?? '')
+  const [contactName, setContactName] = useState(routeContactName ?? '')
+  const [contactPhone, setContactPhone] = useState(routeContactPhone ?? '')
   const [notes, setNotes] = useState('')
+  const [healthRecordType, setHealthRecordType] = useState<HealthRecordType | ''>(routeHealthRecordType ?? '')
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
@@ -42,6 +53,7 @@ export function useCreateCareEventController(navigation: Navigation, route: Rout
         setCycle(template.cycle)
         setContactName(template.contactName)
         setContactPhone(template.contactPhone)
+        setHealthRecordType(template.healthRecordType ?? '')
       }
     }
   }, [templateId])
@@ -74,6 +86,7 @@ export function useCreateCareEventController(navigation: Navigation, route: Rout
       contactName,
       contactPhone,
       notes,
+      healthRecordType,
       admin: adminObject_default(),
     }
 
@@ -98,6 +111,7 @@ export function useCreateCareEventController(navigation: Navigation, route: Rout
     setCycle(template.cycle)
     setContactName(template.contactName)
     setContactPhone(template.contactPhone)
+    setHealthRecordType(template.healthRecordType ?? '')
   }
 
   const onBack = () => navigation.goBack()
@@ -132,6 +146,7 @@ export function useCreateCareEventController(navigation: Navigation, route: Rout
     contactName, setContactName,
     contactPhone, setContactPhone,
     notes, setNotes,
+    healthRecordType, setHealthRecordType,
     loading,
     animals,
     submit,

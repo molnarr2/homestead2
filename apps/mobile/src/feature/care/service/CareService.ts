@@ -109,6 +109,7 @@ export default class CareService implements ICareService {
           photoStorageRef: '',
           photoUrl: '',
           createdNextRecurringEvent: false,
+          healthRecordType: event.healthRecordType ?? '',
           admin: adminObject_default(),
         }
         batch.set(nextEventRef, nextEvent as any)
