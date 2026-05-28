@@ -1,0 +1,2 @@
+- [ ] Anonymous users
+- [ ] Color isn't implemented

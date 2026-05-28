@@ -1,10 +1,26 @@
 dI don't like how the home page is empty when all things are caught up.
 
+ga1@gmail.com -- free account
+zd@test.com 
+
+---
+
+Do we want the theme to be the red color?
+
 # Issues
 
 - [x] care event - phone number callable
-- [ ] Home screen when tapping on due today - Mark as completed it doesn't refresh the home screen.
-- [ ] Home screen - tap on an animal type doesn't take you to that specific animal group within the animals view
+- [x] Home screen when tapping on due today - Mark as completed it doesn't refresh the home screen.
+- [x] Home screen - tap on an animal type doesn't take you to that specific animal group within the animals view
+- [ ] The login / create account - The create account should be first
+- [ ] Icon for the app needs to be updated
+- [ ] What animals do you keep? - missing Goat, Alpaca, and Llama icons
+- [ ] Onboarding causes the user NOT to load - ouch
+- [ ] Anonymous accounts get the user right to the action faster.
+- [ ] The starter playbook needs to have more breeds in it and all of the animals.
+- [ ] Notes when tapping on the picture you can't choose the camera
+- [ ] Theme should be correct colors for the app
+
 
 # Paywall
 
