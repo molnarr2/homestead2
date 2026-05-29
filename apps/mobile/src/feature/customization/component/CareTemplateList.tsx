@@ -16,7 +16,7 @@ const CareTemplateList: React.FC<Props> = ({ templates, onAdd, onEdit }) => {
       <View className="flex-row items-center justify-between">
         <SectionHeader title="Care Templates" count={templates.length} />
         <TouchableOpacity onPress={onAdd} activeOpacity={0.7} className="p-2">
-          <Icon name="plus" size={22} color="#4A6741" />
+          <Icon name="plus" size={22} color="#B5653A" />
         </TouchableOpacity>
       </View>
       {templates.map(template => (
@@ -32,7 +32,7 @@ const CareTemplateList: React.FC<Props> = ({ templates, onAdd, onEdit }) => {
               {template.type === 'careRecurring' ? `Recurring · every ${template.cycle} days` : 'One-time'}
             </Text>
           </View>
-          <Icon name="chevron-right" size={20} color="#9CA3AF" />
+          <Icon name="chevron-right" size={20} color="#B0A49E" />
         </TouchableOpacity>
       ))}
     </View>

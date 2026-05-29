@@ -34,7 +34,7 @@ const BreedingCard: React.FC<Props> = ({
           <Text className="text-xs font-semibold text-primary">
             {daysRemaining} day{daysRemaining !== 1 ? 's' : ''}
           </Text>
-          <Icon name="chevron-right" size={18} color="#9CA3AF" />
+          <Icon name="chevron-right" size={18} color="#B0A49E" />
         </View>
       </View>
       <View className="h-2 bg-border-light rounded-full overflow-hidden">

@@ -48,18 +48,18 @@ const WeightLogDetailScreen: React.FC = () => {
     <ScreenContainer>
       <View className="flex-row items-center justify-between px-4 pt-4 pb-2">
         <TouchableOpacity onPress={controller.onBack} activeOpacity={0.7} className="p-1">
-          <Icon name="arrow-left" size={24} color="#1A1A1A" />
+          <Icon name="arrow-left" size={24} color="#2D2420" />
         </TouchableOpacity>
         <Text className="text-xl font-bold text-text-primary">Weight Log</Text>
         <TouchableOpacity onPress={controller.onEdit} activeOpacity={0.7} className="p-1">
-          <Icon name="pencil" size={24} color="#1A1A1A" />
+          <Icon name="pencil" size={24} color="#2D2420" />
         </TouchableOpacity>
       </View>
 
       <ScrollView className="flex-1 px-4" showsVerticalScrollIndicator={false}>
         <View className="flex-row items-center mt-4">
           <View className="bg-primary/10 rounded-full p-2 mr-3">
-            <Icon name="scale-bathroom" size={24} color="#4A6741" />
+            <Icon name="scale-bathroom" size={24} color="#B5653A" />
           </View>
           <View className="flex-1">
             <Text className="text-2xl font-bold text-text-primary">{log.weight} {log.weightUnit}</Text>

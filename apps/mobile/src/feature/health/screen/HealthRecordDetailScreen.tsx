@@ -50,18 +50,18 @@ const HealthRecordDetailScreen: React.FC = () => {
     <ScreenContainer>
       <View className="flex-row items-center justify-between px-4 pt-4 pb-2">
         <TouchableOpacity onPress={controller.onBack} activeOpacity={0.7} className="p-1">
-          <Icon name="arrow-left" size={24} color="#1A1A1A" />
+          <Icon name="arrow-left" size={24} color="#2D2420" />
         </TouchableOpacity>
         <Text className="text-xl font-bold text-text-primary">Health Record</Text>
         <TouchableOpacity onPress={controller.onEdit} activeOpacity={0.7} className="p-1">
-          <Icon name="pencil" size={24} color="#1A1A1A" />
+          <Icon name="pencil" size={24} color="#2D2420" />
         </TouchableOpacity>
       </View>
 
       <ScrollView className="flex-1 px-4" showsVerticalScrollIndicator={false}>
         <View className="flex-row items-center mt-4">
           <View className="bg-primary/10 rounded-full p-2 mr-3">
-            <Icon name={HEALTH_RECORD_TYPE_ICONS[record.recordType] || 'medical-bag'} size={24} color="#4A6741" />
+            <Icon name={HEALTH_RECORD_TYPE_ICONS[record.recordType] || 'medical-bag'} size={24} color="#B5653A" />
           </View>
           <View className="flex-1">
             <Text className="text-2xl font-bold text-text-primary">{record.name}</Text>
@@ -155,7 +155,7 @@ const HealthRecordDetailScreen: React.FC = () => {
               <Text className="text-sm text-text-secondary">Phone</Text>
               <View className="flex-row items-center gap-1">
                 <Text className="text-sm font-medium text-primary">{record.providerPhone}</Text>
-                <Icon name="phone" size={16} color="#4A6741" />
+                <Icon name="phone" size={16} color="#B5653A" />
               </View>
             </TouchableOpacity>
           ) : null}

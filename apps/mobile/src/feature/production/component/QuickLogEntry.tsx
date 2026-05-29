@@ -26,7 +26,7 @@ const QuickLogEntry: React.FC<Props> = ({ onSelect }) => {
           activeOpacity={0.7}
         >
           <View className="w-12 h-12 rounded-full bg-primary/10 items-center justify-center">
-            <Icon name={item.icon as React.ComponentProps<typeof Icon>['name']} size={24} color="#4A6741" />
+            <Icon name={item.icon as React.ComponentProps<typeof Icon>['name']} size={24} color="#B5653A" />
           </View>
           <Text className="text-xs text-text-secondary mt-1">{item.label}</Text>
         </TouchableOpacity>

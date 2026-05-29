@@ -66,11 +66,11 @@ const GroupDetailScreen: React.FC = () => {
     <ScreenContainer>
       <View className="flex-row items-center justify-between px-4 pt-4 pb-2">
         <TouchableOpacity onPress={controller.onBack} activeOpacity={0.7} className="p-1">
-          <Icon name="arrow-left" size={24} color="#1A1A1A" />
+          <Icon name="arrow-left" size={24} color="#2D2420" />
         </TouchableOpacity>
         <Text className="text-xl font-bold text-text-primary flex-1 text-center">{controller.group.name}</Text>
         <TouchableOpacity onPress={controller.onEdit} activeOpacity={0.7} className="p-1">
-          <Icon name="pencil" size={22} color="#1A1A1A" />
+          <Icon name="pencil" size={22} color="#2D2420" />
         </TouchableOpacity>
       </View>
 
@@ -144,7 +144,7 @@ const MemberRow: React.FC<MemberRowProps> = ({ animal, onPress }) => (
       <Text className="text-base font-semibold text-text-primary">{animal.name}</Text>
       <Text className="text-sm text-text-secondary">{animal.breed || animal.animalType}</Text>
     </View>
-    <Icon name="chevron-right" size={20} color="#BDBDBD" />
+    <Icon name="chevron-right" size={20} color="#B0A49E" />
   </TouchableOpacity>
 )
 

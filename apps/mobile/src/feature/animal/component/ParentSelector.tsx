@@ -59,7 +59,7 @@ const ParentSelector: React.FC<Props> = ({ label, animalTypeId, gender, selected
           <Text className={selectedAnimal ? 'text-base text-text-primary' : 'text-base text-text-disabled'}>
             {selectedAnimal ? selectedAnimal.name : `Select ${label.toLowerCase()}...`}
           </Text>
-          <Icon name="chevron-down" size={20} color="#6B6B6B" />
+          <Icon name="chevron-down" size={20} color="#6B5B52" />
         </TouchableOpacity>
         {selectedAnimal ? (
           <TouchableOpacity
@@ -85,7 +85,7 @@ const ParentSelector: React.FC<Props> = ({ label, animalTypeId, gender, selected
           <View className="flex-row items-center justify-between px-4 pt-4 pb-2">
             <Text className="text-xl font-bold text-text-primary">Select {label}</Text>
             <TouchableOpacity onPress={() => { setVisible(false); setSearchQuery('') }} activeOpacity={0.7}>
-              <Icon name="close" size={24} color="#1A1A1A" />
+              <Icon name="close" size={24} color="#2D2420" />
             </TouchableOpacity>
           </View>
 
@@ -121,7 +121,7 @@ const ParentSelector: React.FC<Props> = ({ label, animalTypeId, gender, selected
                     <Text className="text-xs text-text-secondary">{item.breed || item.animalType}</Text>
                   </View>
                   {item.id === selectedId ? (
-                    <Icon name="check-circle" size={20} color="#4A6741" />
+                    <Icon name="check-circle" size={20} color="#B5653A" />
                   ) : null}
                 </View>
               </TouchableOpacity>

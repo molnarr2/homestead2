@@ -23,7 +23,7 @@ const MenuItemRow: React.FC<MenuItemRowProps> = ({ label, onPress }) => (
     activeOpacity={0.7}
   >
     <Text className="text-base text-text-primary">{label}</Text>
-    <Icon name="chevron-right" size={24} color="#9E9E9E" />
+    <Icon name="chevron-right" size={24} color="#8C7E75" />
   </TouchableOpacity>
 )
 

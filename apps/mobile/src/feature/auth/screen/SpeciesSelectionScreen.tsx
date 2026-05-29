@@ -39,14 +39,14 @@ const SpeciesSelectionScreen: React.FC = () => {
                     <Icon
                       name={item.icon as React.ComponentProps<typeof Icon>['name']}
                       size={32}
-                      color={isSelected ? '#4A6741' : '#6B6B6B'}
+                      color={isSelected ? '#B5653A' : '#6B5B52'}
                     />
                     <Text className={`text-sm font-medium mt-2 ${isSelected ? 'text-primary' : 'text-text-secondary'}`}>
                       {item.name}
                     </Text>
                     {isSelected ? (
                       <View className="absolute top-2 right-2">
-                        <Icon name="check-circle" size={18} color="#4A6741" />
+                        <Icon name="check-circle" size={18} color="#B5653A" />
                       </View>
                     ) : null}
                   </TouchableOpacity>

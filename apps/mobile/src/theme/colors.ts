@@ -1,32 +1,32 @@
 export const colors = {
-  primary: '#4A6741',
-  primaryLight: '#6B8F61',
-  primaryDark: '#2D4228',
+  primary: '#B5653A',
+  primaryLight: '#D08455',
+  primaryDark: '#8A4A28',
 
-  secondary: '#8B6F47',
-  secondaryLight: '#A68B63',
-  secondaryDark: '#6B5232',
+  secondary: '#7A6B5D',
+  secondaryLight: '#A09385',
+  secondaryDark: '#5C4F43',
 
-  accent: '#D4A847',
-  accentLight: '#E8C56A',
-  accentDark: '#B08A2E',
+  accent: '#C49B2A',
+  accentLight: '#DEBB55',
+  accentDark: '#8E6F1E',
 
-  background: '#F5F2ED',
-  backgroundDark: '#E8E3DC',
+  background: '#F8F5F0',
+  backgroundDark: '#EDE8E0',
   surface: '#FFFFFF',
-  surfaceElevated: '#FAFAFA',
+  surfaceElevated: '#FDFBF8',
 
   text: {
-    primary: '#1A1A1A',
-    secondary: '#6B6B6B',
-    disabled: '#BDBDBD',
+    primary: '#2D2420',
+    secondary: '#6B5B52',
+    disabled: '#B0A49E',
     inverse: '#FFFFFF',
   },
 
   border: {
-    light: '#E8E3DC',
-    medium: '#D1CBC2',
-    dark: '#9E9E9E',
+    light: '#EDE8E0',
+    medium: '#D4C8BD',
+    dark: '#8C7E75',
   },
 
   status: {

@@ -26,7 +26,7 @@ const AnimalListScreen: React.FC = () => {
     return (
       <ScreenContainer>
         <View className="flex-1 items-center justify-center">
-          <ActivityIndicator size="large" color="#4A6741" />
+          <ActivityIndicator size="large" color="#B5653A" />
         </View>
       </ScreenContainer>
     )
@@ -44,7 +44,7 @@ const AnimalListScreen: React.FC = () => {
               className="p-1"
             >
               <View>
-                <Icon name="filter-variant" size={24} color="#1A1A1A" />
+                <Icon name="filter-variant" size={24} color="#2D2420" />
                 {controller.isFilterActive ? (
                   <View className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-primary" />
                 ) : null}
@@ -136,7 +136,7 @@ const GroupCard: React.FC<GroupCardProps> = ({ group, onPress }) => {
           {group.animalIds.length} member{group.animalIds.length !== 1 ? 's' : ''}
         </Text>
       </View>
-      <Icon name="chevron-right" size={20} color="#BDBDBD" />
+      <Icon name="chevron-right" size={20} color="#B0A49E" />
     </TouchableOpacity>
   )
 }

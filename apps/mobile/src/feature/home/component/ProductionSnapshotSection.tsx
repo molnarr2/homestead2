@@ -22,7 +22,7 @@ const ProductionSnapshotSection: React.FC<Props> = ({ items, onAddProduction }) 
       <View className="flex-row items-center justify-between mt-4 mb-2">
         <Text className="text-lg font-semibold text-text-primary">Production</Text>
         <Pressable onPress={onAddProduction} hitSlop={8}>
-          <Icon name="plus-circle-outline" size={22} color="#4A6741" />
+          <Icon name="plus-circle-outline" size={22} color="#B5653A" />
         </Pressable>
       </View>
       {items.length === 0 ? (

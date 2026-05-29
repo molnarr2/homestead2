@@ -18,7 +18,7 @@ const SecondaryButton: React.FC<SecondaryButtonProps> = ({ title, onPress, loadi
       activeOpacity={0.7}
     >
       {loading ? (
-        <ActivityIndicator color="#4A6741" />
+        <ActivityIndicator color="#B5653A" />
       ) : (
         <Text className="text-base font-semibold text-primary">{title}</Text>
       )}

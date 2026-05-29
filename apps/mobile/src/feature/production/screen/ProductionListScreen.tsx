@@ -35,7 +35,7 @@ const ProductionCard: React.FC<{ log: ProductionLog; onPress?: () => void }> = (
       activeOpacity={0.7}
     >
       <View className="w-10 h-10 rounded-full bg-primary/10 items-center justify-center mr-3">
-        <Icon name={iconName as React.ComponentProps<typeof Icon>['name']} size={20} color="#4A6741" />
+        <Icon name={iconName as React.ComponentProps<typeof Icon>['name']} size={20} color="#B5653A" />
       </View>
       <View className="flex-1">
         <Text className="text-base font-semibold text-text-primary">
@@ -59,7 +59,7 @@ const ProductionListScreen: React.FC = () => {
     return (
       <ScreenContainer>
         <View className="flex-1 items-center justify-center">
-          <ActivityIndicator size="large" color="#4A6741" />
+          <ActivityIndicator size="large" color="#B5653A" />
         </View>
       </ScreenContainer>
     )

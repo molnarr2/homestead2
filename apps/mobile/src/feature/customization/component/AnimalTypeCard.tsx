@@ -25,7 +25,7 @@ const AnimalTypeCard: React.FC<Props> = ({ name, breedCount, careTemplateCount, 
           {breedCount} breed{breedCount !== 1 ? 's' : ''} · {careTemplateCount} care template{careTemplateCount !== 1 ? 's' : ''}
         </Text>
       </View>
-      <Icon name="chevron-right" size={24} color="#9CA3AF" />
+      <Icon name="chevron-right" size={24} color="#B0A49E" />
     </TouchableOpacity>
   )
 }

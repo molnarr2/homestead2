@@ -58,7 +58,7 @@ const AnimalHealthTab: React.FC<Props> = ({ healthRecords, groupHealthRecords, a
             const content = (
               <View className="mx-4 mt-2 bg-surface rounded-lg p-3 border border-border-light">
                 <View className="flex-row items-center">
-                  <Icon name={HEALTH_RECORD_TYPE_ICONS[item.record.recordType] || 'medical-bag'} size={20} color="#4A6741" />
+                  <Icon name={HEALTH_RECORD_TYPE_ICONS[item.record.recordType] || 'medical-bag'} size={20} color="#B5653A" />
                   <View className="flex-1 ml-2">
                     <View className="flex-row items-center">
                       <Text className="text-sm font-semibold text-text-primary">{item.record.name}</Text>

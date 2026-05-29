@@ -78,7 +78,7 @@ const AnimalPickerModal: React.FC<Props> = ({ visible, onClose, animals, onSelec
                 cachePolicy="dataCache"
               />
             ) : (
-              <Icon name="account-group" size={24} color="#6B6B6B" />
+              <Icon name="account-group" size={24} color="#6B5B52" />
             )}
           </View>
           <View className="flex-1">
@@ -130,7 +130,7 @@ const AnimalPickerModal: React.FC<Props> = ({ visible, onClose, animals, onSelec
       <View className="flex-1 bg-background">
         <View className="flex-row items-center justify-between px-4 pt-4 pb-3 border-b border-border-light">
           <TouchableOpacity onPress={onClose} activeOpacity={0.7} className="p-1">
-            <Icon name="close" size={24} color="#1A1A1A" />
+            <Icon name="close" size={24} color="#2D2420" />
           </TouchableOpacity>
           <Text className="text-lg font-bold text-text-primary">Select Animal</Text>
           <View className="w-8" />

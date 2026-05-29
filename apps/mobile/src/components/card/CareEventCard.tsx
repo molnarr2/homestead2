@@ -35,7 +35,7 @@ const CareEventCard: React.FC<Props> = ({ eventName, animalName, daysInfo, statu
         </View>
         <View className="items-end">
           <Text className={`text-xs font-semibold ${statusColor}`}>{statusLabel}</Text>
-          <Icon name="chevron-right" size={18} color="#9CA3AF" />
+          <Icon name="chevron-right" size={18} color="#B0A49E" />
         </View>
       </View>
     </TouchableOpacity>

@@ -69,12 +69,12 @@ const BreedingRecordDetailScreen: React.FC = () => {
     <ScreenContainer>
       <View className="flex-row items-center justify-between px-4 pt-4 pb-2">
         <TouchableOpacity onPress={controller.onBack} activeOpacity={0.7} className="p-1">
-          <Icon name="arrow-left" size={24} color="#1A1A1A" />
+          <Icon name="arrow-left" size={24} color="#2D2420" />
         </TouchableOpacity>
         <Text className="text-xl font-bold text-text-primary">Breeding Record</Text>
         {record.status === 'active' ? (
           <TouchableOpacity onPress={controller.onEdit} activeOpacity={0.7} className="p-1">
-            <Icon name="pencil" size={24} color="#1A1A1A" />
+            <Icon name="pencil" size={24} color="#2D2420" />
           </TouchableOpacity>
         ) : (
           <View className="w-8" />

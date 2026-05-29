@@ -66,11 +66,11 @@ const CareEventDetailScreen: React.FC = () => {
     <ScreenContainer>
       <View className="flex-row items-center justify-between px-4 pt-4 pb-2">
         <TouchableOpacity onPress={controller.onBack} activeOpacity={0.7} className="p-1">
-          <Icon name="arrow-left" size={24} color="#1A1A1A" />
+          <Icon name="arrow-left" size={24} color="#2D2420" />
         </TouchableOpacity>
         <Text className="text-xl font-bold text-text-primary">Care Event</Text>
         <TouchableOpacity onPress={controller.onEdit} activeOpacity={0.7} className="p-1">
-          <Icon name="pencil" size={24} color="#1A1A1A" />
+          <Icon name="pencil" size={24} color="#2D2420" />
         </TouchableOpacity>
       </View>
 
@@ -114,7 +114,7 @@ const CareEventDetailScreen: React.FC = () => {
             >
               <Text className="text-sm text-text-secondary">Phone</Text>
               <View className="flex-row items-center gap-1">
-                <Icon name="phone" size={16} color="#4A6741" />
+                <Icon name="phone" size={16} color="#B5653A" />
                 <Text className="text-sm font-medium text-primary">{event.contactPhone}</Text>
               </View>
             </TouchableOpacity>

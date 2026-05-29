@@ -97,7 +97,7 @@ const AnimalTimelineTab: React.FC<Props> = ({ careEvents, healthRecords, breedin
         description: `Weight: ${log.weight} ${log.weightUnit}${log.bodyConditionScore ? ` (BCS: ${log.bodyConditionScore})` : ''}`,
         date: formatDate(log.date),
         sortDate: log.date ? new Date(log.date).getTime() : 0,
-        color: '#8B6F47',
+        color: '#7A6B5D',
       })
     }
 

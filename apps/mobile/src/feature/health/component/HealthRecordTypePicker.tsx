@@ -28,7 +28,7 @@ const HealthRecordTypePicker: React.FC<Props> = ({ selected, onSelect }) => {
               onPress={() => onSelect(type)}
               activeOpacity={0.7}
             >
-              <Icon name={icon} size={16} color={isSelected ? '#FFFFFF' : '#4A6741'} />
+              <Icon name={icon} size={16} color={isSelected ? '#FFFFFF' : '#B5653A'} />
               <Text className={`text-sm font-medium ml-1 ${isSelected ? 'text-text-inverse' : 'text-text-primary'}`}>
                 {label}
               </Text>

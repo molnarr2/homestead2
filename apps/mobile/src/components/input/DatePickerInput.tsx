@@ -53,8 +53,8 @@ const DatePickerInput: React.FC<DatePickerInputProps> = ({
         onPress={open}
         activeOpacity={0.7}
       >
-        <Icon name="calendar-clock-outline" size={20} color={value ? '#4A6741' : '#BDBDBD'} />
-        <Text className={`flex-1 text-base ml-3 ${value ? 'text-primary' : 'text-[#BDBDBD]'}`}>
+        <Icon name="calendar-clock-outline" size={20} color={value ? '#B5653A' : '#B0A49E'} />
+        <Text className={`flex-1 text-base ml-3 ${value ? 'text-primary' : 'text-[#B0A49E]'}`}>
           {displayText || placeholder}
         </Text>
         {value ? (
@@ -62,10 +62,10 @@ const DatePickerInput: React.FC<DatePickerInputProps> = ({
             onPress={(e) => { e.stopPropagation(); clear() }}
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           >
-            <Icon name="close-circle" size={18} color="#BDBDBD" />
+            <Icon name="close-circle" size={18} color="#B0A49E" />
           </TouchableOpacity>
         ) : (
-          <Icon name="chevron-down" size={18} color="#BDBDBD" />
+          <Icon name="chevron-down" size={18} color="#B0A49E" />
         )}
       </TouchableOpacity>
 
@@ -102,7 +102,7 @@ const DatePickerInput: React.FC<DatePickerInputProps> = ({
                     <Icon
                       name="calendar-month-outline"
                       size={18}
-                      color={activeTab === 'date' ? '#4A6741' : '#6B6B6B'}
+                      color={activeTab === 'date' ? '#B5653A' : '#6B5B52'}
                     />
                     <Text className={`text-sm font-medium ml-2 ${activeTab === 'date' ? 'text-primary' : 'text-text-secondary'}`}>
                       Date
@@ -116,7 +116,7 @@ const DatePickerInput: React.FC<DatePickerInputProps> = ({
                     <Icon
                       name="clock-outline"
                       size={18}
-                      color={activeTab === 'time' ? '#4A6741' : '#6B6B6B'}
+                      color={activeTab === 'time' ? '#B5653A' : '#6B5B52'}
                     />
                     <Text className={`text-sm font-medium ml-2 ${activeTab === 'time' ? 'text-primary' : 'text-text-secondary'}`}>
                       Time
@@ -131,18 +131,18 @@ const DatePickerInput: React.FC<DatePickerInputProps> = ({
                     display="spinner"
                     onChange={(_, date) => { if (date) setDraft(date) }}
                     style={{ height: 180 }}
-                    textColor="#1A1A1A"
+                    textColor="#2D2420"
                     {...(Platform.OS === 'ios' ? { themeVariant: 'light' as const } : {})}
                   />
                 </View>
 
                 <View className="flex-row items-center justify-center mt-4 bg-surface rounded-xl py-3 px-4">
-                  <Icon name="calendar-check" size={20} color="#4A6741" />
+                  <Icon name="calendar-check" size={20} color="#B5653A" />
                   <Text className="text-base font-medium text-primary ml-2">
                     {format(draft, 'EEE, MMM d, yyyy')}
                   </Text>
                   <Text className="text-base text-text-secondary mx-2">at</Text>
-                  <Icon name="clock-outline" size={18} color="#4A6741" />
+                  <Icon name="clock-outline" size={18} color="#B5653A" />
                   <Text className="text-base font-medium text-primary ml-2">
                     {format(draft, 'h:mm a')}
                   </Text>

@@ -73,7 +73,7 @@ const CareTemplateLookupModal: React.FC<Props> = ({ visible, onClose, onSelect, 
       <View className="flex-1 bg-background">
         <View className="flex-row items-center justify-between px-4 pt-4 pb-3 border-b border-border-light">
           <TouchableOpacity onPress={onClose} activeOpacity={0.7} className="p-1">
-            <Icon name="close" size={24} color="#1A1A1A" />
+            <Icon name="close" size={24} color="#2D2420" />
           </TouchableOpacity>
           <Text className="text-lg font-bold text-text-primary">Care Templates</Text>
           <View className="w-8" />
@@ -104,7 +104,7 @@ const CareTemplateLookupModal: React.FC<Props> = ({ visible, onClose, onSelect, 
               onPress={onGoToCustomization}
               activeOpacity={0.7}
             >
-              <Icon name="cog" size={20} color="#4A6741" />
+              <Icon name="cog" size={20} color="#B5653A" />
               <Text className="text-sm font-medium text-primary ml-2">Manage Templates</Text>
             </TouchableOpacity>
           }

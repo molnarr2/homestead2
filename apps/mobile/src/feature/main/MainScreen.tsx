@@ -30,8 +30,8 @@ export function MainScreen() {
           const iconName = (focused ? active : inactive) as React.ComponentProps<typeof Icon>['name']
           return <Icon name={iconName} size={size} color={color} />
         },
-        tabBarActiveTintColor: '#4A6741',
-        tabBarInactiveTintColor: '#6B6B6B',
+        tabBarActiveTintColor: '#B5653A',
+        tabBarInactiveTintColor: '#8C7E75',
         headerShown: false,
       })}
     >

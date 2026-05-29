@@ -46,7 +46,7 @@ const GroupMemberPicker: React.FC<Props> = ({ visible, onClose, animals, selecte
         <Icon
           name={isSelected ? 'checkbox-marked' : 'checkbox-blank-outline'}
           size={24}
-          color={isSelected ? '#4A6741' : '#BDBDBD'}
+          color={isSelected ? '#B5653A' : '#B0A49E'}
         />
       </TouchableOpacity>
     )
@@ -63,7 +63,7 @@ const GroupMemberPicker: React.FC<Props> = ({ visible, onClose, animals, selecte
       <View className="flex-1 bg-background">
         <View className="flex-row items-center justify-between px-4 pt-4 pb-3 border-b border-border-light">
           <TouchableOpacity onPress={onClose} activeOpacity={0.7} className="p-1">
-            <Icon name="close" size={24} color="#1A1A1A" />
+            <Icon name="close" size={24} color="#2D2420" />
           </TouchableOpacity>
           <Text className="text-lg font-bold text-text-primary">Select Members</Text>
           <TouchableOpacity onPress={onClose} activeOpacity={0.7} className="p-1">

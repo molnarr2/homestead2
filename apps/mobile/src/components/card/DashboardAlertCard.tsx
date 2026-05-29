@@ -25,7 +25,7 @@ const DashboardAlertCard: React.FC<Props> = ({ title, subtitle, detail, icon, on
         </View>
         <View className="items-end">
           <Text className="text-xs font-semibold text-status-error">{detail}</Text>
-          <Icon name="chevron-right" size={18} color="#9CA3AF" />
+          <Icon name="chevron-right" size={18} color="#B0A49E" />
         </View>
       </View>
     </TouchableOpacity>

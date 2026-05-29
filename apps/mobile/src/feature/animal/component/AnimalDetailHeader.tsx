@@ -78,14 +78,14 @@ const AnimalDetailHeader: React.FC<Props> = ({ animal, age, onEdit, onBack, onEx
         <>
           <View className="flex-row items-center justify-between px-4 pt-4 mb-3">
             <TouchableOpacity onPress={onBack} activeOpacity={0.7} className="p-1">
-              <Icon name="arrow-left" size={24} color="#1A1A1A" />
+              <Icon name="arrow-left" size={24} color="#2D2420" />
             </TouchableOpacity>
             <View className="flex-row items-center gap-3">
               <TouchableOpacity onPress={onExport} activeOpacity={0.7} className="p-1">
-                <Icon name="file-export-outline" size={24} color="#4A6741" />
+                <Icon name="file-export-outline" size={24} color="#B5653A" />
               </TouchableOpacity>
               <TouchableOpacity onPress={onEdit} activeOpacity={0.7} className="p-1">
-                <Icon name="pencil" size={24} color="#4A6741" />
+                <Icon name="pencil" size={24} color="#B5653A" />
               </TouchableOpacity>
             </View>
           </View>

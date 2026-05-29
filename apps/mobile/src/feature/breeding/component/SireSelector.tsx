@@ -82,14 +82,14 @@ const SireSelector: React.FC<Props> = ({
             <Text className={selectedSire ? 'text-base text-text-primary' : 'text-base text-text-secondary'}>
               {selectedSire ? selectedSire.name : 'Select sire...'}
             </Text>
-            <Icon name="chevron-down" size={20} color="#9E9E9E" />
+            <Icon name="chevron-down" size={20} color="#8C7E75" />
           </TouchableOpacity>
 
           <Modal visible={visible} animationType="slide" presentationStyle="pageSheet">
             <View className="flex-1 bg-background">
               <View className="flex-row items-center justify-between px-4 pt-4 pb-2">
                 <TouchableOpacity onPress={() => { setVisible(false); setSearchQuery('') }} activeOpacity={0.7} className="p-1">
-                  <Icon name="close" size={24} color="#1A1A1A" />
+                  <Icon name="close" size={24} color="#2D2420" />
                 </TouchableOpacity>
                 <Text className="text-lg font-bold text-text-primary">Select Sire</Text>
                 <View className="w-8" />
@@ -113,7 +113,7 @@ const SireSelector: React.FC<Props> = ({
                       <Text className="text-sm text-text-secondary">{item.breed || item.animalType}</Text>
                     </View>
                     {item.id === selectedId && (
-                      <Icon name="check" size={20} color="#4A6741" />
+                      <Icon name="check" size={20} color="#B5653A" />
                     )}
                   </TouchableOpacity>
                 )}

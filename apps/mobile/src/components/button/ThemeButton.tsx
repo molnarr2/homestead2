@@ -16,13 +16,13 @@ interface ThemeButtonProps {
 const solidStyles: Record<ButtonVariant, { bg: string; text: string; indicator: string }> = {
   primary: { bg: 'bg-primary', text: 'text-text-inverse', indicator: '#FFFFFF' },
   secondary: { bg: 'bg-secondary', text: 'text-text-inverse', indicator: '#FFFFFF' },
-  tertiary: { bg: 'bg-accent', text: 'text-primary-dark', indicator: '#2D4228' },
+  tertiary: { bg: 'bg-accent', text: 'text-primary-dark', indicator: '#8A4A28' },
 }
 
 const outlineStyles: Record<ButtonVariant, { border: string; text: string; indicator: string }> = {
-  primary: { border: 'border-primary', text: 'text-primary', indicator: '#4A6741' },
-  secondary: { border: 'border-secondary', text: 'text-secondary', indicator: '#8B6F47' },
-  tertiary: { border: 'border-accent', text: 'text-accent', indicator: '#D4A847' },
+  primary: { border: 'border-primary', text: 'text-primary', indicator: '#B5653A' },
+  secondary: { border: 'border-secondary', text: 'text-secondary', indicator: '#7A6B5D' },
+  tertiary: { border: 'border-accent', text: 'text-accent', indicator: '#C49B2A' },
 }
 
 const ThemeButton: React.FC<ThemeButtonProps> = ({

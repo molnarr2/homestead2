@@ -105,7 +105,7 @@ const SpeedDialFab: React.FC<Props> = ({ actions }) => {
               onPress={() => handleAction(action)}
               activeOpacity={0.7}
             >
-              <Icon name={action.icon} size={22} color="#4A6741" />
+              <Icon name={action.icon} size={22} color="#B5653A" />
             </TouchableOpacity>
           </Animated.View>
         )

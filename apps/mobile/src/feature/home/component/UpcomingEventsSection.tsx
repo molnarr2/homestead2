@@ -40,12 +40,12 @@ const UpcomingEventsSection: React.FC<Props> = ({ items, totalCount, onViewMore 
               activeOpacity={0.7}
               className="flex-row items-center py-2 border-t border-border"
             >
-              <Icon name="calendar-clock" size={18} color="#6B6B6B" />
+              <Icon name="calendar-clock" size={18} color="#6B5B52" />
               <View className="flex-1 ml-2">
                 <Text className="text-sm font-medium text-primary">View all</Text>
                 <Text className="text-xs text-text-secondary">{remaining} more not shown</Text>
               </View>
-              <Icon name="chevron-right" size={18} color="#9CA3AF" />
+              <Icon name="chevron-right" size={18} color="#B0A49E" />
             </TouchableOpacity>
           )}
         </View>

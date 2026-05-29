@@ -57,7 +57,7 @@ const AnimalOrGroupField: React.FC<Props> = ({ selectedAnimal, selectedGroup, on
                   cachePolicy="dataCache"
                 />
               ) : (
-                <Icon name="account-group" size={20} color="#4A6741" />
+                <Icon name="account-group" size={20} color="#B5653A" />
               )}
             </View>
             <View className="flex-1">
@@ -70,14 +70,14 @@ const AnimalOrGroupField: React.FC<Props> = ({ selectedAnimal, selectedGroup, on
         ) : (
           <>
             <View className="w-10 h-10 rounded-full bg-backgroundDark items-center justify-center mr-3">
-              <Icon name="cow" size={20} color="#BDBDBD" />
+              <Icon name="cow" size={20} color="#B0A49E" />
             </View>
             <Text className="flex-1 text-base text-text-secondary">
               {showGroups ? 'Select Animal or Group' : 'Select Animal'}
             </Text>
           </>
         )}
-        {!readOnly && <Icon name="chevron-right" size={20} color="#BDBDBD" />}
+        {!readOnly && <Icon name="chevron-right" size={20} color="#B0A49E" />}
       </Wrapper>
     </>
   )

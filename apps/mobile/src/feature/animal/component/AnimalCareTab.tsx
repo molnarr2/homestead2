@@ -82,7 +82,7 @@ const AnimalCareTab: React.FC<Props> = ({ careEvents, groupCareEvents, onAddCare
                     </Text>
                   </View>
                   {item.event.type === 'careRecurring' ? (
-                    <Icon name="refresh" size={16} color="#6B6B6B" />
+                    <Icon name="refresh" size={16} color="#6B5B52" />
                   ) : null}
                 </View>
               </View>

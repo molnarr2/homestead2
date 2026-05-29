@@ -20,7 +20,7 @@ const CustomizationHomeScreen: React.FC = () => {
     return (
       <ScreenContainer>
         <View className="flex-1 items-center justify-center">
-          <ActivityIndicator size="large" color="#4A6741" />
+          <ActivityIndicator size="large" color="#B5653A" />
         </View>
       </ScreenContainer>
     )

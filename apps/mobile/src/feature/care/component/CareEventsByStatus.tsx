@@ -45,7 +45,7 @@ const CareEventsByStatus: React.FC<Props> = ({ title, events, statusColor, getAn
               </View>
               <View className="flex-row items-center gap-2">
                 {event.type === 'careRecurring' && (
-                  <Icon name="refresh" size={16} color="#6B6B6B" />
+                  <Icon name="refresh" size={16} color="#6B5B52" />
                 )}
                 <TouchableOpacity
                   className="bg-primary rounded-lg px-3 py-1.5"

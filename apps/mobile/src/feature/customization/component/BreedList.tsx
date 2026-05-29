@@ -16,7 +16,7 @@ const BreedList: React.FC<Props> = ({ breeds, onAdd, onEdit }) => {
       <View className="flex-row items-center justify-between">
         <SectionHeader title="Breeds" count={breeds.length} />
         <TouchableOpacity onPress={onAdd} activeOpacity={0.7} className="p-2">
-          <Icon name="plus" size={22} color="#4A6741" />
+          <Icon name="plus" size={22} color="#B5653A" />
         </TouchableOpacity>
       </View>
       {breeds.map(breed => (
@@ -32,7 +32,7 @@ const BreedList: React.FC<Props> = ({ breeds, onAdd, onEdit }) => {
               <Text className="text-sm text-text-secondary">{breed.gestationDays} day gestation</Text>
             )}
           </View>
-          <Icon name="chevron-right" size={20} color="#9CA3AF" />
+          <Icon name="chevron-right" size={20} color="#B0A49E" />
         </TouchableOpacity>
       ))}
     </View>

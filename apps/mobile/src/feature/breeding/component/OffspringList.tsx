@@ -22,7 +22,7 @@ const OffspringList: React.FC<Props> = ({ offspring, onAnimalPress }) => {
           activeOpacity={0.7}
         >
           <View className="bg-primary/10 rounded-full p-2 mr-3">
-            <Icon name="paw" size={18} color="#4A6741" />
+            <Icon name="paw" size={18} color="#B5653A" />
           </View>
           <View className="flex-1">
             <Text className="text-base font-medium text-text-primary">{animal.name}</Text>
@@ -30,7 +30,7 @@ const OffspringList: React.FC<Props> = ({ offspring, onAnimalPress }) => {
               {animal.breed || animal.animalType} &middot; {animal.gender}
             </Text>
           </View>
-          <Icon name="chevron-right" size={20} color="#9E9E9E" />
+          <Icon name="chevron-right" size={20} color="#8C7E75" />
         </TouchableOpacity>
       ))}
     </View>

@@ -32,7 +32,7 @@ const FeedbackModal: React.FC = () => {
               <Icon
                 name={star <= c.rating ? 'star' : 'star-outline'}
                 size={36}
-                color={star <= c.rating ? '#F9A825' : '#BDBDBD'}
+                color={star <= c.rating ? '#F9A825' : '#B0A49E'}
               />
             </TouchableOpacity>
           ))}

@@ -14,7 +14,7 @@ const UpcomingEventRow: React.FC<Props> = ({ item, showBorder }) => {
       <Icon
         name={item.type === 'care' ? 'medical-bag' : 'baby-carriage'}
         size={18}
-        color="#6B6B6B"
+        color="#6B5B52"
       />
       <View className="flex-1 ml-2">
         <Text className="text-sm font-medium text-text-primary">{item.label}</Text>

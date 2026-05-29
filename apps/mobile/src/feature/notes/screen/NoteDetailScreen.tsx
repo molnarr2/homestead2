@@ -21,7 +21,7 @@ const TAG_COLORS: Record<NoteTag, string> = {
   Breeding: 'bg-[#9C27B0]',
   Feed: 'bg-[#FF9800]',
   Production: 'bg-[#4CAF50]',
-  General: 'bg-[#9E9E9E]',
+  General: 'bg-[#8C7E75]',
 }
 
 const NoteDetailScreen: React.FC = () => {
@@ -49,11 +49,11 @@ const NoteDetailScreen: React.FC = () => {
     <ScreenContainer>
       <View className="flex-row items-center justify-between px-4 pt-4 pb-2">
         <TouchableOpacity onPress={controller.onBack} activeOpacity={0.7} className="p-1">
-          <Icon name="arrow-left" size={24} color="#1A1A1A" />
+          <Icon name="arrow-left" size={24} color="#2D2420" />
         </TouchableOpacity>
         <Text className="text-xl font-bold text-text-primary">Note</Text>
         <TouchableOpacity onPress={controller.onEdit} activeOpacity={0.7} className="p-1">
-          <Icon name="pencil" size={24} color="#1A1A1A" />
+          <Icon name="pencil" size={24} color="#2D2420" />
         </TouchableOpacity>
       </View>
 
@@ -79,7 +79,7 @@ const NoteDetailScreen: React.FC = () => {
         ) : null}
 
         <View className="flex-row items-center mt-4">
-          <Icon name="clock-outline" size={16} color="#9E9E9E" />
+          <Icon name="clock-outline" size={16} color="#8C7E75" />
           <Text className="text-sm text-text-secondary ml-1">{dateStr}</Text>
           <Text className="text-sm text-text-disabled ml-2">({relativeStr})</Text>
         </View>

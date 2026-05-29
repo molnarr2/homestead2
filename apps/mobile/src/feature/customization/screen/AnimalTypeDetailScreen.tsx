@@ -23,7 +23,7 @@ const AnimalTypeDetailScreen: React.FC = () => {
     return (
       <ScreenContainer>
         <View className="flex-1 items-center justify-center">
-          <ActivityIndicator size="large" color="#4A6741" />
+          <ActivityIndicator size="large" color="#B5653A" />
         </View>
       </ScreenContainer>
     )
@@ -33,11 +33,11 @@ const AnimalTypeDetailScreen: React.FC = () => {
     <ScreenContainer>
       <View className="flex-row items-center justify-between px-4 pt-4 pb-2">
         <TouchableOpacity onPress={controller.onBack} activeOpacity={0.7} className="p-1">
-          <Icon name="arrow-left" size={24} color="#1A1A1A" />
+          <Icon name="arrow-left" size={24} color="#2D2420" />
         </TouchableOpacity>
         <Text className="text-xl font-bold text-text-primary">{controller.animalType.name}</Text>
         <TouchableOpacity onPress={controller.onEditType} activeOpacity={0.7} className="p-1">
-          <Icon name="pencil" size={24} color="#4A6741" />
+          <Icon name="pencil" size={24} color="#B5653A" />
         </TouchableOpacity>
       </View>
 

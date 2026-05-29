@@ -19,7 +19,7 @@ const FarmSummarySection: React.FC<Props> = ({ items, onAnimalTypePress, onAddAn
           className="bg-surface rounded-xl p-4 flex-row items-center"
           onPress={onAddAnimal}
         >
-          <Icon name="plus-circle-outline" size={24} color="#4A6741" />
+          <Icon name="plus-circle-outline" size={24} color="#B5653A" />
           <Text className="ml-2 text-sm font-medium text-primary">Add your first animal</Text>
         </Pressable>
       ) : (

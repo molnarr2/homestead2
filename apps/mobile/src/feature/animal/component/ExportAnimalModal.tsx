@@ -28,7 +28,7 @@ const ExportButton: React.FC<ExportButtonProps> = ({ icon, label, onPress, disab
     className="flex-row items-center py-3 px-2"
   >
     <View className="w-10 h-10 rounded-full bg-primary/10 items-center justify-center mr-3">
-      <Icon name={icon} size={22} color="#4A6741" />
+      <Icon name={icon} size={22} color="#B5653A" />
     </View>
     <Text className="text-base text-text-primary flex-1">{label}</Text>
     <Icon name="chevron-right" size={20} color="#999" />
@@ -44,7 +44,7 @@ const ExportAnimalModal: React.FC<Props> = ({ visible, onDismiss, animal }) => {
 
       {controller.loading ? (
         <View className="py-8 items-center">
-          <ActivityIndicator size="large" color="#4A6741" />
+          <ActivityIndicator size="large" color="#B5653A" />
           <Text className="text-sm text-text-secondary mt-3">Generating PDF...</Text>
         </View>
       ) : (

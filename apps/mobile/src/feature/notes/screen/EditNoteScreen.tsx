@@ -21,7 +21,7 @@ const TAG_CONFIG: { tag: NoteTag; label: string; color: string; textColor: strin
   { tag: 'Breeding', label: 'Breeding', color: 'bg-[#9C27B0]', textColor: 'text-white' },
   { tag: 'Feed', label: 'Feed', color: 'bg-[#FF9800]', textColor: 'text-white' },
   { tag: 'Production', label: 'Production', color: 'bg-[#4CAF50]', textColor: 'text-white' },
-  { tag: 'General', label: 'General', color: 'bg-[#9E9E9E]', textColor: 'text-white' },
+  { tag: 'General', label: 'General', color: 'bg-[#8C7E75]', textColor: 'text-white' },
 ]
 
 const EditNoteScreen: React.FC = () => {
@@ -52,7 +52,7 @@ const EditNoteScreen: React.FC = () => {
     <ScreenContainer>
       <View className="flex-row items-center justify-between px-4 pt-4 pb-2">
         <TouchableOpacity onPress={c.onBack} activeOpacity={0.7} className="p-1">
-          <Icon name="arrow-left" size={24} color="#1A1A1A" />
+          <Icon name="arrow-left" size={24} color="#2D2420" />
         </TouchableOpacity>
         <Text className="text-xl font-bold text-text-primary">Edit Note</Text>
         <View className="w-8" />
@@ -73,7 +73,7 @@ const EditNoteScreen: React.FC = () => {
           value={c.text}
           onChangeText={c.setText}
           placeholder="What did you observe?"
-          placeholderTextColor="#BDBDBD"
+          placeholderTextColor="#B0A49E"
           multiline
           numberOfLines={6}
           textAlignVertical="top"
@@ -109,7 +109,7 @@ const EditNoteScreen: React.FC = () => {
           onPress={handlePhotoPick}
           activeOpacity={0.7}
         >
-          <Icon name={hasPhoto ? 'check-circle' : 'camera-plus'} size={24} color={hasPhoto ? '#4CAF50' : '#6B6B6B'} />
+          <Icon name={hasPhoto ? 'check-circle' : 'camera-plus'} size={24} color={hasPhoto ? '#4CAF50' : '#6B5B52'} />
           <Text className={`text-sm ml-3 ${hasPhoto ? 'text-accent' : 'text-text-secondary'}`}>
             {hasPhoto ? 'Photo attached' : 'Add a photo'}
           </Text>

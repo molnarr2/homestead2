@@ -22,7 +22,7 @@ const EditAnimalTypeScreen: React.FC = () => {
     <ScreenContainer>
       <View className="flex-row items-center justify-between px-4 pt-4 pb-2">
         <TouchableOpacity onPress={controller.onBack} activeOpacity={0.7} className="p-1">
-          <Icon name="arrow-left" size={24} color="#1A1A1A" />
+          <Icon name="arrow-left" size={24} color="#2D2420" />
         </TouchableOpacity>
         <Text className="text-xl font-bold text-text-primary">
           {controller.isEditing ? 'Edit Animal Type' : 'New Animal Type'}
@@ -56,7 +56,7 @@ const EditAnimalTypeScreen: React.FC = () => {
               activeOpacity={0.7}
             >
               <Text className="text-sm text-text-primary mr-1">{color}</Text>
-              <Icon name="close" size={14} color="#6B6B6B" />
+              <Icon name="close" size={14} color="#6B5B52" />
             </TouchableOpacity>
           ))}
         </View>

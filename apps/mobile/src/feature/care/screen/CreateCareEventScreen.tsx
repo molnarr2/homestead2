@@ -29,7 +29,7 @@ const CreateCareEventScreen: React.FC = () => {
     <ScreenContainer>
       <View className="flex-row items-center justify-between px-4 pt-4 pb-2">
         <TouchableOpacity onPress={controller.onBack} activeOpacity={0.7} className="p-1">
-          <Icon name="arrow-left" size={24} color="#1A1A1A" />
+          <Icon name="arrow-left" size={24} color="#2D2420" />
         </TouchableOpacity>
         <Text className="text-xl font-bold text-text-primary">Add Care Event</Text>
         <View className="w-8" />
@@ -61,7 +61,7 @@ const CreateCareEventScreen: React.FC = () => {
             activeOpacity={0.7}
             className="mt-3"
           >
-            <Icon name="text-box-search-outline" size={24} color="#4A6741" />
+            <Icon name="text-box-search-outline" size={24} color="#B5653A" />
           </TouchableOpacity>
         </View>
 

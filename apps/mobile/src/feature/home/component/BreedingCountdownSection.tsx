@@ -40,7 +40,7 @@ const BreedingCountdownSection: React.FC<Props> = ({ breedings, totalCount, onBr
               <Text className="text-base font-medium text-primary">View all</Text>
               <Text className="text-sm text-text-secondary mt-0.5">{remaining} more not shown</Text>
             </View>
-            <Icon name="chevron-right" size={18} color="#9CA3AF" />
+            <Icon name="chevron-right" size={18} color="#B0A49E" />
           </View>
         </TouchableOpacity>
       )}
