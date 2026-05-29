@@ -214,6 +214,7 @@ export default class AnimalTypeService implements IAnimalTypeService {
             name: t.name,
             type: t.type,
             cycle: t.cycle,
+            healthRecordType: t.healthRecordType,
             contactName: '',
             contactPhone: '',
           })),

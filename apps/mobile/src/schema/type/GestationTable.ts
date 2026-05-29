@@ -13,6 +13,8 @@ export const GESTATION_TABLE: Record<string, number> = {
   'Alpaca': 345,
   'Llama': 350,
   'Donkey': 365,
+  'Dog': 63,
+  'Cat': 65,
 }
 
 export const POULTRY_TYPES = ['Chicken', 'Duck', 'Turkey', 'Goose', 'Quail']

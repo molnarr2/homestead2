@@ -8,14 +8,16 @@ const AVAILABLE_SPECIES = [
   { name: 'Goose', icon: 'bird' },
   { name: 'Quail', icon: 'bird' },
   { name: 'Rabbit', icon: 'rabbit' },
-  { name: 'Goat', icon: 'goat' },
+  { name: 'Goat', icon: 'paw' },
   { name: 'Sheep', icon: 'sheep' },
   { name: 'Cattle', icon: 'cow' },
   { name: 'Pig', icon: 'pig' },
   { name: 'Horse', icon: 'horse' },
-  { name: 'Alpaca', icon: 'llama' },
-  { name: 'Llama', icon: 'llama' },
+  { name: 'Alpaca', icon: 'paw' },
+  { name: 'Llama', icon: 'paw' },
   { name: 'Donkey', icon: 'donkey' },
+  { name: 'Dog', icon: 'dog-side' },
+  { name: 'Cat', icon: 'cat' },
 ]
 
 export function useSpeciesSelectionController() {

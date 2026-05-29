@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "02_phase1_MVP/06_various_things/05_theming_update.md",
+                "file": "02_phase1_MVP/06_various_things/06_starter_playbooks_completion.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "05_theming_update"
+              "title": "06_starter_playbooks_completion"
             }
           }
         ]
@@ -185,11 +185,11 @@
   },
   "active": "02dd2e34ceb194af",
   "lastOpenFiles": [
+    "02_phase1_MVP/06_various_things/05_theming_update.md",
     "02_phase1_MVP/06_various_things/04_health_care_bidirectional_flow_tech_spec.md",
     "02_phase1_MVP/06_various_things/03_group_tap_to_edit.md",
     "02_phase1_MVP/06_various_things/work/06_changes to login and create account.md",
     "02_phase1_MVP/06_various_things/07_anonymous_auth_and_flow.md",
-    "02_phase1_MVP/06_various_things/05_theming_update.md",
     "02_phase1_MVP/06_various_things/work/05_missing_playbook.md",
     "02_phase1_MVP/02_TODO.md",
     "02_phase1_MVP/06_various_things/06_starter_playbooks_completion.md",
