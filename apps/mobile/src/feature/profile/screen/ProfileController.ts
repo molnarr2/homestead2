@@ -2,7 +2,7 @@ import { useState } from 'react'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
 import { bsAuthService } from '../../../Bootstrap'
-import { resetAllStores } from '../../../store/resetAllStores'
+import { teardownApp } from '../../../store/appInitializer'
 import { useUserStore } from '../../../store/userStore'
 import { useAnimalStore } from '../../../store/animalStore'
 import { usePaywallStore } from '../../../store/paywallStore'
@@ -28,7 +28,7 @@ export function useProfileController(navigation: Navigation) {
   const onLogoutConfirm = () => {
     setShowLogoutDialog(false)
     bsAuthService.signout()
-    resetAllStores()
+    teardownApp()
   }
 
   return {

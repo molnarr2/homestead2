@@ -1,7 +1,6 @@
 import { create } from 'zustand'
-import { bsAuthService, bsUserService, bsSubscriptionService } from '../Bootstrap'
-import { useHomesteadStore } from './homesteadStore'
-import { subscribeAllStores, resetAllStores } from './resetAllStores'
+import { bsAuthService, bsUserService } from '../Bootstrap'
+import { initializeApp, teardownApp } from './appInitializer'
 
 interface AuthState {
   isLoggedIn: boolean | null
@@ -18,16 +17,10 @@ export const useAuthStore = create<AuthState>((set) => {
         if (!user) return
         const hsId = user.activeHomesteadId ?? ''
         if (hsId) {
-          useHomesteadStore.getState().setHomestead(hsId)
-          subscribeAllStores()
-          bsSubscriptionService.initialize().then(() => {
-            bsSubscriptionService.loginRevenueCat(userId).then(() => {
-              bsSubscriptionService.syncSubscription()
-            })
-          })
+          initializeApp(userId, hsId)
         }
       } else {
-        resetAllStores()
+        teardownApp()
         set({ isLoggedIn: false, userId: '' })
       }
     },

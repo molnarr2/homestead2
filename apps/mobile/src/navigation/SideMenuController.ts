@@ -1,13 +1,13 @@
 import { useUserStore } from '../store/userStore'
 import { bsAuthService } from '../Bootstrap'
-import { resetAllStores } from '../store/resetAllStores'
+import { teardownApp } from '../store/appInitializer'
 
 export function useSideMenuController() {
   const user = useUserStore(s => s.user)
 
   const logout = () => {
     bsAuthService.signout()
-    resetAllStores()
+    teardownApp()
   }
 
   return { user, logout }
