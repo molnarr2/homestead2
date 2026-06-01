@@ -46,11 +46,32 @@ export function useRegisterController() {
     setLoading(false)
   }
 
+  const registerAnonymously = async () => {
+    setLoading(true)
+    setError('')
+
+    const result = await bsAuthService.createAccountAnonymously()
+    if (!result.success) {
+      setError(result.error)
+      setLoading(false)
+      return
+    }
+
+    const userId = bsAuthService.currentUserId
+    await bsUserService.createUser({ ...user_default(), id: userId, anonymous: true })
+
+    const homesteadId = await bsHomesteadService.createHomestead('My Homestead', userId, '', '')
+    await bsUserService.setActiveHomestead(userId, homesteadId)
+    initializeApp(userId, homesteadId)
+
+    setLoading(false)
+  }
+
   return {
     firstName, setFirstName,
     lastName, setLastName,
     email, setEmail,
     password, setPassword,
-    loading, error, register,
+    loading, error, register, registerAnonymously,
   }
 }

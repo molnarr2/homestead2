@@ -4,12 +4,17 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RouteProp } from '@react-navigation/native'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
 import { useAnimalTypeStore } from '../../../store/animalTypeStore'
+import { useAnimalStore } from '../../../store/animalStore'
+import { useUserStore } from '../../../store/userStore'
+import { useCreateAccountPromptStore } from '../../../store/createAccountPromptStore'
 import { bsAnimalService } from '../../../Bootstrap'
 import { animal_default, AnimalGender } from '../../../schema/animal/Animal'
 import { adminObject_default } from '../../../schema/object/AdminObject'
 
 type Navigation = NativeStackNavigationProp<RootStackParamList, 'CreateAnimal'>
 type Route = RouteProp<RootStackParamList, 'CreateAnimal'>
+
+const ANONYMOUS_THRESHOLDS = [3, 6, 10]
 
 export function useCreateAnimalController(navigation: Navigation, route: Route) {
   const { animalTypes } = useAnimalTypeStore()
@@ -77,6 +82,17 @@ export function useCreateAnimalController(navigation: Navigation, route: Route) 
 
     setLoading(false)
     if (result.success) {
+      const currentUser = useUserStore.getState().user
+      if (currentUser?.anonymous) {
+        const ownedCount = useAnimalStore.getState().animals.filter(a => a.state === 'own').length
+        const lastSeen = currentUser.anonymousPromptLastSeen ?? 0
+        for (const threshold of ANONYMOUS_THRESHOLDS) {
+          if (ownedCount >= threshold && lastSeen < threshold) {
+            useCreateAccountPromptStore.getState().show(threshold)
+            break
+          }
+        }
+      }
       navigation.goBack()
     } else {
       Alert.alert('Error', result.error)

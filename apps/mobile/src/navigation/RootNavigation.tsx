@@ -9,9 +9,11 @@ import LoadingScreen from '../feature/loading/LoadingScreen'
 import LoginScreen from '../feature/auth/screen/LoginScreen'
 import RegisterScreen from '../feature/auth/screen/RegisterScreen'
 import SpeciesSelectionScreen from '../feature/auth/screen/SpeciesSelectionScreen'
+import LinkAccountScreen from '../feature/auth/screen/LinkAccountScreen'
 import DebugScreen from '../feature/debug/DebugScreen'
 import PlaceholderScreen from './PlaceholderScreen'
 import PaywallModal from '../feature/subscription/component/PaywallModal'
+import CreateAccountPromptModal from '../feature/auth/component/CreateAccountPromptModal'
 import CustomizationHomeScreen from '../feature/customization/screen/CustomizationHomeScreen'
 import AnimalTypeDetailScreen from '../feature/customization/screen/AnimalTypeDetailScreen'
 import EditAnimalTypeScreen from '../feature/customization/screen/EditAnimalTypeScreen'
@@ -52,6 +54,7 @@ export type RootStackParamList = {
   Login: undefined
   Register: undefined
   SpeciesSelection: undefined
+  LinkAccount: undefined
 
   // Main
   DrawerMain: undefined
@@ -130,8 +133,8 @@ const RootNavigation: React.FC = () => {
             <Stack.Screen name="Loading" component={LoadingScreen} />
           ) : isLoggedIn === false ? (
             <>
-              <Stack.Screen name="Login" component={LoginScreen} />
               <Stack.Screen name="Register" component={RegisterScreen} />
+              <Stack.Screen name="Login" component={LoginScreen} />
             </>
           ) : homestead?.onboardingComplete === false ? (
             <Stack.Screen name="SpeciesSelection" component={SpeciesSelectionScreen} />
@@ -164,6 +167,7 @@ const RootNavigation: React.FC = () => {
               <Stack.Screen name="HomeFullList" component={HomeFullListScreen} />
               <Stack.Screen name="Profile" component={ProfileScreen} />
               <Stack.Screen name="EditProfile" component={EditProfileScreen} />
+              <Stack.Screen name="LinkAccount" component={LinkAccountScreen} />
               <Stack.Screen name="Customization" component={CustomizationHomeScreen} />
               <Stack.Screen name="CustomizeAnimalType" component={AnimalTypeDetailScreen} />
               <Stack.Screen name="EditAnimalType" component={EditAnimalTypeScreen} />
@@ -176,6 +180,7 @@ const RootNavigation: React.FC = () => {
             </>
           )}
         </Stack.Navigator>
+        <CreateAccountPromptModal />
       </NavigationContainer>
       <PaywallModal />
       <FeedbackModal />

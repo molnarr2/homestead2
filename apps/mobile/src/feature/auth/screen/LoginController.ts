@@ -1,15 +1,17 @@
 import { useState } from 'react'
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import type { RootStackParamList } from '../../../navigation/RootNavigation'
 import { bsAuthService } from '../../../Bootstrap'
 
-type LoginNavigation = NativeStackNavigationProp<RootStackParamList, 'Login'>
-
-export function useLoginController(navigation: LoginNavigation) {
+export function useLoginController() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+
+  const [resetModalVisible, setResetModalVisible] = useState(false)
+  const [resetEmail, setResetEmail] = useState('')
+  const [resetLoading, setResetLoading] = useState(false)
+  const [resetSent, setResetSent] = useState(false)
+  const [resetError, setResetError] = useState('')
 
   const login = async () => {
     setLoading(true)
@@ -21,15 +23,36 @@ export function useLoginController(navigation: LoginNavigation) {
     setLoading(false)
   }
 
-  const goToRegister = () => navigation.navigate('Register')
-
-  const forgotPassword = async () => {
-    if (!email) {
-      setError('Enter your email first')
-      return
-    }
-    await bsAuthService.sendPasswordResetEmail(email)
+  const openResetModal = () => {
+    setResetEmail(email)
+    setResetSent(false)
+    setResetError('')
+    setResetModalVisible(true)
   }
 
-  return { email, setEmail, password, setPassword, loading, error, login, goToRegister, forgotPassword }
+  const closeResetModal = () => {
+    setResetModalVisible(false)
+  }
+
+  const sendResetEmail = async () => {
+    if (!resetEmail.trim()) {
+      setResetError('Please enter your email address')
+      return
+    }
+    setResetLoading(true)
+    setResetError('')
+    try {
+      await bsAuthService.sendPasswordResetEmail(resetEmail.trim())
+      setResetSent(true)
+    } catch {
+      setResetError('Failed to send reset email. Please check your email and try again.')
+    }
+    setResetLoading(false)
+  }
+
+  return {
+    email, setEmail, password, setPassword, loading, error, login,
+    resetModalVisible, resetEmail, setResetEmail, resetLoading, resetSent, resetError,
+    openResetModal, closeResetModal, sendResetEmail,
+  }
 }

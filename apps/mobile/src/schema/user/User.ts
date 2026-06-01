@@ -8,6 +8,7 @@ export default interface User {
   lastName: string
   email: string
   anonymous: boolean
+  anonymousPromptLastSeen: number
   selectedSpecies: string[]
   avatarUrl: string
   photoStorageRef: string
@@ -23,6 +24,7 @@ export function user_default(): User {
     lastName: '',
     email: '',
     anonymous: false,
+    anonymousPromptLastSeen: 0,
     selectedSpecies: [],
     avatarUrl: '',
     photoStorageRef: '',

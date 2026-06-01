@@ -10,6 +10,7 @@ import { effectiveSubscription } from '../feature/subscription/service/ISubscrip
 import { usePaywallStore } from '../store/paywallStore'
 import { useFeedbackStore } from '../store/feedbackStore'
 import PrimaryButton from '../components/button/PrimaryButton'
+import AppDialog from '../components/dialog/AppDialog'
 
 type RootNavigation = NativeStackNavigationProp<RootStackParamList>
 
@@ -27,14 +28,22 @@ const MenuItem: React.FC<MenuItemProps> = ({ label, onPress }) => (
 const Divider: React.FC = () => <View className="h-px bg-border-light my-1" />
 
 export function SideMenu(props: DrawerContentComponentProps) {
-  const { user, logout } = useSideMenuController()
+  const { user, isAnonymous, logout, showLogoutDialog, onLogoutConfirm, onLogoutCancel } = useSideMenuController()
   const homestead = useHomesteadStore(s => s.homestead)
   const tier = effectiveSubscription(homestead)
   const rootNavigation = useNavigation<RootNavigation>()
 
+  const displayName = isAnonymous ? 'Guest User' : `${user?.firstName ?? ''} ${user?.lastName ?? ''}`.trim()
+  const displayEmail = isAnonymous ? 'No email' : (user?.email ?? '')
+
   const navigateTo = (screen: keyof RootStackParamList) => {
     props.navigation.closeDrawer()
     rootNavigation.navigate(screen as never)
+  }
+
+  const onLogoutCreateAccount = () => {
+    onLogoutCancel()
+    navigateTo('LinkAccount')
   }
 
   return (
@@ -46,15 +55,15 @@ export function SideMenu(props: DrawerContentComponentProps) {
           ) : (
             <View className="w-16 h-16 rounded-full bg-primary items-center justify-center mb-3">
               <Text className="text-2xl font-bold text-text-inverse">
-                {user?.firstName?.charAt(0)?.toUpperCase() ?? '?'}
+                {isAnonymous ? 'G' : (user?.firstName?.charAt(0)?.toUpperCase() ?? '?')}
               </Text>
             </View>
           )}
         </TouchableOpacity>
         <Text className="text-lg font-bold text-text-primary">
-          {user?.firstName ?? ''} {user?.lastName ?? ''}
+          {displayName}
         </Text>
-        <Text className="text-sm text-text-secondary">{user?.email ?? ''}</Text>
+        <Text className="text-sm text-text-secondary">{displayEmail}</Text>
         <View className="mt-2 self-start rounded-full bg-accent px-3 py-1">
           <Text className="text-xs font-semibold text-primary-dark">
             {tier.charAt(0).toUpperCase() + tier.slice(1)}
@@ -64,6 +73,9 @@ export function SideMenu(props: DrawerContentComponentProps) {
 
       <Divider />
 
+      {isAnonymous && (
+        <MenuItem label="Create Account" onPress={() => navigateTo('LinkAccount')} />
+      )}
       <MenuItem label="Profile" onPress={() => navigateTo('Profile')} />
       <MenuItem label="Subscription" onPress={() => { props.navigation.closeDrawer(); usePaywallStore.getState().show() }} />
       <MenuItem label="Customization" onPress={() => navigateTo('Customization')} />
@@ -82,6 +94,27 @@ export function SideMenu(props: DrawerContentComponentProps) {
       <View className="px-4 py-4">
         <PrimaryButton title="Logout" onPress={logout} />
       </View>
+
+      {isAnonymous && (
+        <AppDialog
+          visible={showLogoutDialog}
+          onDismiss={onLogoutCancel}
+          title="Log Out"
+        >
+          <Text className="text-sm text-text-secondary mb-4">
+            You're using a guest account. Logging out will permanently lose access to all your data. Create an account first to keep your data.
+          </Text>
+          <TouchableOpacity className="bg-primary rounded-xl py-3 items-center mb-2" onPress={onLogoutCreateAccount} activeOpacity={0.7}>
+            <Text className="text-base font-semibold text-text-inverse">Create Account</Text>
+          </TouchableOpacity>
+          <TouchableOpacity className="bg-status-error rounded-xl py-3 items-center mb-2" onPress={onLogoutConfirm} activeOpacity={0.7}>
+            <Text className="text-base font-semibold text-text-inverse">Log Out</Text>
+          </TouchableOpacity>
+          <TouchableOpacity className="py-3 items-center" onPress={onLogoutCancel} activeOpacity={0.7}>
+            <Text className="text-base font-semibold text-text-secondary">Cancel</Text>
+          </TouchableOpacity>
+        </AppDialog>
+      )}
     </DrawerContentScrollView>
   )
 }

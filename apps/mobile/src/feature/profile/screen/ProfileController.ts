@@ -15,10 +15,13 @@ export function useProfileController(navigation: Navigation) {
   const animals = useAnimalStore(s => s.animals)
   const [showLogoutDialog, setShowLogoutDialog] = useState(false)
 
+  const isAnonymous = user?.anonymous ?? false
+
   const animalCount = animals.filter(a => a.state === 'own').length
   const animalTypeCount = [...new Set(animals.map(a => a.animalType))].length
 
   const onEditProfile = () => navigation.navigate('EditProfile')
+  const onCreateAccount = () => navigation.navigate('LinkAccount')
   const onSettings = () => navigation.navigate('Settings')
   const onSubscription = () => usePaywallStore.getState().show()
   const onSendFeedback = () => useFeedbackStore.getState().show('menu')
@@ -30,10 +33,14 @@ export function useProfileController(navigation: Navigation) {
     bsAuthService.signout()
     teardownApp()
   }
+  const onLogoutCreateAccount = () => {
+    setShowLogoutDialog(false)
+    navigation.navigate('LinkAccount')
+  }
 
   return {
-    user, animalCount, animalTypeCount,
-    onEditProfile, onSettings, onSubscription, onSendFeedback,
-    showLogoutDialog, onLogoutPress, onLogoutCancel, onLogoutConfirm,
+    user, isAnonymous, animalCount, animalTypeCount,
+    onEditProfile, onCreateAccount, onSettings, onSubscription, onSendFeedback,
+    showLogoutDialog, onLogoutPress, onLogoutCancel, onLogoutConfirm, onLogoutCreateAccount,
   }
 }

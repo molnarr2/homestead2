@@ -4,6 +4,7 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
 import ScreenContainer from '../../../components/layout/ScreenContainer'
 import ConfirmDialog from '../../../components/dialog/ConfirmDialog'
+import AppDialog from '../../../components/dialog/AppDialog'
 import Icon from '@react-native-vector-icons/material-design-icons'
 import { useProfileController } from './ProfileController'
 import { useHomesteadStore } from '../../../store/homesteadStore'
@@ -31,7 +32,8 @@ const ProfileScreen: React.FC<Props> = ({ navigation }) => {
   const c = useProfileController(navigation)
   const homestead = useHomesteadStore(s => s.homestead)
   const tier = effectiveSubscription(homestead)
-  const fullName = `${c.user?.firstName ?? ''} ${c.user?.lastName ?? ''}`.trim()
+  const fullName = c.isAnonymous ? 'Guest User' : `${c.user?.firstName ?? ''} ${c.user?.lastName ?? ''}`.trim()
+  const displayEmail = c.isAnonymous ? 'No email' : (c.user?.email ?? '')
   const subscriptionLabel = tier.charAt(0).toUpperCase() + tier.slice(1)
 
   return (
@@ -50,12 +52,12 @@ const ProfileScreen: React.FC<Props> = ({ navigation }) => {
           ) : (
             <View className="w-20 h-20 rounded-full bg-primary items-center justify-center mb-3">
               <Text className="text-3xl font-bold text-text-inverse">
-                {c.user?.firstName?.charAt(0)?.toUpperCase() ?? '?'}
+                {c.isAnonymous ? 'G' : (c.user?.firstName?.charAt(0)?.toUpperCase() ?? '?')}
               </Text>
             </View>
           )}
           <Text className="text-xl font-bold text-text-primary">{fullName || 'User'}</Text>
-          <Text className="text-sm text-text-secondary mt-1">{c.user?.email ?? ''}</Text>
+          <Text className="text-sm text-text-secondary mt-1">{displayEmail}</Text>
           <View className="mt-2 rounded-full bg-accent px-3 py-1">
             <Text className="text-xs font-semibold text-primary-dark">{subscriptionLabel}</Text>
           </View>
@@ -73,7 +75,11 @@ const ProfileScreen: React.FC<Props> = ({ navigation }) => {
         </View>
 
         <View className="border-t border-border-light">
-          <MenuItemRow label="Edit Profile" onPress={c.onEditProfile} />
+          {c.isAnonymous ? (
+            <MenuItemRow label="Create Account" onPress={c.onCreateAccount} />
+          ) : (
+            <MenuItemRow label="Edit Profile" onPress={c.onEditProfile} />
+          )}
           <View className="h-px bg-border-light ml-4" />
           <MenuItemRow label="Subscription" onPress={c.onSubscription} />
           <View className="h-px bg-border-light ml-4" />
@@ -93,16 +99,37 @@ const ProfileScreen: React.FC<Props> = ({ navigation }) => {
         </View>
       </ScrollView>
 
-      <ConfirmDialog
-        visible={c.showLogoutDialog}
-        title="Log Out"
-        message="Are you sure you want to log out?"
-        confirmLabel="Log Out"
-        cancelLabel="Cancel"
-        destructive
-        onConfirm={c.onLogoutConfirm}
-        onCancel={c.onLogoutCancel}
-      />
+      {c.isAnonymous ? (
+        <AppDialog
+          visible={c.showLogoutDialog}
+          onDismiss={c.onLogoutCancel}
+          title="Log Out"
+        >
+          <Text className="text-sm text-text-secondary mb-4">
+            You're using a guest account. Logging out will permanently lose access to all your data. Create an account first to keep your data.
+          </Text>
+          <TouchableOpacity className="bg-primary rounded-xl py-3 items-center mb-2" onPress={c.onLogoutCreateAccount} activeOpacity={0.7}>
+            <Text className="text-base font-semibold text-text-inverse">Create Account</Text>
+          </TouchableOpacity>
+          <TouchableOpacity className="bg-status-error rounded-xl py-3 items-center mb-2" onPress={c.onLogoutConfirm} activeOpacity={0.7}>
+            <Text className="text-base font-semibold text-text-inverse">Log Out</Text>
+          </TouchableOpacity>
+          <TouchableOpacity className="py-3 items-center" onPress={c.onLogoutCancel} activeOpacity={0.7}>
+            <Text className="text-base font-semibold text-text-secondary">Cancel</Text>
+          </TouchableOpacity>
+        </AppDialog>
+      ) : (
+        <ConfirmDialog
+          visible={c.showLogoutDialog}
+          title="Log Out"
+          message="Are you sure you want to log out?"
+          confirmLabel="Log Out"
+          cancelLabel="Cancel"
+          destructive
+          onConfirm={c.onLogoutConfirm}
+          onCancel={c.onLogoutCancel}
+        />
+      )}
     </ScreenContainer>
   )
 }

@@ -66,9 +66,17 @@ const RegisterScreen: React.FC = () => {
 
         <PrimaryButton title="Create Account" onPress={controller.register} loading={controller.loading} />
 
+        <TouchableOpacity
+          className="mt-4 items-center"
+          onPress={controller.registerAnonymously}
+          disabled={controller.loading}
+        >
+          <Text className="text-sm text-primary">Try without an account</Text>
+        </TouchableOpacity>
+
         <View className="flex-row justify-center mt-8">
           <Text className="text-sm text-text-secondary">Already have an account? </Text>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
             <Text className="text-sm font-semibold text-primary">Login</Text>
           </TouchableOpacity>
         </View>

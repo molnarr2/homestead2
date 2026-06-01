@@ -1,1 +1,2 @@
 - [ ] If someone subscribes and adds animals and then cancels they can continue to use it for those animals. We need to do a read-only overflow. The first 12 become full usage. And the rest become view-only on downgrade.
+- [ ] Notes when tapping on the picture you can't choose the camera
