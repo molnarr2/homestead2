@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "02_phase1_MVP/02_TODO.md",
+                "file": "02_phase1_MVP/06_various_things/08_animal_list_view_toggle.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "02_TODO"
+              "title": "08_animal_list_view_toggle"
             }
           }
         ]
@@ -185,14 +185,16 @@
   },
   "active": "02dd2e34ceb194af",
   "lastOpenFiles": [
-    "03_phase2/Known Issues.md",
+    "02_phase1_MVP/06_various_things/work/07_animal list view.md",
+    "02_phase1_MVP/06_various_things/08_animal_list_view_toggle.md",
+    "02_phase1_MVP/06_various_things/work/06_changes to login and create account.md",
     "02_phase1_MVP/02_TODO.md",
+    "03_phase2/Known Issues.md",
     "02_phase1_MVP/06_various_things/07_anonymous_auth_and_flow.md",
     "02_phase1_MVP/06_various_things/06_starter_playbooks_completion.md",
     "02_phase1_MVP/06_various_things/05_theming_update.md",
     "02_phase1_MVP/06_various_things/04_health_care_bidirectional_flow_tech_spec.md",
     "02_phase1_MVP/06_various_things/03_group_tap_to_edit.md",
-    "02_phase1_MVP/06_various_things/work/06_changes to login and create account.md",
     "02_phase1_MVP/06_various_things/work/05_missing_playbook.md",
     "02_phase1_MVP/06_various_things/work/04_theming colors.md",
     "02_phase1_MVP/06_various_things/work/03_Health events and care events.md",
@@ -212,10 +214,8 @@
     "02_phase1_MVP/06_various_things/work",
     "02_phase1_MVP/06_various_things",
     "02_phase1_MVP/04_health_care/work/health_care.md",
-    "02_phase1_MVP/04_health_care/01_testing_guide.md",
     "02_phase1_MVP/05_home_screen/work",
     "02_phase1_MVP/05_home_screen",
-    "03_phase2/Ideas/Automated Healthcare Testing.md",
     "02_phase1_MVP/04_health_care/work",
     "02_phase1_MVP/04_health_care",
     "02_phase1_MVP/03_issues",

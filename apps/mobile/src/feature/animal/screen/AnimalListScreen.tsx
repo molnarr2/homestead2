@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import { View, Text, SectionList, TouchableOpacity, ActivityIndicator } from 'react-native'
+import { View, Text, SectionList, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native'
 import TurboImage from 'react-native-turbo-image'
 import Icon from '@react-native-vector-icons/material-design-icons'
 import { useNavigation } from '@react-navigation/native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
-import { useAnimalListController, AnimalSection } from './AnimalListController'
+import { useAnimalListController, AnimalSection, GridItem } from './AnimalListController'
 import ScreenContainer from '../../../components/layout/ScreenContainer'
 import SearchBar from '../../../components/input/SearchBar'
 import SpeedDialFab from '../../../components/button/SpeedDialFab'
@@ -38,18 +38,31 @@ const AnimalListScreen: React.FC = () => {
         <View className="px-4 pt-4 pb-2">
           <View className="flex-row items-center justify-between mb-3">
             <Text className="text-2xl font-bold text-text-primary">Animals</Text>
-            <TouchableOpacity
-              onPress={() => setFilterModalVisible(true)}
-              activeOpacity={0.7}
-              className="p-1"
-            >
-              <View>
-                <Icon name="filter-variant" size={24} color="#2D2420" />
-                {controller.isFilterActive ? (
-                  <View className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-primary" />
-                ) : null}
-              </View>
-            </TouchableOpacity>
+            <View className="flex-row items-center">
+              <TouchableOpacity
+                onPress={controller.toggleViewMode}
+                activeOpacity={0.7}
+                className="p-1 mr-2"
+              >
+                <Icon
+                  name={controller.viewMode === 'list' ? 'view-grid-outline' : 'view-list'}
+                  size={24}
+                  color="#2D2420"
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => setFilterModalVisible(true)}
+                activeOpacity={0.7}
+                className="p-1"
+              >
+                <View>
+                  <Icon name="filter-variant" size={24} color="#2D2420" />
+                  {controller.isFilterActive ? (
+                    <View className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-primary" />
+                  ) : null}
+                </View>
+              </TouchableOpacity>
+            </View>
           </View>
           <SearchBar
             value={controller.searchQuery}
@@ -63,6 +76,38 @@ const AnimalListScreen: React.FC = () => {
             icon="cow"
             title="No animals yet"
             subtitle="Add your first animal to get started!"
+          />
+        ) : controller.viewMode === 'grid' ? (
+          <FlatList
+            data={controller.gridFlatData}
+            keyExtractor={(item, index) =>
+              item.type === 'header' ? `header-${item.title}` : `row-${index}`
+            }
+            renderItem={({ item }) => {
+              if (item.type === 'header') {
+                return <AnimalListByType title={item.title} count={item.count} />
+              }
+              return (
+                <View className="flex-row px-4 mb-2" style={{ gap: 8 }}>
+                  <AnimalGridCard
+                    animal={item.animals[0]}
+                    hasWithdrawal={controller.withdrawalAnimalIds.has(item.animals[0].id)}
+                    onPress={() => controller.onAnimalPress(item.animals[0].id)}
+                  />
+                  {item.animals[1] ? (
+                    <AnimalGridCard
+                      animal={item.animals[1]}
+                      hasWithdrawal={controller.withdrawalAnimalIds.has(item.animals[1].id)}
+                      onPress={() => controller.onAnimalPress(item.animals[1]!.id)}
+                    />
+                  ) : (
+                    <View style={{ flex: 1 }} />
+                  )}
+                </View>
+              )
+            }}
+            contentContainerStyle={{ paddingBottom: 80 }}
+            showsVerticalScrollIndicator={false}
           />
         ) : (
           <SectionList
@@ -179,6 +224,54 @@ const AnimalCard: React.FC<AnimalCardProps> = ({ animal, onPress }) => {
       </View>
       <View className={`px-2 py-0.5 rounded-full ${STATE_BADGE_COLORS[animal.state] || 'bg-primary'}`}>
         <Text className="text-xs font-bold text-text-inverse capitalize">{animal.state}</Text>
+      </View>
+    </TouchableOpacity>
+  )
+}
+
+interface AnimalGridCardProps {
+  animal: Animal
+  hasWithdrawal: boolean
+  onPress: () => void
+}
+
+const AnimalGridCard: React.FC<AnimalGridCardProps> = ({ animal, hasWithdrawal, onPress }) => {
+  return (
+    <TouchableOpacity
+      style={{ flex: 1, aspectRatio: 1 }}
+      className="rounded-lg overflow-hidden"
+      onPress={onPress}
+      activeOpacity={0.7}
+    >
+      {animal.photoUrl ? (
+        <TurboImage
+          source={{ uri: animal.photoUrl }}
+          style={{ position: 'absolute', width: '100%', height: '100%' }}
+          cachePolicy="dataCache"
+          resizeMode="cover"
+        />
+      ) : (
+        <View className="absolute w-full h-full bg-backgroundDark items-center justify-center">
+          <Text className="text-3xl font-bold text-white">{animal.name.charAt(0)}</Text>
+        </View>
+      )}
+      {hasWithdrawal ? (
+        <View className="absolute top-0 left-0 right-0 bg-status-error/80 py-1 px-2 flex-row items-center">
+          <Icon name="alert-circle" size={12} color="#FFFFFF" />
+          <Text className="text-xs font-bold text-text-inverse ml-1">Withdrawal</Text>
+        </View>
+      ) : null}
+      <View className="absolute bottom-0 left-0 right-0 px-2 pb-2">
+        <Text
+          className="text-sm font-bold text-white"
+          style={{
+            textShadowColor: 'rgba(0,0,0,0.7)',
+            textShadowOffset: { width: 0, height: 1 },
+            textShadowRadius: 3,
+          }}
+        >
+          {animal.name}
+        </Text>
       </View>
     </TouchableOpacity>
   )
