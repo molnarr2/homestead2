@@ -1,13 +1,10 @@
 import { useState, useMemo } from 'react'
-import { Alert } from 'react-native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
 import { useCareStore } from '../../../store/careStore'
 import { useAnimalStore } from '../../../store/animalStore'
 import { useAnimalTypeStore } from '../../../store/animalTypeStore'
 import { getCareStatus } from '../../../util/CareUtility'
-import CareEvent from '../../../schema/care/CareEvent'
-import { bsCareService } from '../../../Bootstrap'
 
 type Navigation = NativeStackNavigationProp<RootStackParamList>
 
@@ -57,13 +54,6 @@ export function useCareListController(navigation: Navigation) {
   const onEventPress = (eventId: string) => navigation.navigate('CareEventDetail', { eventId })
   const onCreateEvent = () => navigation.navigate('CreateCareEvent', { animalId: '' })
 
-  const onComplete = async (event: CareEvent) => {
-    const result = await bsCareService.completeCareEvent(event)
-    if (!result.success) {
-      Alert.alert('Error', result.error)
-    }
-  }
-
   const resetFilters = () => {
     setFilterType(null)
   }
@@ -71,7 +61,7 @@ export function useCareListController(navigation: Navigation) {
   return {
     overdue, dueToday, upcoming, future, loading,
     animals, getAnimalName,
-    onEventPress, onCreateEvent, onComplete,
+    onEventPress, onCreateEvent,
     animalTypes, filterType, setFilterType, isFilterActive, resetFilters,
   }
 }

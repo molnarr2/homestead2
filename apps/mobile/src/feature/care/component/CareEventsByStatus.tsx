@@ -11,7 +11,6 @@ interface Props {
   statusColor: string
   getAnimalName: (animalId: string) => string
   onEventPress: (eventId: string) => void
-  onComplete: (event: CareEvent) => void
 }
 
 const COLOR_MAP: Record<string, { header: string; border: string; bg: string }> = {
@@ -21,7 +20,7 @@ const COLOR_MAP: Record<string, { header: string; border: string; bg: string }> 
   gray: { header: 'text-text-secondary', border: 'border-l-border-light', bg: 'bg-surface' },
 }
 
-const CareEventsByStatus: React.FC<Props> = ({ title, events, statusColor, getAnimalName, onEventPress, onComplete }) => {
+const CareEventsByStatus: React.FC<Props> = ({ title, events, statusColor, getAnimalName, onEventPress }) => {
   const colors = COLOR_MAP[statusColor] ?? COLOR_MAP.gray
 
   return (
@@ -47,13 +46,7 @@ const CareEventsByStatus: React.FC<Props> = ({ title, events, statusColor, getAn
                 {event.type === 'careRecurring' && (
                   <Icon name="refresh" size={16} color="#6B5B52" />
                 )}
-                <TouchableOpacity
-                  className="bg-primary rounded-lg px-3 py-1.5"
-                  onPress={() => onComplete(event)}
-                  activeOpacity={0.7}
-                >
-                  <Text className="text-xs font-semibold text-text-inverse">Done</Text>
-                </TouchableOpacity>
+                <Icon name="chevron-right" size={22} color="#8C7E75" />
               </View>
             </View>
           </TouchableOpacity>

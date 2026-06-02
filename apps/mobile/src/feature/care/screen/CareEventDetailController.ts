@@ -1,3 +1,4 @@
+import { Alert } from 'react-native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RouteProp } from '@react-navigation/native'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
@@ -8,6 +9,8 @@ import { getCareStatus } from '../../../util/CareUtility'
 import { bsCareService, bsGroupService } from '../../../Bootstrap'
 import type { HealthRecordType } from '../../../schema/health/HealthRecord'
 import { todayIso } from '../../../util/DateUtility'
+import { tstampToDateOrNow } from '../../../schema/type/Tstamp'
+import { format } from 'date-fns'
 
 type Navigation = NativeStackNavigationProp<RootStackParamList, 'CareEventDetail'>
 type Route = RouteProp<RootStackParamList, 'CareEventDetail'>
@@ -28,7 +31,7 @@ export function useCareEventDetailController(navigation: Navigation, route: Rout
   const isComplete = !!event?.completedDate
   const isMedical = !!(event?.healthRecordType)
 
-  const onComplete = async () => {
+  const performComplete = async () => {
     if (!event) return
 
     if (event.healthRecordType) {
@@ -54,8 +57,50 @@ export function useCareEventDetailController(navigation: Navigation, route: Rout
     navigation.goBack()
   }
 
+  const onComplete = () => {
+    if (!event) return
+
+    const notYetDue = status?.status === 'UPCOMING' || status?.status === 'FUTURE'
+    if (notYetDue) {
+      Alert.alert(
+        'Complete Early?',
+        `This is not due until ${format(tstampToDateOrNow(event.dueDate), 'MMM d, yyyy')}. Completing it now marks it done ahead of schedule. Continue?`,
+        [
+          { text: 'Cancel', style: 'cancel' },
+          { text: 'Complete', onPress: () => performComplete() },
+        ]
+      )
+      return
+    }
+
+    performComplete()
+  }
+
+  const onDelete = () => {
+    if (!event) return
+    Alert.alert(
+      'Delete Care Event',
+      `Are you sure you want to delete "${event.name}"? This cannot be undone.`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            if (groupId) {
+              await bsGroupService.deleteGroupCareEvent(groupId, event.id)
+            } else {
+              await bsCareService.deleteCareEvent(event.id)
+            }
+            navigation.goBack()
+          },
+        },
+      ]
+    )
+  }
+
   const onBack = () => navigation.goBack()
   const onEdit = () => navigation.navigate('EditCareEvent', { eventId, groupId })
 
-  return { event, animal, status, isComplete, isMedical, onComplete, onBack, onEdit }
+  return { event, animal, status, isComplete, isMedical, onComplete, onDelete, onBack, onEdit }
 }

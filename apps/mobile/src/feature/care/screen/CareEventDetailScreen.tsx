@@ -137,13 +137,22 @@ const CareEventDetailScreen: React.FC = () => {
         )}
 
         {!isComplete && (
-          <View className="mt-6 mb-8">
+          <View className="mt-6">
             <PrimaryButton
               title={isMedical ? 'Complete & Record' : 'Mark Complete'}
               onPress={controller.onComplete}
             />
           </View>
         )}
+
+        <TouchableOpacity
+          className="flex-row items-center justify-center bg-status-error/10 border border-status-error rounded-lg py-3 mt-4 mb-8"
+          onPress={controller.onDelete}
+          activeOpacity={0.7}
+        >
+          <Icon name="delete-outline" size={20} color="#E53935" />
+          <Text className="text-sm font-medium text-status-error ml-2">Delete Care Event</Text>
+        </TouchableOpacity>
       </ScrollView>
     </ScreenContainer>
   )

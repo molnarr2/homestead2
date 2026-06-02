@@ -217,6 +217,24 @@ export default class GroupService implements IGroupService {
     }
   }
 
+  async deleteGroupCareEvent(groupId: string, eventId: string): Promise<IResult> {
+    try {
+      await this.homesteadRef
+        .collection(Col.animalGroup)
+        .doc(groupId)
+        .collection(Col.careEvent)
+        .doc(eventId)
+        .update({
+          'admin.deleted': true,
+          'admin.updated_at': firestore.FieldValue.serverTimestamp(),
+        })
+      return SuccessResult
+    } catch (error: any) {
+      Log.error(TAG, `deleteGroupCareEvent error: ${error.message}`)
+      return ErrorResult(error.message)
+    }
+  }
+
   async createGroupHealthRecord(groupId: string, record: HealthRecord, photoUri?: string): Promise<IResult> {
     try {
       const ref = this.homesteadRef

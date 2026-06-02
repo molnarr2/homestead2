@@ -13,6 +13,7 @@ export default interface IGroupService {
   createGroupCareEvent(groupId: string, event: CareEvent): Promise<IResult>
   updateGroupCareEvent(groupId: string, event: CareEvent): Promise<IResult>
   completeGroupCareEvent(groupId: string, event: CareEvent): Promise<IResult>
+  deleteGroupCareEvent(groupId: string, eventId: string): Promise<IResult>
   createGroupHealthRecord(groupId: string, record: HealthRecord, photoUri?: string): Promise<IResult>
   updateGroupHealthRecord(groupId: string, record: HealthRecord, photoUri?: string): Promise<IResult>
   removeAnimalFromAllGroups(animalId: string): Promise<IResult>

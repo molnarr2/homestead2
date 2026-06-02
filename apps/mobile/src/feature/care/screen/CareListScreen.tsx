@@ -73,7 +73,6 @@ const CareListScreen: React.FC = () => {
                 statusColor="red"
                 getAnimalName={controller.getAnimalName}
                 onEventPress={controller.onEventPress}
-                onComplete={controller.onComplete}
               />
             )}
             {controller.dueToday.length > 0 && (
@@ -83,7 +82,6 @@ const CareListScreen: React.FC = () => {
                 statusColor="amber"
                 getAnimalName={controller.getAnimalName}
                 onEventPress={controller.onEventPress}
-                onComplete={controller.onComplete}
               />
             )}
             {controller.upcoming.length > 0 && (
@@ -93,7 +91,6 @@ const CareListScreen: React.FC = () => {
                 statusColor="green"
                 getAnimalName={controller.getAnimalName}
                 onEventPress={controller.onEventPress}
-                onComplete={controller.onComplete}
               />
             )}
             {controller.future.length > 0 && (
@@ -103,7 +100,6 @@ const CareListScreen: React.FC = () => {
                 statusColor="gray"
                 getAnimalName={controller.getAnimalName}
                 onEventPress={controller.onEventPress}
-                onComplete={controller.onComplete}
               />
             )}
           </ScrollView>
