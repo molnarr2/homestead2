@@ -21,6 +21,7 @@ import EditCareTemplateScreen from '../feature/customization/screen/EditCareTemp
 import ProfileScreen from '../feature/profile/screen/ProfileScreen'
 import EditProfileScreen from '../feature/profile/screen/EditProfileScreen'
 import SettingsScreen from '../feature/profile/screen/SettingsScreen'
+import DeleteAccountScreen from '../feature/profile/screen/DeleteAccountScreen'
 import FeedbackModal from '../feature/profile/component/FeedbackModal'
 import AnimalDetailScreen from '../feature/animal/screen/AnimalDetailScreen'
 import CreateAnimalScreen from '../feature/animal/screen/CreateAnimalScreen'
@@ -111,6 +112,7 @@ export type RootStackParamList = {
   EditBreed: { animalTypeId: string; breedId?: string }
   EditCareTemplate: { animalTypeId: string; templateId?: string }
   Settings: undefined
+  DeleteAccount: undefined
   Debug: undefined
 }
 
@@ -171,6 +173,7 @@ const RootNavigation: React.FC = () => {
               <Stack.Screen name="EditBreed" component={EditBreedScreen} />
               <Stack.Screen name="EditCareTemplate" component={EditCareTemplateScreen} />
               <Stack.Screen name="Settings" component={SettingsScreen} />
+              <Stack.Screen name="DeleteAccount" component={DeleteAccountScreen} />
               <Stack.Screen name="Debug" component={DebugScreen} options={{ headerShown: true, title: 'Debug Theme' }} />
             </>
           )}

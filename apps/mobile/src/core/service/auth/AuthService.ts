@@ -1,4 +1,5 @@
-import { IResult } from '../../../util/Result'
+import functions from '@react-native-firebase/functions'
+import { ErrorResult, IResult, SuccessResult } from '../../../util/Result'
 import { Subscribable } from 'rxjs'
 import { IFirebaseAuth } from '../../../library/cloudplatform/firebase/FirebaseAuth'
 import IAuthService from './IAuthService'
@@ -46,8 +47,13 @@ export default class AuthService implements IAuthService {
     return this.auth.sendPasswordResetEmail(email)
   }
 
-  async deleteAuthAccount(): Promise<void> {
-    return this.auth.deleteAuthAccount()
+  async deleteAccount(): Promise<IResult> {
+    try {
+      await functions().httpsCallable('deleteAccount')()
+      return SuccessResult
+    } catch (error: any) {
+      return ErrorResult(error?.message || 'Unable to delete account. Please try again.')
+    }
   }
 
   async reauthenticate(email: string, password: string): Promise<IResult> {

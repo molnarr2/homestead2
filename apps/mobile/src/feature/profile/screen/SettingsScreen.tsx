@@ -80,6 +80,16 @@ const SettingsScreen: React.FC<Props> = ({ navigation }) => {
             <Text className="text-base text-text-secondary">{getBuildNumber()}</Text>
           </View>
         </View>
+
+        <Text className="text-sm font-semibold text-text-secondary uppercase mb-2">Account</Text>
+        <TouchableOpacity
+          className="bg-surface rounded-xl px-4 py-3 flex-row items-center justify-between border border-border-light mb-6"
+          onPress={() => navigation.navigate('DeleteAccount')}
+          activeOpacity={0.7}
+        >
+          <Text className="text-base text-status-error">Delete Account</Text>
+          <Icon name="chevron-right" size={24} color="#E53935" />
+        </TouchableOpacity>
       </ScrollView>
     </ScreenContainer>
   )

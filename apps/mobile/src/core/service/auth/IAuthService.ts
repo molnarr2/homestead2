@@ -12,7 +12,7 @@ export default interface IAuthService {
   signin(email: string, password: string): Promise<IResult>
   signout(): void
   sendPasswordResetEmail(email: string): Promise<void>
-  deleteAuthAccount(): Promise<void>
+  deleteAccount(): Promise<IResult>
   reauthenticate(email: string, password: string): Promise<IResult>
   linkUsernamePassword(email: string, password: string): Promise<IResult>
 }

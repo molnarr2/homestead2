@@ -185,11 +185,11 @@
   },
   "active": "02dd2e34ceb194af",
   "lastOpenFiles": [
+    "02_phase1_MVP/04_account_deletion.md",
+    "02_phase1_MVP/03_Push_Notification_Pipeline.md",
     "02_phase1_MVP/07_code_review/06_rn-firebase-audit.md",
     "02_phase1_MVP/06_withdrawal_date_math_fix.md",
     "02_phase1_MVP/05_userId_attribution.md",
-    "02_phase1_MVP/03_Push_Notification_Pipeline.md",
-    "02_phase1_MVP/04_account_deletion.md",
     "03_phase2/Known Issues.md",
     "03_phase2/01_dead_homestead.md",
     "02_phase1_MVP/09_production_logging.md",

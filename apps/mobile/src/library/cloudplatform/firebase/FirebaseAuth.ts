@@ -23,8 +23,6 @@ export interface IFirebaseAuth {
 
     sendPasswordResetEmail(email: string): Promise<void>
 
-    deleteAuthAccount(): Promise<void>
-
     reauthenticate(email: string, password: string): Promise<IResult>
 
     linkUsernamePassword(email: string, password: string): Promise<IResult>
@@ -148,10 +146,6 @@ export default class FirebaseAuth implements IFirebaseAuth {
 
     async sendPasswordResetEmail(email: string): Promise<void> {
         await auth().sendPasswordResetEmail(email);
-    }
-
-    async deleteAuthAccount() {
-        await auth().currentUser?.delete();
     }
 
     async reauthenticate(email: string, password: string): Promise<IResult> {
