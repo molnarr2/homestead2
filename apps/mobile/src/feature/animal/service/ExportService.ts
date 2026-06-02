@@ -55,22 +55,26 @@ export default class ExportService implements IExportService {
     }
   }
 
+  private sanitizeFileName(name: string): string {
+    return name.replace(/[\/\\:*?"<>|]/g, '_')
+  }
+
   async exportCompleteRecord(data: ExportData): Promise<IResult> {
     const photoBase64 = await this.fetchPhotoBase64(data.animal.photoUrl)
     const html = buildCompleteRecordHtml({ ...data, photoBase64 })
-    return this.generateAndShare(html, `${data.animal.name}-complete-record`)
+    return this.generateAndShare(html, `${this.sanitizeFileName(data.animal.name)}-complete-record`)
   }
 
   async exportHealthCareSummary(data: ExportData): Promise<IResult> {
     const photoBase64 = await this.fetchPhotoBase64(data.animal.photoUrl)
     const html = buildHealthCareSummaryHtml({ ...data, photoBase64 })
-    return this.generateAndShare(html, `${data.animal.name}-health-care-summary`)
+    return this.generateAndShare(html, `${this.sanitizeFileName(data.animal.name)}-health-care-summary`)
   }
 
   async exportBreedingLineageReport(data: ExportData): Promise<IResult> {
     const photoBase64 = await this.fetchPhotoBase64(data.animal.photoUrl)
     const html = buildBreedingLineageReportHtml({ ...data, photoBase64 })
-    return this.generateAndShare(html, `${data.animal.name}-breeding-lineage`)
+    return this.generateAndShare(html, `${this.sanitizeFileName(data.animal.name)}-breeding-lineage`)
   }
 
 }

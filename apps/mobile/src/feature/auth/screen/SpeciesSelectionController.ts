@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Alert } from 'react-native'
 import { bsAuthService, bsUserService, bsAnimalTypeService, bsHomesteadService } from '../../../Bootstrap'
 
 const AVAILABLE_SPECIES = [
@@ -49,12 +50,17 @@ export function useSpeciesSelectionController() {
   }
 
   const skip = async () => {
+    setLoading(true)
     const userId = bsAuthService.currentUserId
     const user = await bsUserService.getUser(userId)
     const homesteadId = user?.activeHomesteadId ?? ''
     if (homesteadId) {
-      await bsHomesteadService.setOnboardingComplete(homesteadId)
+      const result = await bsHomesteadService.setOnboardingComplete(homesteadId)
+      if (!result.success) {
+        Alert.alert('Error', 'Something went wrong. Please try again.')
+      }
     }
+    setLoading(false)
   }
 
   return { availableSpecies: AVAILABLE_SPECIES, selectedSpecies, toggleSpecies, loading, complete, skip }

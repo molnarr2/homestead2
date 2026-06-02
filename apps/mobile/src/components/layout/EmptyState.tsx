@@ -6,9 +6,10 @@ interface Props {
   icon: React.ComponentProps<typeof Icon>['name']
   title: string
   subtitle?: string
+  children?: React.ReactNode
 }
 
-const EmptyState: React.FC<Props> = ({ icon, title, subtitle }) => {
+const EmptyState: React.FC<Props> = ({ icon, title, subtitle, children }) => {
   return (
     <View className="flex-1 items-center justify-center px-8 py-16">
       <Icon name={icon} size={64} color="#B0A49E" />
@@ -16,6 +17,7 @@ const EmptyState: React.FC<Props> = ({ icon, title, subtitle }) => {
       {subtitle && (
         <Text className="text-sm text-text-secondary text-center mt-2">{subtitle}</Text>
       )}
+      {children}
     </View>
   )
 }

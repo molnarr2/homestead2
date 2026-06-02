@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import { Alert } from 'react-native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
 import { useCareStore } from '../../../store/careStore'
@@ -57,7 +58,10 @@ export function useCareListController(navigation: Navigation) {
   const onCreateEvent = () => navigation.navigate('CreateCareEvent', { animalId: '' })
 
   const onComplete = async (event: CareEvent) => {
-    await bsCareService.completeCareEvent(event)
+    const result = await bsCareService.completeCareEvent(event)
+    if (!result.success) {
+      Alert.alert('Error', result.error)
+    }
   }
 
   const resetFilters = () => {

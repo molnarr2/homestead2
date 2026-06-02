@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Alert } from 'react-native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
 import { bsAuthService } from '../../../Bootstrap'
@@ -38,13 +39,17 @@ export function useLinkAccountController(navigation: Navigation) {
       return
     }
 
-    await useUserStore.getState().updateUser({
-      firstName: firstName.trim(),
-      lastName: lastName.trim(),
-      email,
-      anonymous: false,
-      anonymousPromptLastSeen: 0,
-    })
+    try {
+      await useUserStore.getState().updateUser({
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
+        email,
+        anonymous: false,
+        anonymousPromptLastSeen: 0,
+      })
+    } catch {
+      Alert.alert('Note', 'Your account was linked but profile update failed. You can update your name in Settings.')
+    }
 
     setLoading(false)
     navigation.goBack()

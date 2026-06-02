@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Alert } from 'react-native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RouteProp } from '@react-navigation/native'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
@@ -55,9 +56,13 @@ export function useCreateBreedingRecordController(navigation: Navigation, route:
       notes,
       status: 'active' as const,
     }
-    await bsBreedingService.createBreedingRecord(record)
+    const result = await bsBreedingService.createBreedingRecord(record)
     setLoading(false)
-    navigation.goBack()
+    if (result.success) {
+      navigation.goBack()
+    } else {
+      Alert.alert('Error', result.error)
+    }
   }
 
   const onBack = () => navigation.goBack()

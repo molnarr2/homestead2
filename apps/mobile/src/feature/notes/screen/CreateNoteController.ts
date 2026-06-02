@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Alert } from 'react-native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RouteProp } from '@react-navigation/native'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
@@ -35,9 +36,13 @@ export function useCreateNoteController(navigation: Navigation, route: Route) {
       text: text.trim(),
       tags,
     }
-    await bsNoteService.createNote(note, photoUri || undefined)
+    const result = await bsNoteService.createNote(note, photoUri || undefined)
     setLoading(false)
-    navigation.goBack()
+    if (result.success) {
+      navigation.goBack()
+    } else {
+      Alert.alert('Error', result.error)
+    }
   }
 
   const onBack = () => navigation.goBack()

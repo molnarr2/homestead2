@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Alert } from 'react-native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RouteProp } from '@react-navigation/native'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
@@ -42,7 +43,10 @@ export function useCreateProductionLogController(navigation: Navigation, route: 
 
   const submit = async () => {
     const qty = parseFloat(quantity)
-    if (!qty || qty <= 0) return
+    if (!qty || qty <= 0) {
+      Alert.alert('Invalid Quantity', 'Please enter a number greater than 0.')
+      return
+    }
 
     setLoading(true)
     const log = {
@@ -55,9 +59,13 @@ export function useCreateProductionLogController(navigation: Navigation, route: 
       animalId: selectedAnimalId,
       groupName: selectedGroup?.name ?? '',
     }
-    await bsProductionService.createProductionLog(log)
+    const result = await bsProductionService.createProductionLog(log)
     setLoading(false)
-    navigation.goBack()
+    if (result.success) {
+      navigation.goBack()
+    } else {
+      Alert.alert('Error', result.error)
+    }
   }
 
   const onBack = () => navigation.goBack()

@@ -11,7 +11,6 @@ import RegisterScreen from '../feature/auth/screen/RegisterScreen'
 import SpeciesSelectionScreen from '../feature/auth/screen/SpeciesSelectionScreen'
 import LinkAccountScreen from '../feature/auth/screen/LinkAccountScreen'
 import DebugScreen from '../feature/debug/DebugScreen'
-import PlaceholderScreen from './PlaceholderScreen'
 import PaywallModal from '../feature/subscription/component/PaywallModal'
 import CreateAccountPromptModal from '../feature/auth/component/CreateAccountPromptModal'
 import CustomizationHomeScreen from '../feature/customization/screen/CustomizationHomeScreen'
@@ -111,8 +110,6 @@ export type RootStackParamList = {
   EditAnimalType: { animalTypeId?: string }
   EditBreed: { animalTypeId: string; breedId?: string }
   EditCareTemplate: { animalTypeId: string; templateId?: string }
-  CustomizeBreeds: { animalTypeId: string }
-  CustomizeCareTemplates: { animalTypeId: string }
   Settings: undefined
   Debug: undefined
 }
@@ -173,8 +170,6 @@ const RootNavigation: React.FC = () => {
               <Stack.Screen name="EditAnimalType" component={EditAnimalTypeScreen} />
               <Stack.Screen name="EditBreed" component={EditBreedScreen} />
               <Stack.Screen name="EditCareTemplate" component={EditCareTemplateScreen} />
-              <Stack.Screen name="CustomizeBreeds" component={PlaceholderScreen} />
-              <Stack.Screen name="CustomizeCareTemplates" component={PlaceholderScreen} />
               <Stack.Screen name="Settings" component={SettingsScreen} />
               <Stack.Screen name="Debug" component={DebugScreen} options={{ headerShown: true, title: 'Debug Theme' }} />
             </>

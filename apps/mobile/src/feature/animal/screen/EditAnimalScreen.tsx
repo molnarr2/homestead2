@@ -186,7 +186,20 @@ const EditAnimalScreen: React.FC = () => {
               <TouchableOpacity
                 key={s.value}
                 className={`px-4 py-2 rounded-lg border ${isSelected ? 'bg-primary border-primary' : 'bg-surface border-border-light'}`}
-                onPress={() => controller.setState(s.value)}
+                onPress={() => {
+                  if ((s.value === 'deceased' || s.value === 'processed') && controller.state !== s.value) {
+                    Alert.alert(
+                      `Mark as ${s.label}?`,
+                      'This will move the animal out of your active herd.',
+                      [
+                        { text: 'Cancel', style: 'cancel' },
+                        { text: 'Confirm', onPress: () => controller.setState(s.value) },
+                      ]
+                    )
+                  } else {
+                    controller.setState(s.value)
+                  }
+                }}
                 activeOpacity={0.7}
               >
                 <Text className={`text-sm font-medium ${isSelected ? 'text-text-inverse' : 'text-text-primary'}`}>

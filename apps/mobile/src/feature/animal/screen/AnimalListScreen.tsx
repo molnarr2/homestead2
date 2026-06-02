@@ -76,7 +76,15 @@ const AnimalListScreen: React.FC = () => {
             icon="cow"
             title="No animals yet"
             subtitle="Add your first animal to get started!"
-          />
+          >
+            <TouchableOpacity
+              className="mt-4 bg-primary px-6 py-3 rounded-lg"
+              onPress={controller.onCreateAnimal}
+              activeOpacity={0.7}
+            >
+              <Text className="text-base font-semibold text-text-inverse">Add Your First Animal</Text>
+            </TouchableOpacity>
+          </EmptyState>
         ) : controller.viewMode === 'grid' ? (
           <FlatList
             data={controller.gridFlatData}

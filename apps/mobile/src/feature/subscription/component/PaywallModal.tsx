@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, ActivityIndicator, Alert } from 'react-native'
+import { View, Text, ActivityIndicator, Alert, TouchableOpacity } from 'react-native'
 import BottomSheet from '../../../components/modal/BottomSheet'
 import PrimaryButton from '../../../components/button/PrimaryButton'
 import SecondaryButton from '../../../components/button/SecondaryButton'
@@ -81,12 +81,11 @@ const PaywallModal: React.FC = () => {
             />
           </View>
 
-          <Text
-            className="text-sm text-primary text-center"
-            onPress={handleRestore}
-          >
-            Restore Purchases
-          </Text>
+          <TouchableOpacity onPress={handleRestore} activeOpacity={0.7}>
+            <Text className="text-sm text-primary text-center">
+              Restore Purchases
+            </Text>
+          </TouchableOpacity>
         </View>
       )}
     </BottomSheet>

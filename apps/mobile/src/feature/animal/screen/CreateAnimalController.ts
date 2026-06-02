@@ -77,6 +77,8 @@ export function useCreateAnimalController(navigation: Navigation, route: Route) 
           photoUrl: photoResult.url,
           photoStorageRef: photoResult.ref,
         })
+      } else {
+        Alert.alert('Photo Error', 'Animal was saved but the photo failed to upload. You can add it later from the edit screen.')
       }
     }
 
