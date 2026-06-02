@@ -27,12 +27,12 @@ export function useRecordBirthOutcomeController(navigation: Navigation, route: R
   const [loading, setLoading] = useState(false)
 
   const submit = async () => {
-    if (!dam || !record) return
+    if (!record) return
     setLoading(true)
     const result = await bsBreedingService.completeBirth(recordId, {
       birthDate, bornAlive, stillborn, complications, damCondition,
       sireId: record.sireId,
-    }, dam)
+    })
     setLoading(false)
     if (result.success) {
       navigation.goBack()

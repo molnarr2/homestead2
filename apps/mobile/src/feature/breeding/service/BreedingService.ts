@@ -1,8 +1,7 @@
 import firestore from '@react-native-firebase/firestore'
 import { IResult, SuccessResult, ErrorResult } from '../../../util/Result'
-import { adminObject_default, adminObject_updateLastUpdated } from '../../../schema/object/AdminObject'
+import { adminObject_updateLastUpdated } from '../../../schema/object/AdminObject'
 import BreedingRecord, { BirthOutcome } from '../../../schema/breeding/BreedingRecord'
-import Animal from '../../../schema/animal/Animal'
 import Log from '../../../library/log/Log'
 import { useHomesteadStore } from '../../../store/homesteadStore'
 import IBreedingService from './IBreedingService'
@@ -85,52 +84,17 @@ export default class BreedingService implements IBreedingService {
     }
   }
 
-  async completeBirth(recordId: string, outcome: BirthOutcome, dam: Animal): Promise<IResult> {
+  async completeBirth(recordId: string, outcome: BirthOutcome): Promise<IResult> {
     try {
-      const batch = firestore().batch()
-      const offspringIds: string[] = []
-
-      for (let i = 0; i < outcome.bornAlive; i++) {
-        const offspringRef = this.homesteadRef.collection(Col.animal).doc()
-        offspringIds.push(offspringRef.id)
-        batch.set(offspringRef, {
-          id: offspringRef.id,
-          name: `Baby ${i + 1}`,
-          animalType: dam.animalType,
-          animalTypeId: dam.animalTypeId,
-          animalTypeLevel: dam.animalTypeLevel,
-          breed: dam.breed,
-          animalBreedId: dam.animalBreedId,
-          birthday: outcome.birthDate,
-          gender: 'unknown',
-          color: '',
-          register: '',
-          state: 'own',
-          notes: '',
-          photoStorageRef: '',
-          photoUrl: '',
-          purchasePrice: 0,
-          weight: 0,
-          weightUnit: 'lbs',
-          sireId: outcome.sireId ?? '',
-          damId: dam.id,
-          admin: adminObject_default(),
-        })
-      }
-
-      const recordRef = this.homesteadRef.collection(Col.breedingRecord).doc(recordId)
-      batch.update(recordRef, {
+      await this.homesteadRef.collection(Col.breedingRecord).doc(recordId).update({
         status: 'completed',
         birthDate: outcome.birthDate,
         bornAlive: outcome.bornAlive,
         stillborn: outcome.stillborn,
         complications: outcome.complications,
         damCondition: outcome.damCondition,
-        offspringIds,
         'admin.updated_at': firestore.FieldValue.serverTimestamp(),
       })
-
-      await batch.commit()
       return SuccessResult
     } catch (error: any) {
       Log.error(TAG, `completeBirth error: ${error.message}`)
