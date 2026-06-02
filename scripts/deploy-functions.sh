@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 echo "Building Cloud Functions..."
-cd "$(dirname "$0")/../functions"
+cd "$(dirname "$0")/../packages/functions"
 npm run build
 echo "Deploying Cloud Functions..."
 cd "$(dirname "$0")/.."

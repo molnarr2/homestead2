@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "02_phase1_MVP/03_Push_Notification_Pipeline.md",
+                "file": "02_phase1_MVP/04_account_deletion.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "03_Push_Notification_Pipeline"
+              "title": "04_account_deletion"
             }
           }
         ]
@@ -185,8 +185,8 @@
   },
   "active": "02dd2e34ceb194af",
   "lastOpenFiles": [
-    "02_phase1_MVP/04_account_deletion.md",
     "02_phase1_MVP/03_Push_Notification_Pipeline.md",
+    "02_phase1_MVP/04_account_deletion.md",
     "02_phase1_MVP/07_code_review/06_rn-firebase-audit.md",
     "02_phase1_MVP/06_withdrawal_date_math_fix.md",
     "02_phase1_MVP/05_userId_attribution.md",
