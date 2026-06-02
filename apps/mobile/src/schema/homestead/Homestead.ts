@@ -1,5 +1,6 @@
 import AdminObject, { adminObject_default } from '../object/AdminObject'
 import type { SubscriptionTier } from '../../feature/subscription/service/ISubscriptionService'
+import { Tstamp, tstampServerTime } from '../type/Tstamp'
 
 export default interface Homestead {
   id: string
@@ -8,6 +9,7 @@ export default interface Homestead {
   onboardingComplete: boolean
   subscriptionRevenuecat: SubscriptionTier
   subscriptionOverride: SubscriptionTier
+  lastActiveAt: Tstamp
 }
 
 export function homestead_default(): Homestead {
@@ -18,5 +20,6 @@ export function homestead_default(): Homestead {
     onboardingComplete: false,
     subscriptionRevenuecat: 'free',
     subscriptionOverride: 'free',
+    lastActiveAt: tstampServerTime(),
   }
 }

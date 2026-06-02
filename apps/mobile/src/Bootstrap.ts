@@ -40,13 +40,14 @@ import { useFeedbackStore } from './store/feedbackStore'
 const firebaseAuth = new FirebaseAuth()
 const firebaseAnalytics = new FirebaseAnalytics()
 const analyticsStorage = createMMKV({ id: 'analytics' })
+const homesteadStorage = createMMKV({ id: 'homestead' })
 const revenueCat = new RevenueCatInAppPurchases()
 
 export const bsFirebaseAuth = firebaseAuth
 export const bsAuthService: IAuthService = new AuthService(firebaseAuth)
 export const bsAnalyticsService: IAnalyticsService = new AnalyticsService(firebaseAnalytics, firebaseAuth, analyticsStorage)
 export const bsUserService: IUserService = new UserService()
-export const bsHomesteadService: IHomesteadService = new HomesteadService()
+export const bsHomesteadService: IHomesteadService = new HomesteadService(homesteadStorage)
 export const bsAnimalService: IAnimalService = new AnimalService(bsAnalyticsService)
 export const bsCareService: ICareService = new CareService(bsAnalyticsService)
 export const bsHealthService: IHealthService = new HealthService(bsCareService, bsAnalyticsService)

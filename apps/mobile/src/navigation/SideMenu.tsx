@@ -87,10 +87,6 @@ export function SideMenu(props: DrawerContentComponentProps) {
 
       <Divider />
 
-      <MenuItem label="Debug Theme" onPress={() => navigateTo('Debug')} />
-
-      <Divider />
-
       <View className="px-4 py-4">
         <PrimaryButton title="Logout" onPress={logout} />
       </View>

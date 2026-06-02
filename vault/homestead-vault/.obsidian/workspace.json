@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "02_phase1_MVP/06_various_things/08_animal_list_view_toggle.md",
+                "file": "02_phase1_MVP/07_code_review/03_mvp_launch_bugs.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "08_animal_list_view_toggle"
+              "title": "03_mvp_launch_bugs"
             }
           }
         ]
@@ -53,7 +53,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "tag:#02_phase1_MVP/07_code_review/02_research_and_options",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -185,11 +185,19 @@
   },
   "active": "02dd2e34ceb194af",
   "lastOpenFiles": [
-    "02_phase1_MVP/06_various_things/work/07_animal list view.md",
+    "02_phase1_MVP/07_code_review/03_fixes.md",
+    "02_phase1_MVP/07_code_review/03_mvp_launch_bugs.md",
+    "03_phase2/Known Issues.md",
+    "02_phase1_MVP/07_code_review/01_code_analysis.md",
+    "03_phase2/01_dead_homestead.md",
+    "02_phase1_MVP/07_code_review/02_research_and_options.md",
+    "02_phase1_MVP/05_home_screen/01_overdue_upcoming_sections.md",
+    "02_phase1_MVP/07_code_review",
+    "02_phase1_MVP/06_various_things/work/08_code_analysis.md",
     "02_phase1_MVP/06_various_things/08_animal_list_view_toggle.md",
+    "02_phase1_MVP/06_various_things/work/07_animal list view.md",
     "02_phase1_MVP/06_various_things/work/06_changes to login and create account.md",
     "02_phase1_MVP/02_TODO.md",
-    "03_phase2/Known Issues.md",
     "02_phase1_MVP/06_various_things/07_anonymous_auth_and_flow.md",
     "02_phase1_MVP/06_various_things/06_starter_playbooks_completion.md",
     "02_phase1_MVP/06_various_things/05_theming_update.md",
@@ -204,22 +212,14 @@
     "02_phase1_MVP/09_production_logging.md",
     "02_phase1_MVP/06_various_things/research/03_health_care_bidirectional_flow.md",
     "02_phase1_MVP/06_various_things/research/02_care_event_categories_deep_dive.md",
-    "02_phase1_MVP/06_various_things/research/02b_schema_migration_options.md",
-    "02_phase1_MVP/06_various_things/research/01_care_event_health_record_relationship.md",
-    "02_phase1_MVP/06_various_things/01_animal_export_pdf.md",
     "02_phase1_MVP/06_various_things/research",
-    "02_phase1_MVP/06_various_things/02_cascade_soft_delete_animal.md",
-    "02_phase1_MVP/05_home_screen/01_overdue_upcoming_sections.md",
-    "02_phase1_MVP/05_home_screen/work/home screen tap for more.md",
     "02_phase1_MVP/06_various_things/work",
     "02_phase1_MVP/06_various_things",
-    "02_phase1_MVP/04_health_care/work/health_care.md",
     "02_phase1_MVP/05_home_screen/work",
     "02_phase1_MVP/05_home_screen",
     "02_phase1_MVP/04_health_care/work",
     "02_phase1_MVP/04_health_care",
     "02_phase1_MVP/03_issues",
-    "03_phase2/Ideas",
-    "03_phase2"
+    "03_phase2/Ideas"
   ]
 }

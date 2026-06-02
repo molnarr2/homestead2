@@ -8,10 +8,20 @@ import Log from '../../../library/log/Log'
 import IHomesteadService from './IHomesteadService'
 import { Col } from '@template/common'
 import type { SubscriptionTier } from '../../subscription/service/ISubscriptionService'
+import { format } from 'date-fns'
+import type { MMKV } from 'react-native-mmkv'
+import { tstampServerTime } from '../../../schema/type/Tstamp'
 
 const TAG = 'HomesteadService'
+const LAST_ACTIVE_KEY = 'lastActiveDate'
 
 export default class HomesteadService implements IHomesteadService {
+
+  private storage: MMKV
+
+  constructor(storage: MMKV) {
+    this.storage = storage
+  }
 
   private homesteadCollection() {
     return firestore().collection(Col.homestead)
@@ -38,6 +48,7 @@ export default class HomesteadService implements IHomesteadService {
         onboardingComplete: false,
         subscriptionRevenuecat: 'free',
         subscriptionOverride: 'free',
+        lastActiveAt: tstampServerTime(),
       }
       await homesteadRef.set(homestead)
 
@@ -175,5 +186,19 @@ export default class HomesteadService implements IHomesteadService {
       Log.error(TAG, `updateHomesteadSubscription error: ${error.message}`)
       return ErrorResult(error.message)
     }
+  }
+
+  updateLastActiveIfNeeded(homesteadId: string): void {
+    const today = format(new Date(), 'yyyy-MM-dd')
+    const lastUpdated = this.storage.getString(LAST_ACTIVE_KEY)
+    if (lastUpdated === today) return
+
+    this.storage.set(LAST_ACTIVE_KEY, today)
+    this.homesteadCollection()
+      .doc(homesteadId)
+      .update({ lastActiveAt: tstampServerTime() })
+      .catch(error => {
+        Log.error(TAG, `updateLastActiveIfNeeded error: ${error.message}`)
+      })
   }
 }

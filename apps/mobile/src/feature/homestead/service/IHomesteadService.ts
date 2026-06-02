@@ -13,4 +13,5 @@ export default interface IHomesteadService {
   addMember(homesteadId: string, member: HomesteadMember): Promise<IResult>
   setOnboardingComplete(homesteadId: string): Promise<IResult>
   updateHomesteadSubscription(homesteadId: string, subscriptionRevenuecat: SubscriptionTier): Promise<IResult>
+  updateLastActiveIfNeeded(homesteadId: string): void
 }
