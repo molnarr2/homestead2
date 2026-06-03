@@ -1,8 +1,7 @@
 import { onSchedule } from 'firebase-functions/v2/scheduler'
 import { getFirestore, Timestamp } from 'firebase-admin/firestore'
-import { getMessaging } from 'firebase-admin/messaging'
-import { logger } from 'firebase-functions/v2'
 import { Col } from '@template/common'
+import { collectHomesteadTokens, sendToTokens } from '../notifications/deviceTokens'
 
 export const dailyCareReminder = onSchedule('every day 07:00', async () => {
   const db = getFirestore()
@@ -25,41 +24,15 @@ export const dailyCareReminder = onSchedule('every day 07:00', async () => {
   })
 
   for (const [homesteadId, count] of Object.entries(byHomestead)) {
-    const membersSnap = await db
-      .collection(Col.homestead)
-      .doc(homesteadId)
-      .collection(Col.member)
-      .get()
-    const memberUserIds = membersSnap.docs.map((d) => d.id)
-
-    const tokens: string[] = []
-    for (const userId of memberUserIds) {
-      const devicesSnap = await db
-        .collection(Col.user)
-        .doc(userId)
-        .collection(Col.device)
-        .get()
-      devicesSnap.docs.forEach((d) => {
-        const token = d.data().tokenId
-        if (token) tokens.push(token)
-      })
-    }
-
-    if (tokens.length > 0) {
-      try {
-        await getMessaging().sendEachForMulticast({
-          tokens,
-          notification: {
-            title: 'Care Reminder',
-            body: `You have ${count} care item${count > 1 ? 's' : ''} due today`,
-          },
-        })
-      } catch (error) {
-        logger.error(
-          `Failed to send daily care reminder for homestead ${homesteadId}`,
-          error
-        )
-      }
-    }
+    const entries = await collectHomesteadTokens(db, homesteadId)
+    await sendToTokens(
+      db,
+      entries,
+      {
+        title: 'Care Reminder',
+        body: `You have ${count} care item${count > 1 ? 's' : ''} due today`,
+      },
+      `homestead ${homesteadId}`
+    )
   }
 })

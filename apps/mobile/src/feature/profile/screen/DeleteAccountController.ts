@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
-import { bsAuthService } from '../../../Bootstrap'
+import { bsAuthService, bsNotificationService } from '../../../Bootstrap'
 import { teardownApp } from '../../../store/appInitializer'
 import { useUserStore } from '../../../store/userStore'
 
@@ -39,6 +39,8 @@ export function useDeleteAccountController(navigation: Navigation) {
         return
       }
     }
+
+    await bsNotificationService.unregisterDevice(bsAuthService.currentUserId)
 
     const result = await bsAuthService.deleteAccount()
     if (!result.success) {

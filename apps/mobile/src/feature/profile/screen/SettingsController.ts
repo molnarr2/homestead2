@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { createMMKV } from 'react-native-mmkv'
+import { bsAuthService, bsNotificationService } from '../../../Bootstrap'
 
 const settingsStorage = createMMKV()
 
@@ -28,6 +29,12 @@ export function useSettingsController() {
   const onToggleNotifications = (value: boolean) => {
     setNotificationsEnabled(value)
     settingsStorage.set(SETTINGS_KEYS.notificationsEnabled, value)
+    const userId = bsAuthService.currentUserId
+    if (value) {
+      bsNotificationService.registerDevice(userId)
+    } else {
+      bsNotificationService.unregisterDevice(userId)
+    }
   }
 
   const onChangeWeightUnit = (value: 'lbs' | 'kg') => {

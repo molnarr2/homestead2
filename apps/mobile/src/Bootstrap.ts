@@ -33,6 +33,8 @@ import GroupService from './feature/group/service/GroupService'
 import type IGroupService from './feature/group/service/IGroupService'
 import ExportService from './feature/animal/service/ExportService'
 import type IExportService from './feature/animal/service/IExportService'
+import NotificationService from './feature/notification/service/NotificationService'
+import type INotificationService from './feature/notification/service/INotificationService'
 import RevenueCatInAppPurchases from './library/purchases/revenuecat/RevenueCatInAppPurchases'
 import InAppReview from 'react-native-in-app-review'
 import { useFeedbackStore } from './store/feedbackStore'
@@ -41,6 +43,7 @@ const firebaseAuth = new FirebaseAuth()
 const firebaseAnalytics = new FirebaseAnalytics()
 const analyticsStorage = createMMKV({ id: 'analytics' })
 const homesteadStorage = createMMKV({ id: 'homestead' })
+const settingsStorage = createMMKV()
 const revenueCat = new RevenueCatInAppPurchases()
 
 export const bsFirebaseAuth = firebaseAuth
@@ -60,6 +63,7 @@ export const bsAnimalTypeService: IAnimalTypeService = new AnimalTypeService()
 export const bsGroupService: IGroupService = new GroupService()
 export const bsSubscriptionService: ISubscriptionService = new SubscriptionService(revenueCat, bsHomesteadService, bsAuthService)
 export const bsExportService: IExportService = new ExportService()
+export const bsNotificationService: INotificationService = new NotificationService(settingsStorage)
 
 bsAnalyticsService.onFeedbackTrigger(() => {
   useFeedbackStore.getState().show('auto')

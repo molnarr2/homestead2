@@ -1,6 +1,6 @@
 import { useHomesteadStore } from './homesteadStore'
 import { subscribeAllStores, resetAllStores } from './resetAllStores'
-import { bsSubscriptionService, bsHomesteadService } from '../Bootstrap'
+import { bsSubscriptionService, bsHomesteadService, bsNotificationService } from '../Bootstrap'
 
 let initialized = false
 
@@ -10,6 +10,8 @@ export function initializeApp(userId: string, homesteadId: string) {
   useHomesteadStore.getState().setHomestead(homesteadId)
   subscribeAllStores()
   bsHomesteadService.updateLastActiveIfNeeded(homesteadId)
+  bsNotificationService.startTokenRefreshListener(userId)
+  bsNotificationService.registerDevice(userId)
   bsSubscriptionService.initialize().then(() => {
     bsSubscriptionService.loginRevenueCat(userId).then(() => {
       bsSubscriptionService.syncSubscription()

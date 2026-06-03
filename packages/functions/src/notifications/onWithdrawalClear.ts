@@ -1,8 +1,7 @@
 import { onSchedule } from 'firebase-functions/v2/scheduler'
 import { getFirestore } from 'firebase-admin/firestore'
-import { getMessaging } from 'firebase-admin/messaging'
-import { logger } from 'firebase-functions/v2'
 import { Col } from '@template/common'
+import { collectHomesteadTokens, sendToTokens } from './deviceTokens'
 
 export const onWithdrawalClear = onSchedule('every day 07:00', async () => {
   const db = getFirestore()
@@ -41,41 +40,15 @@ export const onWithdrawalClear = onSchedule('every day 07:00', async () => {
       }
     }
 
-    const membersSnap = await db
-      .collection(Col.homestead)
-      .doc(homesteadId)
-      .collection(Col.member)
-      .get()
-    const memberUserIds = membersSnap.docs.map((d) => d.id)
-
-    const tokens: string[] = []
-    for (const userId of memberUserIds) {
-      const devicesSnap = await db
-        .collection(Col.user)
-        .doc(userId)
-        .collection(Col.device)
-        .get()
-      devicesSnap.docs.forEach((d) => {
-        const token = d.data().tokenId
-        if (token) tokens.push(token)
-      })
-    }
-
-    if (tokens.length > 0) {
-      try {
-        await getMessaging().sendEachForMulticast({
-          tokens,
-          notification: {
-            title: 'Withdrawal Period Cleared',
-            body: `Withdrawal period cleared for ${animalName}`,
-          },
-        })
-      } catch (error) {
-        logger.error(
-          `Failed to send withdrawal clear notification for homestead ${homesteadId}`,
-          error
-        )
-      }
-    }
+    const entries = await collectHomesteadTokens(db, homesteadId)
+    await sendToTokens(
+      db,
+      entries,
+      {
+        title: 'Withdrawal Period Cleared',
+        body: `Withdrawal period cleared for ${animalName}`,
+      },
+      `homestead ${homesteadId}`
+    )
   }
 })

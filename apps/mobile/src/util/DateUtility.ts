@@ -1,4 +1,4 @@
-import { formatDistanceToNow, parseISO, format, isToday as isTodayFn, isPast as isPastFn, differenceInDays, addDays as addDaysFn } from 'date-fns'
+import { formatDistanceToNow, parseISO, format, isToday as isTodayFn, isPast as isPastFn, differenceInCalendarDays, startOfDay, addDays as addDaysFn } from 'date-fns'
 
 export function toIsoString(date: Date): string {
   return date.toISOString()
@@ -21,7 +21,7 @@ export function isPast(iso: string): boolean {
 }
 
 export function daysBetween(startIso: string, endIso: string): number {
-  return differenceInDays(parseISO(endIso), parseISO(startIso))
+  return differenceInCalendarDays(startOfDay(parseISO(endIso)), startOfDay(parseISO(startIso)))
 }
 
 export function addDays(iso: string, days: number): string {

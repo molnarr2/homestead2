@@ -19,7 +19,7 @@ export function calculateWithdrawal(
 ): WithdrawalResult {
   const withdrawalEndDate = addDays(dateAdministered, withdrawalPeriodDays)
   const daysRemaining = daysBetween(todayIso(), withdrawalEndDate)
-  const status: WithdrawalStatus = daysRemaining > 0 ? 'ACTIVE' : 'CLEAR'
+  const status: WithdrawalStatus = daysRemaining >= 0 ? 'ACTIVE' : 'CLEAR'
 
   return {
     withdrawalEndDate,

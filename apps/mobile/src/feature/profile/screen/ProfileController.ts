@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RootStackParamList } from '../../../navigation/RootNavigation'
-import { bsAuthService } from '../../../Bootstrap'
+import { bsAuthService, bsNotificationService } from '../../../Bootstrap'
 import { teardownApp } from '../../../store/appInitializer'
 import { useUserStore } from '../../../store/userStore'
 import { useAnimalStore } from '../../../store/animalStore'
@@ -28,8 +28,9 @@ export function useProfileController(navigation: Navigation) {
 
   const onLogoutPress = () => setShowLogoutDialog(true)
   const onLogoutCancel = () => setShowLogoutDialog(false)
-  const onLogoutConfirm = () => {
+  const onLogoutConfirm = async () => {
     setShowLogoutDialog(false)
+    await bsNotificationService.unregisterDevice(bsAuthService.currentUserId)
     bsAuthService.signout()
     teardownApp()
   }

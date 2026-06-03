@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useUserStore } from '../store/userStore'
-import { bsAuthService } from '../Bootstrap'
+import { bsAuthService, bsNotificationService } from '../Bootstrap'
 import { teardownApp } from '../store/appInitializer'
 
 export function useSideMenuController() {
@@ -9,17 +9,19 @@ export function useSideMenuController() {
 
   const isAnonymous = user?.anonymous ?? false
 
-  const logout = () => {
+  const logout = async () => {
     if (isAnonymous) {
       setShowLogoutDialog(true)
       return
     }
+    await bsNotificationService.unregisterDevice(bsAuthService.currentUserId)
     bsAuthService.signout()
     teardownApp()
   }
 
-  const onLogoutConfirm = () => {
+  const onLogoutConfirm = async () => {
     setShowLogoutDialog(false)
+    await bsNotificationService.unregisterDevice(bsAuthService.currentUserId)
     bsAuthService.signout()
     teardownApp()
   }

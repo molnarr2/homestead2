@@ -16,7 +16,6 @@
     "firebase-functions": "^6.3.0"
   },
   "devDependencies": {
-    "@template/common": "*",
     "esbuild": "^0.24.0",
     "typescript": "^5.7.0"
   }
