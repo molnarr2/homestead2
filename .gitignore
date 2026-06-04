@@ -40,6 +40,9 @@ Thumbs.db
 *.swp
 *.swo
 
+# Obsidian user-specific
+vault/homestead-vault/.obsidian/workspace.json
+
 # Build output
 dist/
 lib/
