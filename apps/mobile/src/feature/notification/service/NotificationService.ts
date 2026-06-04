@@ -48,6 +48,10 @@ export default class NotificationService implements INotificationService {
       const granted = await this.requestPermission()
       if (!granted) return SuccessResult
 
+      if (Platform.OS === 'ios' && !messaging().isDeviceRegisteredForRemoteMessages) {
+        await messaging().registerDeviceForRemoteMessages()
+      }
+
       const token = await messaging().getToken()
       if (!token) return SuccessResult
 
