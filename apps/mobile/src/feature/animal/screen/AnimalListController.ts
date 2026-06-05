@@ -32,6 +32,7 @@ export interface AnimalSection {
 export type GridItem =
   | { type: 'header'; title: string; count: number }
   | { type: 'row'; animals: [Animal, Animal?] }
+  | { type: 'groupRow'; groups: [AnimalGroup, AnimalGroup?] }
 
 export function useAnimalListController(navigation: Navigation) {
   const { animals, loading } = useAnimalStore()
@@ -120,7 +121,19 @@ export function useAnimalListController(navigation: Navigation) {
   const gridFlatData = useMemo((): GridItem[] => {
     const result: GridItem[] = []
     for (const section of sections) {
-      if (section.isGroupSection) continue
+      if (section.isGroupSection) {
+        const sectionGroups = section.data as AnimalGroup[]
+        result.push({ type: 'header', title: section.title, count: sectionGroups.length })
+        for (let i = 0; i < sectionGroups.length; i += 2) {
+          result.push({
+            type: 'groupRow',
+            groups: i + 1 < sectionGroups.length
+              ? [sectionGroups[i], sectionGroups[i + 1]]
+              : [sectionGroups[i]],
+          })
+        }
+        continue
+      }
       const sectionAnimals = section.data as Animal[]
       result.push({ type: 'header', title: section.title, count: sectionAnimals.length })
       for (let i = 0; i < sectionAnimals.length; i += 2) {

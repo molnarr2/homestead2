@@ -95,6 +95,24 @@ const AnimalListScreen: React.FC = () => {
               if (item.type === 'header') {
                 return <AnimalListByType title={item.title} count={item.count} />
               }
+              if (item.type === 'groupRow') {
+                return (
+                  <View className="flex-row px-4 mb-2" style={{ gap: 8 }}>
+                    <GroupGridCard
+                      group={item.groups[0]}
+                      onPress={() => controller.onGroupPress(item.groups[0].id)}
+                    />
+                    {item.groups[1] ? (
+                      <GroupGridCard
+                        group={item.groups[1]}
+                        onPress={() => controller.onGroupPress(item.groups[1]!.id)}
+                      />
+                    ) : (
+                      <View style={{ flex: 1 }} />
+                    )}
+                  </View>
+                )
+              }
               return (
                 <View className="flex-row px-4 mb-2" style={{ gap: 8 }}>
                   <AnimalGridCard
@@ -279,6 +297,57 @@ const AnimalGridCard: React.FC<AnimalGridCardProps> = ({ animal, hasWithdrawal, 
           }}
         >
           {animal.name}
+        </Text>
+      </View>
+    </TouchableOpacity>
+  )
+}
+
+interface GroupGridCardProps {
+  group: AnimalGroup
+  onPress: () => void
+}
+
+const GroupGridCard: React.FC<GroupGridCardProps> = ({ group, onPress }) => {
+  return (
+    <TouchableOpacity
+      style={{ flex: 1, aspectRatio: 1 }}
+      className="rounded-lg overflow-hidden"
+      onPress={onPress}
+      activeOpacity={0.7}
+    >
+      {group.photoUrl ? (
+        <TurboImage
+          source={{ uri: group.photoUrl }}
+          style={{ position: 'absolute', width: '100%', height: '100%' }}
+          cachePolicy="dataCache"
+          resizeMode="cover"
+        />
+      ) : (
+        <View className="absolute w-full h-full bg-backgroundDark items-center justify-center">
+          <Text className="text-3xl font-bold text-white">{group.name.charAt(0)}</Text>
+        </View>
+      )}
+      <View className="absolute bottom-0 left-0 right-0 px-2 pb-2">
+        <Text
+          className="text-sm font-bold text-white"
+          style={{
+            textShadowColor: 'rgba(0,0,0,0.7)',
+            textShadowOffset: { width: 0, height: 1 },
+            textShadowRadius: 3,
+          }}
+        >
+          {group.name}
+        </Text>
+        <Text
+          className="text-xs text-white"
+          style={{
+            textShadowColor: 'rgba(0,0,0,0.7)',
+            textShadowOffset: { width: 0, height: 1 },
+            textShadowRadius: 3,
+          }}
+        >
+          {group.animalIds.length} member{group.animalIds.length !== 1 ? 's' : ''}
         </Text>
       </View>
     </TouchableOpacity>
