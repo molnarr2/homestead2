@@ -103,6 +103,32 @@
         { "fieldPath": "admin.deleted", "order": "ASCENDING" },
         { "fieldPath": "date", "order": "DESCENDING" }
       ]
+    },
+    {
+      "collectionGroup": "careEvent_v2",
+      "queryScope": "COLLECTION_GROUP",
+      "fields": [
+        { "fieldPath": "admin.deleted", "order": "ASCENDING" },
+        { "fieldPath": "completedDate", "order": "ASCENDING" },
+        { "fieldPath": "dueDate", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "healthRecord_v2",
+      "queryScope": "COLLECTION_GROUP",
+      "fields": [
+        { "fieldPath": "admin.deleted", "order": "ASCENDING" },
+        { "fieldPath": "withdrawalPeriodDays", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "breedingRecord_v2",
+      "queryScope": "COLLECTION_GROUP",
+      "fields": [
+        { "fieldPath": "admin.deleted", "order": "ASCENDING" },
+        { "fieldPath": "status", "order": "ASCENDING" },
+        { "fieldPath": "expectedDueDate", "order": "ASCENDING" }
+      ]
     }
   ],
   "fieldOverrides": []

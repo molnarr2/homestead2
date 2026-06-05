@@ -41,16 +41,28 @@ export async function sendToTokens(
   notification: { title: string; body: string },
   context: string
 ): Promise<void> {
-  if (entries.length === 0) return
+  if (entries.length === 0) {
+    logger.info(`No device tokens for ${context}, nothing to send`)
+    return
+  }
 
   try {
+    logger.info(`Sending to ${entries.length} token(s) for ${context}`)
     const response = await getMessaging().sendEachForMulticast({
       tokens: entries.map((entry) => entry.token),
       notification,
     })
+    logger.info(
+      `Send result for ${context}: ${response.successCount} ok, ${response.failureCount} failed`
+    )
 
     const stale: TokenEntry[] = []
     response.responses.forEach((result, index) => {
+      if (!result.success) {
+        logger.warn(
+          `Token send failed for ${context}: code=${result.error?.code} message=${result.error?.message}`
+        )
+      }
       if (
         !result.success &&
         result.error?.code === 'messaging/registration-token-not-registered'

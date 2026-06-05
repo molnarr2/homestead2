@@ -43,20 +43,32 @@ export default class NotificationService implements INotificationService {
 
   async registerDevice(userId: string): Promise<IResult> {
     try {
-      if (!this.notificationsEnabled) return SuccessResult
+      if (!this.notificationsEnabled) {
+        Log.info(TAG, 'registerDevice skipped: notifications disabled')
+        return SuccessResult
+      }
 
       const granted = await this.requestPermission()
-      if (!granted) return SuccessResult
+      if (!granted) {
+        Log.info(TAG, 'registerDevice skipped: permission not granted')
+        return SuccessResult
+      }
 
-      if (Platform.OS === 'ios' && !messaging().isDeviceRegisteredForRemoteMessages) {
-        await messaging().registerDeviceForRemoteMessages()
+      const apnsReady = await this.ensureApnsToken()
+      if (!apnsReady) {
+        Log.info(TAG, 'registerDevice skipped: no APNs token (check APNs key + Push capability)')
+        return SuccessResult
       }
 
       const token = await messaging().getToken()
-      if (!token) return SuccessResult
+      if (!token) {
+        Log.info(TAG, 'registerDevice skipped: empty FCM token')
+        return SuccessResult
+      }
 
       await this.writeToken(userId, token)
       this.currentToken = token
+      Log.info(TAG, `registerDevice wrote device_v2 token for user ${userId}`)
       return SuccessResult
     } catch (error: any) {
       Log.error(TAG, `registerDevice error: ${error.message}`)
@@ -92,6 +104,22 @@ export default class NotificationService implements INotificationService {
         Log.error(TAG, `onTokenRefresh error: ${error.message}`)
       }
     })
+  }
+
+  private async ensureApnsToken(): Promise<boolean> {
+    if (Platform.OS !== 'ios') return true
+
+    if (!messaging().isDeviceRegisteredForRemoteMessages) {
+      await messaging().registerDeviceForRemoteMessages()
+    }
+
+    for (let attempt = 0; attempt < 10; attempt++) {
+      const apnsToken = await messaging().getAPNSToken()
+      if (apnsToken) return true
+      await new Promise<void>((resolve) => setTimeout(() => resolve(), 500))
+    }
+
+    return false
   }
 
   private async writeToken(userId: string, token: string): Promise<void> {

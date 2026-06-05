@@ -1,10 +1,13 @@
 import { onSchedule } from 'firebase-functions/v2/scheduler'
-import { getFirestore, Timestamp } from 'firebase-admin/firestore'
+import { getFirestore, Timestamp, Firestore } from 'firebase-admin/firestore'
 import { Col } from '@template/common'
 import { collectHomesteadTokens, sendToTokens } from '../notifications/deviceTokens'
 
 export const dailyCareReminder = onSchedule('every day 07:00', async () => {
-  const db = getFirestore()
+  await runDailyCareReminder(getFirestore())
+})
+
+export async function runDailyCareReminder(db: Firestore): Promise<void> {
   const today = new Date()
   today.setHours(23, 59, 59, 999)
 
@@ -35,4 +38,4 @@ export const dailyCareReminder = onSchedule('every day 07:00', async () => {
       `homestead ${homesteadId}`
     )
   }
-})
+}

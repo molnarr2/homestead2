@@ -1,10 +1,13 @@
 import { onSchedule } from 'firebase-functions/v2/scheduler'
-import { getFirestore } from 'firebase-admin/firestore'
+import { getFirestore, Firestore } from 'firebase-admin/firestore'
 import { Col } from '@template/common'
 import { collectHomesteadTokens, sendToTokens } from './deviceTokens'
 
 export const onBreedingDue = onSchedule('every day 07:00', async () => {
-  const db = getFirestore()
+  await runOnBreedingDue(getFirestore())
+})
+
+export async function runOnBreedingDue(db: Firestore): Promise<void> {
   const today = new Date()
   const threeDaysFromNow = new Date()
   threeDaysFromNow.setDate(today.getDate() + 3)
@@ -53,4 +56,4 @@ export const onBreedingDue = onSchedule('every day 07:00', async () => {
       `homestead ${homesteadId}`
     )
   }
-})
+}

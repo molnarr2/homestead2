@@ -1,10 +1,13 @@
 import { onSchedule } from 'firebase-functions/v2/scheduler'
-import { getFirestore } from 'firebase-admin/firestore'
+import { getFirestore, Firestore } from 'firebase-admin/firestore'
 import { Col } from '@template/common'
 import { collectHomesteadTokens, sendToTokens } from './deviceTokens'
 
 export const onWithdrawalClear = onSchedule('every day 07:00', async () => {
-  const db = getFirestore()
+  await runOnWithdrawalClear(getFirestore())
+})
+
+export async function runOnWithdrawalClear(db: Firestore): Promise<void> {
   const today = new Date()
   today.setHours(0, 0, 0, 0)
 
@@ -51,4 +54,4 @@ export const onWithdrawalClear = onSchedule('every day 07:00', async () => {
       `homestead ${homesteadId}`
     )
   }
-})
+}
