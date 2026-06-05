@@ -47,6 +47,7 @@ import EditProductionLogScreen from '../feature/production/screen/EditProduction
 import GroupDetailScreen from '../feature/group/screen/GroupDetailScreen'
 import EditGroupScreen from '../feature/group/screen/EditGroupScreen'
 import HomeFullListScreen from '../feature/home/screen/HomeFullListScreen'
+import V1TransitionScreen from '../feature/auth/screen/V1TransitionScreen'
 
 export type RootStackParamList = {
   // Auth
@@ -55,6 +56,7 @@ export type RootStackParamList = {
   Register: undefined
   SpeciesSelection: undefined
   LinkAccount: undefined
+  V1Transition: undefined
 
   // Main
   DrawerMain: undefined
@@ -120,9 +122,10 @@ const Stack = createNativeStackNavigator<RootStackParamList>()
 
 const RootNavigation: React.FC = () => {
   const isLoggedIn = useAuthStore(s => s.isLoggedIn)
+  const migrationUser = useAuthStore(s => s.migrationUser)
   const homesteadId = useHomesteadStore(s => s.homesteadId)
   const homestead = useHomesteadStore(s => s.homestead)
-  const showLoading = isLoggedIn === null || (isLoggedIn === true && (homesteadId === '' || homestead === null))
+  const showLoading = isLoggedIn === null || (isLoggedIn === true && !migrationUser && (homesteadId === '' || homestead === null))
 
   return (
     <>
@@ -130,6 +133,8 @@ const RootNavigation: React.FC = () => {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           {showLoading ? (
             <Stack.Screen name="Loading" component={LoadingScreen} />
+          ) : migrationUser ? (
+            <Stack.Screen name="V1Transition" component={V1TransitionScreen} />
           ) : isLoggedIn === false ? (
             <>
               <Stack.Screen name="Register" component={RegisterScreen} />

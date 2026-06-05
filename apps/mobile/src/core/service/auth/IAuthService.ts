@@ -3,6 +3,7 @@ import { Subscribable } from 'rxjs'
 
 export default interface IAuthService {
   readonly currentUserId: string
+  readonly currentUserEmail: string
   readonly isLoggedIn: boolean
   readonly isAnonymous: boolean
   readonly loggedIn: Subscribable<boolean>

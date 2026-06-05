@@ -8,6 +8,7 @@ const LOGGED_IN_KEY: string = "auth-logged-in";
 
 export interface IFirebaseAuth {
     readonly currentUserId: string
+    readonly currentUserEmail: string
     readonly isAnonymous: boolean
     readonly isLoggedIn: boolean
     readonly loggedIn: Subscribable<boolean>
@@ -61,6 +62,10 @@ export default class FirebaseAuth implements IFirebaseAuth {
         } else {
             return "";
         }
+    }
+
+    get currentUserEmail(): string {
+        return auth().currentUser?.email ?? ''
     }
 
     get isAnonymous(): boolean {

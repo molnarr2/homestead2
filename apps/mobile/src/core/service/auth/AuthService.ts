@@ -15,6 +15,10 @@ export default class AuthService implements IAuthService {
     return this.auth.currentUserId
   }
 
+  get currentUserEmail(): string {
+    return this.auth.currentUserEmail
+  }
+
   get isLoggedIn(): boolean {
     return this.auth.isLoggedIn
   }

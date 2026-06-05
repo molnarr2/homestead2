@@ -5,6 +5,8 @@
 - [ ] 5. Cloud Functions Don't Scale with User Base -- [[02_phase1_MVP/07_code_review/01_code_analysis]]
 - [ ] C1 — Storage rules grant every authenticated user read/write to every homestead's files
 - [ ] C2 — Firestore rules perform no field validation; client-trusted subscription tier is client-writable → free paywall bypass + cross-field tampering
+- [ ] Can't add more customization animals from the list after onboarding
+- [ ] Health care should have templates and there should always be contacts saved
 
 
 /Users/molnarr2/src/homestead2/vault/homestead-vault/02_phase1_MVP/07_code_review/06_rn-firebase-audit.md

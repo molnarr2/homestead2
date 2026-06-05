@@ -4,7 +4,7 @@ import { IResult, SuccessResult, ErrorResult } from '../../../util/Result'
 import { adminObject_updateLastUpdated } from '../../../schema/object/AdminObject'
 import User from '../../../schema/user/User'
 import Log from '../../../library/log/Log'
-import IUserService from './IUserService'
+import IUserService, { V1User } from './IUserService'
 import { Col } from '@template/common'
 
 const TAG = 'UserService'
@@ -34,9 +34,27 @@ export default class UserService implements IUserService {
       )
   }
 
+  async getV1User(userId: string): Promise<V1User | null> {
+    try {
+      const doc = await firestore().collection('user').doc(userId).get()
+      if (!doc.exists) return null
+      const data = doc.data()!
+      return {
+        firstName: data.firstName ?? '',
+        lastName: data.lastName ?? '',
+        email: data.email ?? '',
+        anonymous: data.anonymous ?? false,
+      }
+    } catch (error: any) {
+      Log.error(TAG, `getV1User error: ${error.message}`)
+      return null
+    }
+  }
+
   async getUser(userId: string): Promise<User | null> {
     try {
       const doc = await this.userCollection().doc(userId).get()
+
       if (!doc.exists) return null
       return { ...doc.data(), id: doc.id } as User
     } catch (error: any) {
