@@ -22,7 +22,10 @@ export const useAuthStore = create<AuthState>((set) => {
           if (hsId) {
             initializeApp(userId, hsId)
           } else {
-            set({ migrationUser: { firstName: user.firstName, lastName: user.lastName, email: user.email, anonymous: user.anonymous } })
+            const v1User = await bsUserService.getV1User(userId)
+            if (v1User) {
+              set({ migrationUser: { firstName: user.firstName, lastName: user.lastName, email: user.email, anonymous: user.anonymous } })
+            }
           }
           return
         }
