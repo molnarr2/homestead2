@@ -35,9 +35,7 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Take photos of your animals and homestead.</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
-	<key>RCTNewArchEnabled</key>
+<key>RCTNewArchEnabled</key>
 	<true/>
 	<key>UIBackgroundModes</key>
 	<array>
