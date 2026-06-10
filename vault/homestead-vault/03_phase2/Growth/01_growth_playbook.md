@@ -54,12 +54,12 @@ acquisition asset.
 
 Prioritized by search demand × ease × how naturally it leads to the app:
 
-| Tool | Why it works | App tie-in |
-|------|-------------|------------|
-| **Medication / milk / egg withdrawal calculator** | High-intent, low competition, scary to get wrong → people want a tool | App already does withdrawal date math. "Track this automatically →" |
-| **Goat/sheep/cow/pig gestation due-date calculator** | Huge evergreen search volume ("goat gestation calculator") | App tracks breeding → "Get a reminder when she's due →" |
-| **Deworming / vaccination schedule generator** | Recurring pain, people print these | App = care reminders that do this forever |
-| **Chicken egg / feed cost calculator** | Backyard-chicken crowd is enormous | Entry point to production tracking |
+| Tool                                                 | Why it works                                                          | App tie-in                                                          |
+| ---------------------------------------------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| **Medication / milk / egg withdrawal calculator**    | High-intent, low competition, scary to get wrong → people want a tool | App already does withdrawal date math. "Track this automatically →" |
+| **Goat/sheep/cow/pig gestation due-date calculator** | Huge evergreen search volume ("goat gestation calculator")            | App tracks breeding → "Get a reminder when she's due →"             |
+| **Deworming / vaccination schedule generator**       | Recurring pain, people print these                                    | App = care reminders that do this forever                           |
+| **Chicken egg / feed cost calculator**               | Backyard-chicken crowd is enormous                                    | Entry point to production tracking                                  |
 
 ### Build rules
 

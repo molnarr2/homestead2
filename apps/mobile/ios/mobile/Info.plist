@@ -34,9 +34,9 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Take photos of your animals and homestead.</string>
+	<string>Homestead uses your camera to capture photos of your animals. For example, you can take a photo to set as an animal's profile picture or document its health records.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Select photos of your animals and homestead from your library.</string>
+	<string>Homestead uses your photo library to let you choose photos for your animals. For example, you can pick a photo from your library to set as an animal's profile picture.</string>
 <key>RCTNewArchEnabled</key>
 	<true/>
 	<key>UIBackgroundModes</key>
