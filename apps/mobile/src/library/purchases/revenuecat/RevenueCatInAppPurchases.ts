@@ -36,8 +36,8 @@ export default class RevenueCatInAppPurchases implements IInAppPurchases {
 
     constructor() {
         if (Platform.OS === 'android') {
-            this.identifierStandard = "homestead_standard_monthly:homestead_standard_monthly"
-            this.identifierPro = "homestead_pro_monthly:homestead_pro_monthly"
+            this.identifierStandard = "homestead_standard_monthly:homestead-standard-monthly"
+            this.identifierPro = "homestead_pro_monthly:homestead-pro-monthly"
         }
     }
 

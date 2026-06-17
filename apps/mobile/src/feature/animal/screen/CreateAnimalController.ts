@@ -47,6 +47,11 @@ export function useCreateAnimalController(navigation: Navigation, route: Route) 
       return
     }
 
+    if (!animalTypeId) {
+      Alert.alert('Required', 'Please select an animal type.')
+      return
+    }
+
     setLoading(true)
     const selectedBreed = availableBreeds.find(b => b.id === breedId)
     const animal = {

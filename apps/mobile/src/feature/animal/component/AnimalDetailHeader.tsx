@@ -20,6 +20,12 @@ const STATE_BADGE_COLORS: Record<string, string> = {
   processed: 'bg-status-warning',
 }
 
+const ICON_SHADOW = {
+  textShadowColor: 'rgba(0,0,0,0.9)',
+  textShadowOffset: { width: 0, height: 1 },
+  textShadowRadius: 3,
+}
+
 const AnimalDetailHeader: React.FC<Props> = ({ animal, age, onEdit, onBack, onExport }) => {
   const hasPhoto = !!animal.photoUrl
 
@@ -33,15 +39,15 @@ const AnimalDetailHeader: React.FC<Props> = ({ animal, age, onEdit, onBack, onEx
             cachePolicy="dataCache"
           />
           <View className="absolute top-0 left-0 right-0 flex-row items-center justify-between px-4 pt-4 z-10">
-            <TouchableOpacity onPress={onBack} activeOpacity={0.7} className="p-1" style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.9, shadowRadius: 3, elevation: 5 }}>
-              <Icon name="arrow-left" size={26} color="#FFFFFF" />
+            <TouchableOpacity onPress={onBack} activeOpacity={0.7} className="p-1">
+              <Icon name="arrow-left" size={26} color="#FFFFFF" style={ICON_SHADOW} />
             </TouchableOpacity>
             <View className="flex-row items-center gap-3">
-              <TouchableOpacity onPress={onExport} activeOpacity={0.7} className="p-1" style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.9, shadowRadius: 3, elevation: 5 }}>
-                <Icon name="file-export-outline" size={24} color="#FFFFFF" />
+              <TouchableOpacity onPress={onExport} activeOpacity={0.7} className="p-1">
+                <Icon name="file-export-outline" size={24} color="#FFFFFF" style={ICON_SHADOW} />
               </TouchableOpacity>
-              <TouchableOpacity onPress={onEdit} activeOpacity={0.7} className="p-1" style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.9, shadowRadius: 3, elevation: 5 }}>
-                <Icon name="pencil" size={24} color="#FFFFFF" />
+              <TouchableOpacity onPress={onEdit} activeOpacity={0.7} className="p-1">
+                <Icon name="pencil" size={24} color="#FFFFFF" style={ICON_SHADOW} />
               </TouchableOpacity>
             </View>
           </View>

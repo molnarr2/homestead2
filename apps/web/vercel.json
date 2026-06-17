@@ -1,0 +1,25 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "buildCommand": "yarn workspace @homestead/web build",
+  "outputDirectory": "dist",
+  "headers": [
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/printables/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=86400" }
+      ]
+    }
+  ],
+  "redirects": [
+    { "source": "/tools/withdrawal", "destination": "/tools/medication-withdrawal-calculator", "permanent": true },
+    { "source": "/tools/gestation", "destination": "/tools/gestation-calculator", "permanent": true }
+  ]
+}

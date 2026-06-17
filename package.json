@@ -5,5 +5,17 @@
     "apps/*",
     "packages/*"
   ],
+  "scripts": {
+    "webapp:dev": "yarn workspace @homestead/web dev",
+    "webapp:build": "yarn workspace @homestead/web build",
+    "webapp:preview": "yarn workspace @homestead/web preview",
+    "webapp:typecheck": "yarn workspace @homestead/web typecheck",
+    "webapp:printables": "yarn workspace @homestead/web generate:printables",
+    "webapp:sitemap": "yarn workspace @homestead/web generate:sitemap",
+    "webapp:verify": "yarn workspace @homestead/web verify:ssg"
+  },
+  "resolutions": {
+    "semver": "^7.7.3"
+  },
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

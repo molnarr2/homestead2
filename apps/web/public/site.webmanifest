@@ -1,0 +1,8 @@
+{
+  "name": "Homestead Animals",
+  "short_name": "Homestead Animals",
+  "icons": [{ "src": "/favicon.svg", "type": "image/svg+xml", "sizes": "any" }],
+  "theme_color": "#B5562B",
+  "background_color": "#FBF6EE",
+  "display": "standalone"
+}

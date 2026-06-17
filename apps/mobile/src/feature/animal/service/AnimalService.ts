@@ -169,9 +169,7 @@ export default class AnimalService implements IAnimalService {
       const homesteadId = useHomesteadStore.getState().homesteadId
       const path = `homestead/${homesteadId}/animal/${animalId}/${Date.now()}.jpg`
       const ref = storage().ref(path)
-      const response = await fetch(uri)
-      const blob = await response.blob()
-      await ref.put(blob)
+      await ref.putFile(uri)
       const url = await ref.getDownloadURL()
       return { url, ref: path }
     } catch (error: any) {

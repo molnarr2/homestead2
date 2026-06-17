@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    font-family: theme('fontFamily.sans');
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: theme('fontFamily.serif');
+    color: theme('colors.bark.DEFAULT');
+  }
+}
+
+@layer components {
+  .prose-article {
+    @apply max-w-prose text-bark-light leading-relaxed;
+  }
+  .prose-article h2 {
+    @apply mt-10 mb-3 text-2xl;
+  }
+  .prose-article h3 {
+    @apply mt-6 mb-2 text-xl;
+  }
+  .prose-article p {
+    @apply my-4;
+  }
+  .prose-article ul {
+    @apply my-4 list-disc pl-6;
+  }
+  .prose-article a {
+    @apply text-terracotta underline;
+  }
+}
