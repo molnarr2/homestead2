@@ -88,8 +88,8 @@ android {
         applicationId "com.hrjsoftware.homestead"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 14
-        versionName "2.0.2"
+        versionCode 17
+        versionName "2.0.5"
         resValue "integer", "react_native_dev_server_port", "8083"
         resValue "string", "build_config_package", "com.mobile"
     }
